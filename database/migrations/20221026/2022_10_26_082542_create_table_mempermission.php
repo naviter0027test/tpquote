@@ -46,6 +46,9 @@ return new class extends Migration
             $table->integer('quoteSub_10')
                 ->default(0)
                 ->comment('實際下單成本 0:無權限 1:查詢 2:編輯');
+            $table->integer('member')
+                ->default(0)
+                ->comment('成員管理 0:無權限 1:查詢 2:編輯');
             $table->timestamps();
         });
     }

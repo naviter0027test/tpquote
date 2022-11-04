@@ -28,6 +28,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 0,
             'quoteSub_9' => 0,
             'quoteSub_10' => 0,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 2,
@@ -42,6 +43,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 0,
             'quoteSub_9' => 0,
             'quoteSub_10' => 1,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 3,
@@ -56,6 +58,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 1,
             'quoteSub_9' => 0,
             'quoteSub_10' => 1,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 4,
@@ -70,6 +73,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 2,
             'quoteSub_9' => 0,
             'quoteSub_10' => 2,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 5,
@@ -84,6 +88,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 2,
             'quoteSub_9' => 0,
             'quoteSub_10' => 0,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 6,
@@ -98,6 +103,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 1,
             'quoteSub_9' => 0,
             'quoteSub_10' => 1,
+            'member' => 0,
         ]);
         DB::table('MemPermission')->insert([
             'id' => 7,
@@ -112,6 +118,7 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_8' => 2,
             'quoteSub_9' => 2,
             'quoteSub_10' => 2,
+            'member' => 2,
         ]);
     }
 }
