@@ -17,4 +17,10 @@ class MemPermissionRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function getAll() {
+        $items = MemPermission::orderBy('id', 'asc')
+            ->get();
+        return $items;
+    }
 }
