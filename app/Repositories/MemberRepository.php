@@ -50,11 +50,22 @@ class MemberRepository
         return true;
     }
 
+    public function checkLogin($param) {
+        $item = Member::where('account', '=', $param['account'])
+            ->where('pass', '=', md5(trim($param['pass'])) )
+            ->first();
+        if(isset($item->id) == false)
+            return false;
+        return $item;
+    }
+
     public function create($param) {
         if($this->checkByAccount($param['account']) == true)
             throw new Exception('帳號重複');
+        if(trim($param['account']) == '')
+            throw new Exception('帳號不得為空');
         $member = new Member();
-        $member->account = $param['account'];
+        $member->account = trim($param['account']);
         $member->pass = md5(trim($param['pass']));
         $member->userName = $param['userName'];
         $member->memPermissionId = $param['memPermissionId'];

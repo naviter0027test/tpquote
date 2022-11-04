@@ -94,5 +94,45 @@ class MemberTest extends TestCase
         catch(Exception $e) {
             $this->assertEquals('帳號重複', $e->getMessage());
         }
+
+        try {
+            $param = [
+                'account' => '',
+                'pass' => '123456',
+                'userName' => '測試人員',
+                'memPermissionId' => 7,
+            ];
+            $memberRepo->create($param);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('帳號不得為空', $e->getMessage());
+        }
+    }
+
+    public function testCheckLogin() {
+        $memberRepo = new MemberRepository();
+        try {
+            $param = [
+                'account' => 'account20',
+                'pass' => '123456',
+            ];
+            $this->assertEquals(false, $memberRepo->checkLogin($param));
+        }
+        catch(Exception $e) {
+            $this->assertEquals('error', $e->getMessage());
+        }
+
+        try {
+            $param = [
+                'account' => 'account19',
+                'pass' => '123456',
+            ];
+            $item = $memberRepo->checkLogin($param);
+            $this->assertEquals('管理員', $item->userName);
+            $this->assertEquals(7, $item->memPermissionId);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('error', $e->getMessage());
+        }
     }
 }
