@@ -71,4 +71,13 @@ class MemberRepository
         $member->memPermissionId = $param['memPermissionId'];
         $member->save();
     }
+
+    public function lists($param) {
+        if(is_numeric($param['nowPage']) == false)
+            throw new Exception('頁數請輸入數字');
+        if(isset($param['offset']) == true && is_numeric($param['offset']) == false)
+            throw new Exception('頁數限制請輸入數字');
+        else
+            $param['offset'] = 20;
+    }
 }

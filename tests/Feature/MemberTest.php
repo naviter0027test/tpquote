@@ -135,4 +135,29 @@ class MemberTest extends TestCase
             $this->assertEquals('error', $e->getMessage());
         }
     }
+
+    public function testLists() {
+        $memberRepo = new MemberRepository();
+        try {
+            $param = [
+                'nowPage' => '1acco',
+                'offset' => 'rrr',
+            ];
+            $memberRepo->lists($param);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('頁數請輸入數字', $e->getMessage());
+        }
+
+        try {
+            $param = [
+                'nowPage' => '1',
+                'offset' => 'rrr',
+            ];
+            $memberRepo->lists($param);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('頁數限制請輸入數字', $e->getMessage());
+        }
+    }
 }
