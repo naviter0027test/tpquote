@@ -185,4 +185,35 @@ class MemberTest extends TestCase
         $amount = $memberRepo->listsAmount($param);
         $this->assertEquals(21, $amount);
     }
+
+    public function testUpdateById() {
+        $memberRepo = new MemberRepository();
+        try {
+            $param = [];
+            $memberRepo->updateById(999, $param);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('指定資料不存在', $e->getMessage());
+        }
+
+        $item = $memberRepo->getById(20);
+        $param = [];
+        $param['userName'] = '測試員999';
+        $param['memPermissionId'] = 3;
+        $memberRepo->updateById($item->id, $param);
+
+        $item = $memberRepo->getById(20);
+        $this->assertEquals('測試員999', $item->userName);
+        $this->assertEquals(3, $item->memPermissionId);
+
+        $param = [];
+        $param['pass'] = '12345678';
+        $memberRepo->updateById(20, $param);
+
+        $param = [
+            'account' => 'account20',
+            'pass' => '12345678',
+        ];
+        $this->assertNotEquals(false, $memberRepo->checkLogin($param));
+    }
 }

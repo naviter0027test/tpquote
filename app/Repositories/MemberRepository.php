@@ -19,6 +19,7 @@ class MemberRepository
                 'Member.id',
                 'Member.account',
                 'Member.userName',
+                'Member.memPermissionId',
                 'MemPermission.name as permissionName',
                 'MemPermission.quoteSub_1',
                 'MemPermission.quoteSub_2',
@@ -111,5 +112,18 @@ class MemberRepository
     public function listsAmount($param) {
         $amount = Member::count();
         return $amount;
+    }
+
+    public function updateById($id, $param) {
+        $item = Member::where('Member.id', '=', $id)->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        if(isset($param['pass']) == true && trim($param['pass']) != '')
+            $item->pass = md5($param['pass']);
+        if(isset($param['userName']) == true && trim($param['userName']) != '')
+            $item->userName = $param['userName'];
+        if(isset($param['memPermissionId']) == true && trim($param['memPermissionId']) != '')
+            $item->memPermissionId = $param['memPermissionId'];
+        $item->save();
     }
 }
