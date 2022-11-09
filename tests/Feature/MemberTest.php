@@ -141,7 +141,7 @@ class MemberTest extends TestCase
         try {
             $param = [
                 'nowPage' => '1acco',
-                'offset' => 'rrr',
+                'pageNum' => 'rrr',
             ];
             $memberRepo->lists($param);
         }
@@ -152,12 +152,30 @@ class MemberTest extends TestCase
         try {
             $param = [
                 'nowPage' => '1',
-                'offset' => 'rrr',
+                'pageNum' => 'rrr',
             ];
             $memberRepo->lists($param);
         }
         catch(Exception $e) {
             $this->assertEquals('頁數限制請輸入數字', $e->getMessage());
         }
+
+        $param = [
+            'nowPage' => 1,
+        ];
+        $items = $memberRepo->lists($param);
+        $this->assertEquals(19, count($items));
+
+        $item = $items[0];
+        $this->assertEquals('account19', $item->account);
+        $this->assertEquals('管理員', $item->userName);
+        $this->assertEquals('系統管理者', $item->permissionName);
+        $this->assertEquals(2, $item->member);
+
+        $item = $items[2];
+        $this->assertEquals('account17', $item->account);
+        $this->assertEquals('工廠成本會計', $item->userName);
+        $this->assertEquals('工業成本會計', $item->permissionName);
+        $this->assertEquals(0, $item->member);
     }
 }

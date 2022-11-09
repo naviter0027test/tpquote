@@ -75,9 +75,36 @@ class MemberRepository
     public function lists($param) {
         if(is_numeric($param['nowPage']) == false)
             throw new Exception('頁數請輸入數字');
-        if(isset($param['offset']) == true && is_numeric($param['offset']) == false)
+        if(isset($param['pageNum']) == true && is_numeric($param['pageNum']) == false)
             throw new Exception('頁數限制請輸入數字');
         else
-            $param['offset'] = 20;
+            $param['pageNum'] = 20;
+
+        $start = ($param['nowPage'] - 1) * $param['pageNum'];
+        $items = Member::leftJoin('MemPermission', 'MemPermission.id', '=', 'Member.memPermissionId')
+            ->orderBy('Member.id', 'desc')
+            ->offset($start)
+            ->limit($param['pageNum'])
+            ->select([
+                'Member.id',
+                'Member.account',
+                'Member.userName',
+                'MemPermission.name as permissionName',
+                'MemPermission.quoteSub_1',
+                'MemPermission.quoteSub_2',
+                'MemPermission.quoteSub_3',
+                'MemPermission.quoteSub_4',
+                'MemPermission.quoteSub_5',
+                'MemPermission.quoteSub_6',
+                'MemPermission.quoteSub_7',
+                'MemPermission.quoteSub_8',
+                'MemPermission.quoteSub_9',
+                'MemPermission.quoteSub_10',
+                'MemPermission.member',
+                'Member.created_at',
+                'Member.updated_at',
+            ])
+            ->get();
+        return $items;
     }
 }
