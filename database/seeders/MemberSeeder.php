@@ -166,6 +166,22 @@ class MemberSeeder extends Seeder
         $member->userName = '管理員';
         $member->memPermissionId = 7;
         $member->save();
+
+        $member = new Member();
+        $member->id = 20;
+        $member->account = 'account20';
+        $member->pass = md5('123456');
+        $member->userName = '測試員1';
+        $member->memPermissionId = 1;
+        $member->save();
+
+        $member = new Member();
+        $member->id = 21;
+        $member->account = 'account21';
+        $member->pass = md5('123456');
+        $member->userName = '測試員2';
+        $member->memPermissionId = 2;
+        $member->save();
     }
 }
 

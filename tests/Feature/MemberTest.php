@@ -54,7 +54,7 @@ class MemberTest extends TestCase
         }
 
         try {
-            $result = $memberRepo->checkByAccount('account20');
+            $result = $memberRepo->checkByAccount('account999');
             $this->assertEquals(false, $result);
         }
         catch(Exception $e) {
@@ -66,15 +66,15 @@ class MemberTest extends TestCase
         $memberRepo = new MemberRepository();
         try {
             $param = [
-                'account' => 'account20',
+                'account' => 'account30',
                 'pass' => '123456',
                 'userName' => '測試人員',
                 'memPermissionId' => 7,
             ];
             $memberRepo->create($param);
 
-            $item = $memberRepo->getById(20);
-            $this->assertEquals('account20', $item->account);
+            $item = $memberRepo->getById(22);
+            $this->assertEquals('account30', $item->account);
             $this->assertEquals('測試人員', $item->userName);
             $this->assertEquals('系統管理者', $item->permissionName);
         }
@@ -84,7 +84,7 @@ class MemberTest extends TestCase
 
         try {
             $param = [
-                'account' => 'account20',
+                'account' => 'account30',
                 'pass' => '123456',
                 'userName' => '測試人員',
                 'memPermissionId' => 7,
@@ -113,7 +113,7 @@ class MemberTest extends TestCase
         $memberRepo = new MemberRepository();
         try {
             $param = [
-                'account' => 'account20',
+                'account' => 'account999',
                 'pass' => '123456',
             ];
             $this->assertEquals(false, $memberRepo->checkLogin($param));
@@ -164,18 +164,25 @@ class MemberTest extends TestCase
             'nowPage' => 1,
         ];
         $items = $memberRepo->lists($param);
-        $this->assertEquals(19, count($items));
+        $this->assertEquals(20, count($items));
 
-        $item = $items[0];
+        $item = $items[2];
         $this->assertEquals('account19', $item->account);
         $this->assertEquals('管理員', $item->userName);
         $this->assertEquals('系統管理者', $item->permissionName);
         $this->assertEquals(2, $item->member);
 
-        $item = $items[2];
+        $item = $items[4];
         $this->assertEquals('account17', $item->account);
         $this->assertEquals('工廠成本會計', $item->userName);
         $this->assertEquals('工業成本會計', $item->permissionName);
         $this->assertEquals(0, $item->member);
+    }
+
+    public function testListsAmount() {
+        $memberRepo = new MemberRepository();
+        $param = [];
+        $amount = $memberRepo->listsAmount($param);
+        $this->assertEquals(21, $amount);
     }
 }

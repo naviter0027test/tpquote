@@ -107,4 +107,9 @@ class MemberRepository
             ->get();
         return $items;
     }
+
+    public function listsAmount($param) {
+        $amount = Member::count();
+        return $amount;
+    }
 }
