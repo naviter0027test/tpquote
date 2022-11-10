@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckMemberLoginMiddle;
 use App\Http\Controllers\MemberController;
 
 /*
@@ -15,3 +16,17 @@ use App\Http\Controllers\MemberController;
 */
 
 Route::get('/', [MemberController::class, 'loginPage']);
+
+Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
+    Route::group(['prefix' => 'member'], function() {
+        Route::get('login', [MemberController::class, 'loginPage']);
+        Route::post('login', [membercontroller::class, 'login']);
+        Route::get('home', [MemberController::class, 'home']);
+
+        Route::get('logout', [MemberController::class, 'logout']);
+    });
+});
+
+Route::group(['prefix' => 'member'], function() {
+    Route::get('isLogin', [MemberController::class, 'isLogin']);
+});
