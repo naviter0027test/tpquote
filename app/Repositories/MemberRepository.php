@@ -126,4 +126,8 @@ class MemberRepository
             $item->memPermissionId = $param['memPermissionId'];
         $item->save();
     }
+
+    public function removeById($id) {
+        Member::where('id', '=', $id)->delete();
+    }
 }

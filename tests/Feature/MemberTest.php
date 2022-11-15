@@ -216,4 +216,13 @@ class MemberTest extends TestCase
         ];
         $this->assertNotEquals(false, $memberRepo->checkLogin($param));
     }
+
+    public function testRemoveById() {
+        $memberRepo = new MemberRepository();
+        $memberRepo->removeById(21);
+
+        $param = [];
+        $amount = $memberRepo->listsAmount($param);
+        $this->assertEquals(20, $amount);
+    }
 }
