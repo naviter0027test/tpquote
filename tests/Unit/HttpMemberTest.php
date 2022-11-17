@@ -44,4 +44,28 @@ class HttpMemberTest extends TestCase
                 'msg' => 'has login',
             ]);
     }
+
+    public function testLogin() {
+        $test1Param = [
+            'account' => 'aaaaa',
+            'pass' => 'bbbbb',
+        ];
+        $response = $this->call('POST', '/member/login', $test1Param);
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'login failure',
+            ]);
+
+        $test2Param = [
+            'account' => 'test1',
+            'pass' => '123456',
+        ];
+        $response = $this->call('POST', '/member/login', $test2Param);
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'login failure',
+            ]);
+    }
 }
