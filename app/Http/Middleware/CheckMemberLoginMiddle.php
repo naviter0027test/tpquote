@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Session;
 
 class CheckMemberLoginMiddle
 {
@@ -16,6 +17,13 @@ class CheckMemberLoginMiddle
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if(Session::has('member') == true) {
+            if($request->path() == 'member/login')
+                return redirect('/member/home');
+            return $next($request);
+        } else if($request->path() == 'member/login') {
+            return $next($request);
+        }
+        return redirect('/member/login');
     }
 }

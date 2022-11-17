@@ -103,4 +103,29 @@ class HttpMemberTest extends TestCase
                 'msg' => 'not login',
             ]);
     }
+
+    public function testCheckMemberLoginMiddle() {
+        $response = $this->get('/member/home');
+        $response->assertStatus(302)
+            ->assertRedirect('/member/login');
+
+        $response = $this->get('/member/login');
+        $response->assertStatus(200);
+
+        $memberRepo = new MemberRepository();
+
+        $param = [
+            'account' => 'test1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $response = $this->withSession(['member' => $member])
+            ->get('/member/home');
+        $response->assertStatus(200);
+
+        $response = $this->get('/member/login');
+        $response->assertStatus(302)
+            ->assertRedirect('/member/home');
+    }
 }
