@@ -19,9 +19,11 @@ class MemberController extends Controller
             'status' => false,
             'msg' => 'login failure',
         ];
+        $jump = '/member/login';
         $param = $request->all();
         $param['account'] = isset($param['account']) ? $param['account'] : '';
         $param['pass'] = isset($param['pass']) ? $param['pass'] : '';
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
         $memberRepo = new MemberRepository();
         $member = $memberRepo->checkLogin($param);
         if($member != false) {
@@ -30,6 +32,10 @@ class MemberController extends Controller
                 'status' => true,
                 'msg' => 'login success',
             ];
+            $jump = '/member/home';
+        }
+        if($param['mode'] == 'html') {
+            return redirect($jump)->with('msg', $result['msg']);
         }
         return json_encode($result);
     }
@@ -38,7 +44,24 @@ class MemberController extends Controller
         return view('member.home');
     }
 
-    public function logout() {
+    public function logout(Request $request) {
+        $result = [
+            'status' => false,
+            'msg' => 'logout failure',
+        ];
+        $jump = '/member/login';
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+        \Log::info($param);
+        Session::forget('member');
+        $result = [
+            'status' => true,
+            'msg' => 'logout success',
+        ];
+        if($param['mode'] == 'html')
+            return redirect($jump);
+        return json_encode($result);
     }
 
     public function isLogin() {

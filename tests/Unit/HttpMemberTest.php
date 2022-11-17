@@ -49,6 +49,7 @@ class HttpMemberTest extends TestCase
         $test1Param = [
             'account' => 'aaaaa',
             'pass' => 'bbbbb',
+            'mode' => 'json',
         ];
         $response = $this->call('POST', '/member/login', $test1Param);
         $response->assertStatus(200)
@@ -60,12 +61,46 @@ class HttpMemberTest extends TestCase
         $test2Param = [
             'account' => 'test1',
             'pass' => '123456',
+            'mode' => 'json',
         ];
         $response = $this->call('POST', '/member/login', $test2Param);
         $response->assertStatus(200)
             ->assertJson([
                 'status' => false,
                 'msg' => 'login failure',
+            ]);
+    }
+
+    public function testLogout() {
+        $memberRepo = new MemberRepository();
+
+        $param = [
+            'account' => 'test1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+        $response = $this->withSession(['member' => $member])
+            ->get('/member/isLogin');
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => 'has login',
+            ]);
+
+        $test1Param = [
+            'mode' => 'json',
+        ];
+        $response = $this->get('/member/logout?'. http_build_query($test1Param) );
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => 'logout success',
+            ]);
+        $response = $this->get('/member/isLogin');
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'not login',
             ]);
     }
 }
