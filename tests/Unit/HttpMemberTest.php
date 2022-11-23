@@ -107,7 +107,8 @@ class HttpMemberTest extends TestCase
     public function testCheckMemberLoginMiddle() {
         $response = $this->get('/member/home');
         $response->assertStatus(302)
-            ->assertRedirect('/member/login');
+            ->assertRedirect('/member/login')
+            ->assertLocation('/member/login');
 
         $response = $this->get('/member/login');
         $response->assertStatus(200);
