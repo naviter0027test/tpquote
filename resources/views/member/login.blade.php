@@ -16,9 +16,10 @@
                 <h5>帳號:</h5>
                 <p> <input type="text" name="account" /> </p>
                 <h5>密碼:</h5>
-                <p> <input type="password" name="password" /> </p>
+                <p> <input type="password" name="pass" /> </p>
                 <p class="loginBtnP"> <button class="btn loginSubmit">登入</button> </p>
-                            </form>
+            </form>
+            <div class="alert alert-danger"> {{ session('msg') }} </div>
         </div>
     </body>
     <script src="/lib/jquery-2.1.4.min.js"></script>
