@@ -35,7 +35,8 @@ class MemberController extends Controller
             $jump = '/member/home';
         }
         if($param['mode'] == 'html') {
-            return redirect($jump)->with('msg', $result['msg']);
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
         }
         return json_encode($result);
     }

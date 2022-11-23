@@ -19,7 +19,9 @@
                 <p> <input type="password" name="pass" /> </p>
                 <p class="loginBtnP"> <button class="btn loginSubmit">登入</button> </p>
             </form>
+            @if (session('msg'))
             <div class="alert alert-danger"> {{ session('msg') }} </div>
+            @endif
         </div>
     </body>
     <script src="/lib/jquery-2.1.4.min.js"></script>
