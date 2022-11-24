@@ -91,6 +91,31 @@ class MemberController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $memberRepo = new MemberRepository();
+        $member = Session::get('member');
+        $memberParam = [
+            'account' => $member->account,
+            'pass' => $param['oldPass'],
+        ];
+        try {
+            $member = $memberRepo->checkLogin($memberParam);
+            if($member == false)
+                throw new Exception('舊密碼錯誤');
+
+            $updateParam['pass'] = $param['pass'];
+            $memberRepo->updateById($member->id, $updateParam);
+            $result = [
+                'status' => true,
+                'msg' => '密碼更新成功',
+            ];
+        }
+        catch(Exception $e) {
+            $result = [
+                'status' => false,
+                'msg' => $e->getMessage(),
+            ];
+        }
+
         if($param['mode'] == 'html')
             return redirect($jump);
         return json_encode($result);

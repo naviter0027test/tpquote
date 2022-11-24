@@ -133,12 +133,13 @@ class HttpMemberTest extends TestCase
     public function testUpdatePassword() {
         $memberRepo = new MemberRepository();
         $param = [
-            'account' => 'test1',
+            'account' => 'account1',
             'pass' => '123456',
         ];
         $member = $memberRepo->checkLogin($param);
 
         $updateParam = [
+            'oldPass' => '1234567',
             'pass' => '12345678',
             'mode' => 'json',
         ];
@@ -146,8 +147,21 @@ class HttpMemberTest extends TestCase
             ->post('/member/password', $updateParam);
         $response->assertStatus(200)
             ->assertJson([
+                'status' => false,
+                'msg' => '舊密碼錯誤',
+            ]);
+
+        $updateParam2 = [
+            'oldPass' => '123456',
+            'pass' => '12345678',
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->post('/member/password', $updateParam2);
+        $response->assertStatus(200)
+            ->assertJson([
                 'status' => true,
-                'msg' => 'password update success',
+                'msg' => '密碼更新成功',
             ]);
     }
 }
