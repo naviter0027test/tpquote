@@ -53,7 +53,6 @@ class MemberController extends Controller
 
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
-        \Log::info($param);
         Session::forget('member');
         $result = [
             'status' => true,
@@ -75,6 +74,25 @@ class MemberController extends Controller
                 'msg' => 'has login',
             ];
         }
+        return json_encode($result);
+    }
+
+    public function passwordPage(Request $request) {
+        return view('member.password');
+    }
+
+    public function password(Request $request) {
+        $result = [
+            'status' => false,
+            'msg' => 'password update failure',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        if($param['mode'] == 'html')
+            return redirect($jump);
         return json_encode($result);
     }
 }

@@ -129,4 +129,25 @@ class HttpMemberTest extends TestCase
         $response->assertStatus(302)
             ->assertRedirect('/member/home');
     }
+
+    public function testUpdatePassword() {
+        $memberRepo = new MemberRepository();
+        $param = [
+            'account' => 'test1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $updateParam = [
+            'pass' => '12345678',
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->post('/member/password', $updateParam);
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => 'password update success',
+            ]);
+    }
 }
