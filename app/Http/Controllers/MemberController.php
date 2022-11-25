@@ -138,6 +138,10 @@ class MemberController extends Controller
 
         try {
             $memberRepo = new MemberRepository();
+            $member = Session::get('member');
+            $memberPermission = $memberRepo->getById($member->id);
+            if($memberPermission->member < 1)
+                throw new Exception('權限不足');
             $items = $memberRepo->lists($param);
             $amount = $memberRepo->listsAmount($param);
             $result = [
@@ -152,6 +156,53 @@ class MemberController extends Controller
                 'status' => false,
                 'msg' => $e->getMessage(),
             ];
+        }
+
+        if($param['mode'] == 'html')
+            return redirect($jump);
+        return json_encode($result);
+    }
+
+    public function createPage(Request $request) {
+        return view('member.create');
+    }
+
+    public function create(Request $request) {
+        $result = [
+            'status' => false,
+            'msg' => '成員新增錯誤',
+        ];
+        $jump = "/member/proccess";
+
+        $memberRepo = new MemberRepository();
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        try {
+            $member = Session::get('member');
+            $memberPermission = $memberRepo->getById($member->id);
+            if($memberPermission->member != 2)
+                throw new Exception('權限不足');
+
+            $validator = Validator::make($param, [
+                'account' => 'required|max:20',
+                'pass' => 'required',
+                'userName' => 'required',
+                'memPermissionId' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $memberRepo->create($param);
+            $result['status'] = true;
+            $result['msg'] = '新增成功';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
         }
 
         if($param['mode'] == 'html')

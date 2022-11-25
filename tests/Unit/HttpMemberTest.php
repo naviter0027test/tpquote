@@ -166,7 +166,7 @@ class HttpMemberTest extends TestCase
             ]);
     }
 
-    public function testMemberLists() {
+    public function testLists() {
         $memberRepo = new MemberRepository();
         $param = [
             'account' => 'account1',
@@ -197,5 +197,68 @@ class HttpMemberTest extends TestCase
                         ->etc();
                 });
             });
+    }
+
+    public function testCreate() {
+        $memberRepo = new MemberRepository();
+        $param = [
+            'account' => 'account1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $createParam = [
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->post('/member/create', $createParam);
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '權限不足');
+            });
+
+        $sysParam = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($sysParam);
+
+        $createParam2 = [
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member2])
+            ->post('/member/create', $createParam2);
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.account')
+                    ->has('errors.pass')
+                    ->has('errors.userName')
+                    ->has('errors.memPermissionId');
+            });
+
+        $createParam2 = [
+            'mode' => 'json',
+            'account' => 'account23',
+            'pass' => '123456',
+            'userName' => '李順生',
+            'memPermissionId' => 1,
+        ];
+        $response = $this->withSession(['member' => $member2])
+            ->post('/member/create', $createParam2);
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', '新增成功');
+            });
+
+        $searchParam = [
+            'account' => 'account23',
+            'pass' => '123456',
+        ];
+        $member23 = $memberRepo->checkLogin($searchParam);
+        $this->assertNotEquals(false, $member23);
     }
 }
