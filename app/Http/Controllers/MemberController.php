@@ -209,4 +209,12 @@ class MemberController extends Controller
             return redirect($jump);
         return json_encode($result);
     }
+
+    public function edit(Request $request) {
+        return ;
+    }
+
+    public function update(Request $request) {
+        return ;
+    }
 }

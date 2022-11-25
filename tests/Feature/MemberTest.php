@@ -29,7 +29,7 @@ class MemberTest extends TestCase
             $this->assertEquals('account1', $item->account);
             $this->assertEquals('採購人員1', $item->userName);
             $this->assertEquals('採購部', $item->permissionName);
-            $this->assertEquals(0, $item->member);
+            $this->assertEquals(1, $item->member);
         }
         catch(Exception $e) {
             $this->assertEquals('錯誤', $e->getMessage());
@@ -176,7 +176,7 @@ class MemberTest extends TestCase
         $this->assertEquals('account17', $item->account);
         $this->assertEquals('工廠成本會計', $item->userName);
         $this->assertEquals('工業成本會計', $item->permissionName);
-        $this->assertEquals(0, $item->member);
+        $this->assertEquals(1, $item->member);
     }
 
     public function testListsAmount() {
