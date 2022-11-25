@@ -123,7 +123,7 @@ class MemberController extends Controller
     }
 
     public function proccess(Request $request) {
-        return ;
+        return view('member.proccess');
     }
 
     public function lists(Request $request) {

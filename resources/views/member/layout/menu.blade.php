@@ -11,6 +11,18 @@
         密碼更改</a>
     </div>
     <div class="menu1">
+        <a href="#" class="{{ strpos(\Request::path(), '#') === false ? '' : 'clicked' }} glyphicon glyphicon-book">
+        報價管理</a>
+    </div>
+    <div class="menu1">
+        <a href="/member/lists" class="{{ strpos(\Request::path(), '/member/lists') === false ? '' : 'clicked' }} glyphicon glyphicon-align-justify">
+        成員管理</a>
+    </div>
+    <div class="menu1">
+        <a href="/member/permission" class="{{ strpos(\Request::path(), '/member/permission') === false ? '' : 'clicked' }} glyphicon glyphicon-certificate">
+        權限管理</a>
+    </div>
+    <div class="menu1">
         <a href="/member/logout" class="glyphicon glyphicon-share logout">
         登出</a>
     </div>
