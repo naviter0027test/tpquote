@@ -19,8 +19,8 @@
         成員管理</a>
     </div>
     <div class="menu1">
-        <a href="/member/permission" class="{{ strpos(\Request::path(), '/member/permission') === false ? '' : 'clicked' }} glyphicon glyphicon-certificate">
-        權限管理</a>
+        <a href="/member/permission/lists" class="{{ strpos(\Request::path(), '/member/permission') === false ? '' : 'clicked' }} glyphicon glyphicon-certificate">
+        查看權限</a>
     </div>
     <div class="menu1">
         <a href="/member/logout" class="glyphicon glyphicon-share logout">

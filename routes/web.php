@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckMemberLoginMiddle;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemPermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::post('create', [MemberController::class, 'create']);
         Route::get('edit', [MemberController::class, 'edit']);
         Route::post('update', [MemberController::class, 'update']);
+
+        Route::get('permission/lists', [MemPermissionController::class, 'lists']);
 
         Route::get('logout', [MemberController::class, 'logout']);
     });
