@@ -120,4 +120,42 @@ class MemberController extends Controller
             return redirect($jump);
         return json_encode($result);
     }
+
+    public function proccess(Request $request) {
+        return ;
+    }
+
+    public function lists(Request $request) {
+        $result = [
+            'status' => false,
+            'msg' => '成員列表錯誤',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+        $param['nowPage'] = isset($param['nowPage']) ? $param['nowPage'] : 1;
+
+        try {
+            $memberRepo = new MemberRepository();
+            $items = $memberRepo->lists($param);
+            $amount = $memberRepo->listsAmount($param);
+            $result = [
+                'status' => true,
+                'msg' => '成員列表成功',
+                'items' => $items,
+                'amount' => $amount,
+            ];
+        }
+        catch(Exception $e) {
+            $result = [
+                'status' => false,
+                'msg' => $e->getMessage(),
+            ];
+        }
+
+        if($param['mode'] == 'html')
+            return redirect($jump);
+        return json_encode($result);
+    }
 }

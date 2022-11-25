@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 //use PHPUnit\Framework\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use App\Repositories\MemberRepository;
 
@@ -163,5 +164,38 @@ class HttpMemberTest extends TestCase
                 'status' => true,
                 'msg' => '密碼更新成功',
             ]);
+    }
+
+    public function testMemberLists() {
+        $memberRepo = new MemberRepository();
+        $param = [
+            'account' => 'account1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $searchParam = [
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->get('/member/lists?'. http_build_query($searchParam));
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+            $json->where('status', true)
+                ->where('msg', '成員列表成功')
+                ->where('amount', 21)
+                ->has('items.2', function($item2) {
+                    $item2->where('id', 19)
+                        ->where('userName', '管理員')
+                        ->where('permissionName', '系統管理者')
+                        ->etc();
+                })
+                ->has('items.19', function($item19) {
+                    $item19->where('id', 2)
+                        ->where('userName', '採購人員2')
+                        ->where('permissionName', '採購部')
+                        ->etc();
+                });
+            });
     }
 }

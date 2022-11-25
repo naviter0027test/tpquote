@@ -24,6 +24,8 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::get('home', [MemberController::class, 'home']);
         Route::get('password', [MemberController::class, 'passwordPage']);
         Route::post('password', [MemberController::class, 'password']);
+        Route::get('proccess', [MemberController::class, 'proccess']);
+        Route::get('lists', [MemberController::class, 'lists']);
 
         Route::get('logout', [MemberController::class, 'logout']);
     });
