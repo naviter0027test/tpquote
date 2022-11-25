@@ -92,7 +92,7 @@ body {
     -webkit-transition: background 0.5s; /* Safari prior 6.1 */
     transition: background 0.5s;
     text-decoration: none;
-    background: #19194a;
+    background: #2eb8b8;
     text-align: center;
 }
 
@@ -101,7 +101,7 @@ body {
     height: 700px;
 
     width: 160px;
-    background: #19194a;
+    background: #2eb8b8;
 }
 
 .admin-menu .menu1 {
@@ -111,7 +111,7 @@ body {
     display: block;
     padding: 12px 5px 12px 5px;
 
-    color: #c6c6d2;
+    color: #eee;
     font-size: 14px;
     font-weight: 400;
     text-decoration: none;
@@ -121,7 +121,8 @@ body {
 }
 
 .admin-menu a:hover {
-    color: #eee;
+    color: #c6c6d2;
+    background: #145252;
 }
 
 .admin-menu a.clicked {
