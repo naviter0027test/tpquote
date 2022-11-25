@@ -159,8 +159,12 @@ class MemberController extends Controller
             ];
         }
 
-        if($param['mode'] == 'html')
-            return redirect($jump);
+        if($param['mode'] == 'html') {
+            if($result['status'] == false)
+                return redirect($jump);
+            else
+                return view('member.lists');
+        }
         return json_encode($result);
     }
 

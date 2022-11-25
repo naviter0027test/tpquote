@@ -22,7 +22,7 @@ body {
 
     font-weight: 400;
     font-size: 14px;
-    background: #7a33cc;
+    background: #33cccc;
     border-color: #800055;
     color: #ece0fa;
     -webkit-border-radius: 4px;
@@ -34,7 +34,7 @@ body {
 
 .btn-style1:hover {
     color: #ece0fa;
-    background: #6229a3;
+    background: #196666;
     text-decoration: none;
 }
 
