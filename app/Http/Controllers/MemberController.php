@@ -219,7 +219,44 @@ class MemberController extends Controller
         return ;
     }
 
-    public function update(Request $request) {
-        return ;
+    public function update(Request $request, $id) {
+        $result = [
+            'status' => false,
+            'msg' => '成員修改錯誤',
+        ];
+        $jump = "/member/proccess";
+
+        $memberRepo = new MemberRepository();
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        try {
+            $member = Session::get('member');
+            $memberPermission = $memberRepo->getById($member->id);
+            if($memberPermission->member != 2)
+                throw new Exception('權限不足');
+
+            $validator = Validator::make($param, [
+                'userName' => 'required',
+                'memPermissionId' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $memberRepo->updateById($id, $param);
+            $result['status'] = true;
+            $result['msg'] = '修改成功';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html')
+            return redirect($jump);
+        return json_encode($result);
     }
 }

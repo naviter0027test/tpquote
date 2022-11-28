@@ -241,7 +241,7 @@ class HttpMemberTest extends TestCase
 
         $createParam2 = [
             'mode' => 'json',
-            'account' => 'account23',
+            'account' => 'account33',
             'pass' => '123456',
             'userName' => '李順生',
             'memPermissionId' => 1,
@@ -255,10 +255,70 @@ class HttpMemberTest extends TestCase
             });
 
         $searchParam = [
-            'account' => 'account23',
+            'account' => 'account33',
             'pass' => '123456',
         ];
-        $member23 = $memberRepo->checkLogin($searchParam);
-        $this->assertNotEquals(false, $member23);
+        $member33 = $memberRepo->checkLogin($searchParam);
+        $this->assertNotEquals(false, $member33);
+    }
+
+    public function testUpdate() {
+        $memberRepo = new MemberRepository();
+        $param = [
+            'account' => 'account1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $updateParam = [
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->post('/member/update/22', $updateParam);
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '權限不足');
+            });
+
+        $sysParam = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($sysParam);
+
+        $updateParam2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/member/update/22', $updateParam2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.userName')
+                    ->has('errors.memPermissionId');
+            });
+
+        $updateParam3 = [
+            'mode' => 'json',
+            'userName' => '陳炯明',
+            'memPermissionId' => 1,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/member/update/22', $updateParam3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', '修改成功');
+            });
+
+        $loginParam = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member22 = $memberRepo->checkLogin($loginParam);
+        $this->assertNotEquals('測試員3', $member22->userName);
+        $this->assertNotEquals(8, $member22->memPermissionId);
     }
 }
