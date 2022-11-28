@@ -120,5 +120,20 @@ class MemPermissionSeeder extends Seeder
             'quoteSub_10' => 2,
             'member' => 2,
         ]);
+        DB::table('MemPermission')->insert([
+            'id' => 8,
+            'name' => '系統管理者',
+            'quoteSub_1' => 0,
+            'quoteSub_2' => 0,
+            'quoteSub_3' => 0,
+            'quoteSub_4' => 0,
+            'quoteSub_5' => 0,
+            'quoteSub_6' => 0,
+            'quoteSub_7' => 0,
+            'quoteSub_8' => 0,
+            'quoteSub_9' => 0,
+            'quoteSub_10' => 0,
+            'member' => 0,
+        ]);
     }
 }

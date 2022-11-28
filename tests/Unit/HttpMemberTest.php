@@ -183,16 +183,16 @@ class HttpMemberTest extends TestCase
             ->assertJson(function (AssertableJson $json) {
             $json->where('status', true)
                 ->where('msg', '成員列表成功')
-                ->where('amount', 21)
-                ->has('items.2', function($item2) {
+                ->where('amount', 22)
+                ->has('items.3', function($item2) {
                     $item2->where('id', 19)
                         ->where('userName', '管理員')
                         ->where('permissionName', '系統管理者')
                         ->etc();
                 })
                 ->has('items.19', function($item19) {
-                    $item19->where('id', 2)
-                        ->where('userName', '採購人員2')
+                    $item19->where('id', 3)
+                        ->where('userName', '採購人員3')
                         ->where('permissionName', '採購部')
                         ->etc();
                 });
