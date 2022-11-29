@@ -321,4 +321,60 @@ class HttpMemberTest extends TestCase
         $this->assertNotEquals('測試員3', $member22->userName);
         $this->assertNotEquals(8, $member22->memPermissionId);
     }
+
+    public function testRemove() {
+        $memberRepo = new MemberRepository();
+        $param = [
+            'account' => 'account1',
+            'pass' => '123456',
+        ];
+        $member = $memberRepo->checkLogin($param);
+
+        $removeParam = [
+            'mode' => 'json',
+        ];
+        $response = $this->withSession(['member' => $member])
+            ->get('/member/remove/22?'. http_build_query($removeParam));
+        $response->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '權限不足');
+            });
+
+        $sysParam = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($sysParam);
+
+        $removeParam2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->get('/member/remove?'. http_build_query($removeParam2) );
+        $response2->assertStatus(404);
+
+        $response3 = $this->withSession(['member' => $member2])
+            ->get('/member/remove/0?'. http_build_query($removeParam2) );
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '未輸入刪除的對象');
+            });
+
+        $response4 = $this->withSession(['member' => $member2])
+            ->get('/member/remove/22?'. http_build_query($removeParam2) );
+        $response4->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', '刪除成功');
+            });
+
+        $loginParam = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member22 = $memberRepo->checkLogin($loginParam);
+        $this->assertEquals(false, $member22);
+    }
 }

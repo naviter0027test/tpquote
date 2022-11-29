@@ -32,6 +32,7 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::post('create', [MemberController::class, 'create']);
         Route::get('edit', [MemberController::class, 'edit']);
         Route::post('update/{id}', [MemberController::class, 'update']);
+        Route::get('remove/{id}', [MemberController::class, 'remove']);
 
         Route::get('permission/lists', [MemPermissionController::class, 'lists']);
 
