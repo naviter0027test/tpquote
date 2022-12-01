@@ -10,13 +10,13 @@
         <a href="/member/password" class="{{ strpos(\Request::path(), 'member/password') === false ? '' : 'clicked' }} glyphicon glyphicon-star-empty">
         密碼更改</a>
     </div>
-    @if(isset($memPermission->id) && $memPermission->quoteSub_1 > 0)
+    @if(isset($memberPermission->id) && $memberPermission->quoteSub_1 > 0)
     <div class="menu1">
         <a href="#" class="{{ strpos(\Request::path(), '#') === false ? '' : 'clicked' }} glyphicon glyphicon-book">
         報價管理</a>
     </div>
     @endif
-    @if(isset($memPermission->id) && $memPermission->member > 0)
+    @if(isset($memberPermission->id) && $memberPermission->member > 0)
     <div class="menu1">
         <a href="/member/lists" class="{{ strpos(\Request::path(), '/member/lists') === false ? '' : 'clicked' }} glyphicon glyphicon-align-justify">
         成員管理</a>

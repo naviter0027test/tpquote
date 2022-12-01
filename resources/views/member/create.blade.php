@@ -26,6 +26,12 @@
                 <h5>權限</h5>
                 <p>
                     <select name="memPermissionId">
+                    @if (isset($memPermissionList))
+                    @foreach ($memPermissionList as $memPerm)
+                        <option value="{{ $memPerm->id }}">{{ $memPerm->name }}</option>
+                    @endforeach
+                    @endif
+                    <!--
                         <option value="1">採購部</option>
                         <option value="2">採購主管</option>
                         <option value="3">台北開發</option>
@@ -33,6 +39,7 @@
                         <option value="5">工業成本會計</option>
                         <option value="6">財務主管</option>
                         <option value="7">系統管理者</option>
+                    -->
                     </select>
                 </p>
                 <p class=""> <button class="btn">新增</button> </p>

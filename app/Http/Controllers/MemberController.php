@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\MemberRepository;
+use App\Repositories\MemPermissionRepository;
 use Session;
 use Exception;
 
@@ -28,7 +29,7 @@ class MemberController extends Controller
         $member = $memberRepo->checkLogin($param);
         if($member != false) {
             Session::put('member', $member);
-            Session::put('memPermission', $memberRepo->getById($member->id));
+            Session::put('memberPermission', $memberRepo->getById($member->id));
             $result = [
                 'status' => true,
                 'msg' => 'login success',
@@ -43,8 +44,8 @@ class MemberController extends Controller
     }
 
     public function home() {
-        $memPermission = Session::get('memPermission');
-        return view('member.home', ['memPermission' => $memPermission]);
+        $memberPermission = Session::get('memberPermission');
+        return view('member.home', ['memberPermission' => $memberPermission]);
     }
 
     public function logout(Request $request) {
@@ -81,8 +82,8 @@ class MemberController extends Controller
     }
 
     public function passwordPage(Request $request) {
-        $memPermission = Session::get('memPermission');
-        return view('member.password', ['memPermission' => $memPermission]);
+        $memberPermission = Session::get('memberPermission');
+        return view('member.password', ['memberPermission' => $memberPermission]);
     }
 
     public function password(Request $request) {
@@ -126,8 +127,8 @@ class MemberController extends Controller
     }
 
     public function proccess(Request $request) {
-        $memPermission = Session::get('memPermission');
-        return view('member.proccess', ['memPermission' => $memPermission]);
+        $memberPermission = Session::get('memberPermission');
+        return view('member.proccess', ['memberPermission' => $memberPermission]);
     }
 
     public function lists(Request $request) {
@@ -174,15 +175,17 @@ class MemberController extends Controller
             else {
                 $nowPage = $param['nowPage'];
                 unset($param['nowPage']);
-                return view('member.lists', ['memPermission' => $memberPermission, 'result' => $result, 'param' => $param, 'nowPage' => $nowPage ]);
+                return view('member.lists', ['memberPermission' => $memberPermission, 'result' => $result, 'param' => $param, 'nowPage' => $nowPage ]);
             }
         }
         return json_encode($result);
     }
 
     public function createPage(Request $request) {
-        $memPermission = Session::get('memPermission');
-        return view('member.create', ['memPermission' => $memPermission]);
+        $memberPermission = Session::get('memberPermission');
+        $memPermissionRepo = new MemPermissionRepository();
+        $memPermissionList = $memPermissionRepo->getAll();
+        return view('member.create', ['memberPermission' => $memberPermission, 'memPermissionList' => $memPermissionList]);
     }
 
     public function create(Request $request) {
@@ -231,8 +234,8 @@ class MemberController extends Controller
     }
 
     public function edit(Request $request) {
-        $memPermission = Session::get('memPermission');
-        return view('member.edit', ['memPermission' => $memPermission]);
+        $memberPermission = Session::get('memberPermission');
+        return view('member.edit', ['memberPermission' => $memberPermission]);
     }
 
     public function update(Request $request, $id = 0) {
