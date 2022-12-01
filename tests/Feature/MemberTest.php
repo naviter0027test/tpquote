@@ -73,7 +73,7 @@ class MemberTest extends TestCase
             ];
             $memberRepo->create($param);
 
-            $item = $memberRepo->getById(22);
+            $item = $memberRepo->getById(23);
             $this->assertEquals('account30', $item->account);
             $this->assertEquals('測試人員', $item->userName);
             $this->assertEquals('系統管理者', $item->permissionName);
@@ -166,13 +166,13 @@ class MemberTest extends TestCase
         $items = $memberRepo->lists($param);
         $this->assertEquals(20, count($items));
 
-        $item = $items[2];
+        $item = $items[3];
         $this->assertEquals('account19', $item->account);
         $this->assertEquals('管理員', $item->userName);
         $this->assertEquals('系統管理者', $item->permissionName);
         $this->assertEquals(2, $item->member);
 
-        $item = $items[4];
+        $item = $items[5];
         $this->assertEquals('account17', $item->account);
         $this->assertEquals('工廠成本會計', $item->userName);
         $this->assertEquals('工業成本會計', $item->permissionName);
@@ -183,7 +183,7 @@ class MemberTest extends TestCase
         $memberRepo = new MemberRepository();
         $param = [];
         $amount = $memberRepo->listsAmount($param);
-        $this->assertEquals(21, $amount);
+        $this->assertEquals(22, $amount);
     }
 
     public function testUpdateById() {
@@ -223,6 +223,6 @@ class MemberTest extends TestCase
 
         $param = [];
         $amount = $memberRepo->listsAmount($param);
-        $this->assertEquals(20, $amount);
+        $this->assertEquals(21, $amount);
     }
 }
