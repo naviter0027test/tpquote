@@ -29,9 +29,33 @@
                     </tr>
                 </thead>
                 <tbody>
+                @if (isset($result['items']))
+                @foreach ($result['items'] as $item)
+                    <tr>
+                        <td>{{ $item->id }} </td>
+                        <td>{{ $item->account }} </td>
+                        <td>{{ $item->userName }} </td>
+                        <td>{{ $item->created_at }} </td>
+                        <td>{{ $item->updated_at }} </td>
+                        <td>
+                            <a href='/member/edit/{{ $item->id }}' class='glyphicon glyphicon-pencil'></a>
+                            <a href='/member/remove/{{ $item->id }}' class='glyphicon glyphicon-remove itemRemove'></a>
+                        </td>
+                    </tr>
+                @endforeach
+                @endif
                 </tbody>
             </table>
             <div class="pagination paginationCenter">
+            @if(isset($result['amount']))
+            @for($i = 0;$i < ceil($result['amount'] / $param['pageNum']); ++$i)
+                @if(($i+1) == $nowPage)
+                <label>{{ $i+1 }} </label>
+                @elseif(($i+1) != $nowPage && abs($i+1-$nowPage) < 5)
+                <a href="/member/lists?nowPage={{ $i+1 }}&{{ http_build_query($param) }}">{{ $i+1 }}</a>
+                @endif
+            @endfor
+            @endif
             </div>
         </div>
 @include('member.layout.footer')

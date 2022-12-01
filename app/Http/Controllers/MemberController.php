@@ -142,6 +142,11 @@ class MemberController extends Controller
         $param['nowPage'] = isset($param['nowPage']) ? $param['nowPage'] : 1;
 
         try {
+            if(isset($param['pageNum']) == true && is_numeric($param['pageNum']) == false)
+                throw new Exception('頁數限制請輸入數字');
+            else
+                $param['pageNum'] = 20;
+
             $memberRepo = new MemberRepository();
             $member = Session::get('member');
             $memberPermission = $memberRepo->getById($member->id);
@@ -166,8 +171,11 @@ class MemberController extends Controller
         if($param['mode'] == 'html') {
             if($result['status'] == false)
                 return redirect($jump);
-            else
-                return view('member.lists', ['memPermission' => $memberPermission]);
+            else {
+                $nowPage = $param['nowPage'];
+                unset($param['nowPage']);
+                return view('member.lists', ['memPermission' => $memberPermission, 'result' => $result, 'param' => $param, 'nowPage' => $nowPage ]);
+            }
         }
         return json_encode($result);
     }
@@ -215,13 +223,16 @@ class MemberController extends Controller
             $result['msg'] = $e->getMessage();
         }
 
-        if($param['mode'] == 'html')
+        if($param['mode'] == 'html') {
+            $request->session()->flash('result', $result);
             return redirect($jump);
+        }
         return json_encode($result);
     }
 
     public function edit(Request $request) {
-        return ;
+        $memPermission = Session::get('memPermission');
+        return view('member.edit', ['memPermission' => $memPermission]);
     }
 
     public function update(Request $request, $id = 0) {

@@ -76,10 +76,6 @@ class MemberRepository
     public function lists($param) {
         if(is_numeric($param['nowPage']) == false)
             throw new Exception('頁數請輸入數字');
-        if(isset($param['pageNum']) == true && is_numeric($param['pageNum']) == false)
-            throw new Exception('頁數限制請輸入數字');
-        else
-            $param['pageNum'] = 20;
 
         $start = ($param['nowPage'] - 1) * $param['pageNum'];
         $items = Member::leftJoin('MemPermission', 'MemPermission.id', '=', 'Member.memPermissionId')

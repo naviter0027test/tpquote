@@ -15,7 +15,7 @@
             <div class="content-header">
                 <span>首頁</span> &gt; <label>新增</label>
             </div>
-            <form method='post' action='/admin/news/create' class='form1' enctype="multipart/form-data">
+            <form method='post' action='/member/create' class='form1' enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <h5>帳號</h5>
                 <p> <input type="text" name="account" required /> </p>

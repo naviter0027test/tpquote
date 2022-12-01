@@ -22,9 +22,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                    @if(isset($result['result']))
-                        <td>{{ $result['result'] == true ? '成功' : '失敗' }}</td>
-                        <td>{{ $result['msg'] }}</td>
+                    @if (session('result'))
+                        <td>{{ session('result')['status'] == true ? '成功' : '失敗' }}</td>
+                        <td>{{ session('result')['msg'] }}</td>
                     @endif
                     </tr>
                 </tbody>
