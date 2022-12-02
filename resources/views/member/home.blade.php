@@ -14,6 +14,16 @@
             <div class="content-header">
                 <span>首頁</span>
             </div>
+            <div class="content-emp">
+                <div class="show-line1">
+                    <label>員工名稱:</label>
+                    <span>黃玄鳴</span>
+                </div>
+                <div class="show-line1">
+                    <label>部門所屬:</label>
+                    <span>練習部門</span>
+                </div>
+            </div>
         </div>
 @include('member.layout.footer')
     </body>
