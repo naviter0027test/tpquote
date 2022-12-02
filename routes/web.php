@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckMemberLoginMiddle;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemPermissionController;
+use App\Http\Controllers\TstController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +44,6 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
 Route::group(['prefix' => 'member'], function() {
     Route::get('isLogin', [MemberController::class, 'isLogin']);
 });
+
+Route::get('tst/iframe/mother', [TstController::class, 'iframeMother']);
+Route::get('tst/iframe/child', [TstController::class, 'iframeChild']);
