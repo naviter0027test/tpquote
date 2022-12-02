@@ -21,6 +21,32 @@ class MemPermissionRepository
     public function getAll() {
         $items = MemPermission::orderBy('id', 'asc')
             ->get();
+        foreach($items as $i => $item) {
+            for($j = 1;$j <= 10;++$j) {
+                switch($item->{'quoteSub_'. $j}) {
+                    case 0:
+                        $items[$i]->{'quoteSub_'.$j.'_Show'} = '無';
+                        break;
+                    case 1:
+                        $items[$i]->{'quoteSub_'.$j.'_Show'} = '查看';
+                        break;
+                    case 2:
+                        $items[$i]->{'quoteSub_'.$j.'_Show'} = '編輯';
+                        break;
+                }
+            }
+            switch($item->{'member'}) {
+                case 0:
+                    $items[$i]->{'memberShow'} = '無';
+                    break;
+                case 1:
+                    $items[$i]->{'memberShow'} = '查看';
+                    break;
+                case 2:
+                    $items[$i]->{'memberShow'} = '編輯';
+                    break;
+            }
+        }
         return $items;
     }
 }

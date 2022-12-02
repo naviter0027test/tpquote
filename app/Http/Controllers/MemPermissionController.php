@@ -10,6 +10,9 @@ use Exception;
 class MemPermissionController extends Controller
 {
     public function lists(Request $request) {
-        return view('member.permission');
+        $memberPermission = Session::get('memberPermission');
+        $memPermissionRepo = new MemPermissionRepository();
+        $memPermissionList = $memPermissionRepo->getAll();
+        return view('member.permission', ['memberPermission' => $memberPermission, 'memPermissionList' => $memPermissionList]);
     }
 }

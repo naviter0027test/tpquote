@@ -32,6 +32,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach ($memPermissionList as $item)
+                    <tr>
+                        <td>{{ $item->name }}</td>
+                    @for ($k = 1; $k <= 10;++$k)
+                        <td>{{ $item->{'quoteSub_'.$k.'_Show'} }}</td>
+                    @endfor
+                        <td>{{ $item->memberShow }}</td>
+                    </tr>
+                @endforeach
+                <!--
                     <tr>
                         <td>權限者1</td>
                         <td>編輯</td>
@@ -74,6 +84,7 @@
                         <td>編輯</td>
                         <td>編輯</td>
                     </tr>
+                    -->
                 </tbody>
             </table>
         </div>
