@@ -23,6 +23,11 @@
                     <label>部門所屬:</label>
                     <span>練習部門</span>
                 </div>
+                <div class="home-panel">
+                    <a href="#" class="home-btn">業務一部</a>
+                    <a href="#" class="home-btn">業務二部</a>
+                    <a href="#" class="home-btn">公司品項</a>
+                </div>
             </div>
         </div>
 @include('member.layout.footer')
