@@ -5,6 +5,7 @@ use App\Http\Middleware\CheckMemberLoginMiddle;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemPermissionController;
 use App\Http\Controllers\TstController;
+use App\Http\Controllers\QuoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,12 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::get('permission/lists', [MemPermissionController::class, 'lists']);
 
         Route::get('logout', [MemberController::class, 'logout']);
+    });
+
+    Route::group(['prefix' => 'quote'], function() {
+        Route::get('lists', [QuoteController::class, 'lists']);
+        Route::get('create-1', [QuoteController::class, 'create1']);
+        Route::get('edit-1/{id}', [QuoteController::class, 'edit1']);
     });
 });
 
