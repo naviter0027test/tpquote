@@ -8,7 +8,7 @@ use Exception;
 class QuoteController extends Controller
 {
     public function lists(Request $request) {
-        return 'quote lists';
+        return view('quote.lists');
     }
 
     public function create1(Request $request) {

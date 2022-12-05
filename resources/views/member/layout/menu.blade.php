@@ -12,7 +12,7 @@
     </div>
     @if(isset($memberPermission->id) && $memberPermission->quoteSub_1 > 0)
     <div class="menu1">
-        <a href="#" class="{{ strpos(\Request::path(), '#') === false ? '' : 'clicked' }} glyphicon glyphicon-book">
+        <a href="/quote/lists" class="{{ strpos(\Request::path(), '#') === false ? '' : 'clicked' }} glyphicon glyphicon-book">
         報價管理</a>
     </div>
     @endif
