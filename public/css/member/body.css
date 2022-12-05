@@ -168,6 +168,29 @@ body {
     background: white;
 }
 
+.content .home-panel {
+    margin: 10px 0 0 20px;
+    padding: 8px 10px 8px 10px;
+}
+
+.content .home-btn {
+    display: inline-block;
+    padding: 20px;
+    margin: 0 10px 15px 0;
+    width: 45%;
+
+    color: #333333;
+    text-decoration: none;
+    background: white;
+    border: #b3b3b3 solid 1px;
+    border-radius: 20px;
+}
+
+.content .home-btn:hover {
+    color: #2eb8b8;
+    border: #2eb8b8 solid 1px;
+}
+
 .content .form1 {
     padding: 10px;
 
