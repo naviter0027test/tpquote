@@ -26,4 +26,20 @@ class QuoteController extends Controller
     public function editSub1_1(Request $request, $id = 0) {
         return 'quote edit sub1';
     }
+
+    public function createSub2(Request $request) {
+        return 'quote create sub 2';
+    }
+
+    public function editSub2(Request $request, $id = 0) {
+        return 'quote edit sub2';
+    }
+
+    public function createSub2_1(Request $request) {
+        return 'quote create sub 2-1';
+    }
+
+    public function editSub2_1(Request $request, $id = 0) {
+        return 'quote edit sub 2-1';
+    }
 }
