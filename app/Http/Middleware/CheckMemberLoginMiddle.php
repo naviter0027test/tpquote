@@ -18,7 +18,7 @@ class CheckMemberLoginMiddle
     public function handle(Request $request, Closure $next)
     {
         if(Session::has('member') == true) {
-            if($request->path() == 'member/login')
+            if($request->path() == 'member/login' || $request->path() == '/')
                 return redirect('/member/home');
             return $next($request);
         } else if($request->path() == 'member/login') {

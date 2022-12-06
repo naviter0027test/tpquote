@@ -18,9 +18,9 @@ use App\Http\Controllers\QuoteController;
 |
 */
 
-Route::get('/', [MemberController::class, 'loginPage']);
-
 Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
+    Route::get('/', [MemberController::class, 'loginPage']);
+
     Route::group(['prefix' => 'member'], function() {
         Route::get('login', [MemberController::class, 'loginPage']);
         Route::post('login', [membercontroller::class, 'login']);
