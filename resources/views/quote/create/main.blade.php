@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
         <link href='/lib/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' />
         <link href='/lib/bootstrap/dist/css/bootstrap-theme.min.css' rel='stylesheet' />
+        <link href='/lib/selectize.js-master/dist/css/selectize.default.css' rel='stylesheet' />
         <link href='/css/member/body.css' rel='stylesheet' />
         <link href='/css/member/login.css' rel='stylesheet' />
     </head>
@@ -12,29 +13,17 @@
 @include('member.layout.menu')
         <div class="content">
             <div class="content-header">
-                <span>報價</span> &gt; <label>列表</label>
-                <div class="operation-panel">
-                    <a href="/quote/create/main" class="btn-style1">新增</a>
-                </div>
+                <span>報價</span> &gt; <label>新增</label>
             </div>
-            <table class="table1">
-                <thead>
-                    <tr>
-                        <td>報價類別</td>
-                        <td>客人名稱</td>
-                        <td>產品編號</td>
-                        <td>中文產品名稱</td>
-                        <td>建立時間</td>
-                        <td>修改時間</td>
-                        <td>操作</td>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <form method='post' action='/quote/create/main' class='form1' enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <p class=""> <button class="btn">新增</button> </p>
+            </form>
         </div>
 @include('member.layout.footer')
     </body>
     <script src="/lib/jquery-2.1.4.min.js"></script>
+    <script src="/lib/selectize.js-master/dist/js/standalone/selectize.js"></script>
+    <script src="/js/member/edit.js"></script>
     <script src="/js/member/logout.js"></script>
 </html>

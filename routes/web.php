@@ -43,8 +43,10 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
 
     Route::group(['prefix' => 'quote'], function() {
         Route::get('lists', [QuoteController::class, 'lists']);
-        Route::get('create-1', [QuoteController::class, 'create1']);
-        Route::get('edit-1/{id}', [QuoteController::class, 'edit1']);
+        Route::get('create/main', [QuoteController::class, 'createMain']);
+        Route::get('edit/main/{id}', [QuoteController::class, 'editMain']);
+        Route::get('create/sub1', [QuoteController::class, 'createSub1']);
+        Route::get('edit/sub1/{id}', [QuoteController::class, 'editSub1']);
     });
 });
 
