@@ -45,8 +45,8 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::get('lists', [QuoteController::class, 'lists']);
         Route::get('create/main', [QuoteController::class, 'createMain']);
         Route::get('edit/main/{id}', [QuoteController::class, 'editMain']);
-        Route::get('create/sub1', [QuoteController::class, 'createSub1']);
-        Route::get('edit/sub1/{id}', [QuoteController::class, 'editSub1']);
+        Route::get('create/sub1-1', [QuoteController::class, 'createSub1_1']);
+        Route::get('edit/sub1-1/{id}', [QuoteController::class, 'editSub1_1']);
     });
 });
 

@@ -13,7 +13,7 @@
 @include('member.layout.menu')
         <div class="content">
             <div class="content-header">
-                <span>報價</span> &gt; <label>新增</label>
+                <span>報價</span> &gt; <span>新增</span> &gt; <label>主要</label>
             </div>
             <form method='post' action='/quote/create/main' class='form1' enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />

@@ -19,11 +19,11 @@ class QuoteController extends Controller
         return 'quote edit main';
     }
 
-    public function createSub1(Request $request) {
-        return 'quote create sub1';
+    public function createSub1_1(Request $request) {
+        return view('quote.create.sub1-1');
     }
 
-    public function editSub1(Request $request, $id = 0) {
+    public function editSub1_1(Request $request, $id = 0) {
         return 'quote edit sub1';
     }
 }
