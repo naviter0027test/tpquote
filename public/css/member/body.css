@@ -168,6 +168,22 @@ body {
     background: white;
 }
 
+.content .show-line2 {
+    display: inline-block;
+    margin: 10px 0 5px 10px;
+    padding: 8px 10px 8px 10px;
+    width: 48%;
+
+    background: white;
+}
+
+.content .show-line3 {
+    margin: 10px 0 10px 10px;
+    padding: 8px 10px 8px 10px;
+
+    background: white;
+}
+
 .content .home-panel {
     margin: 10px 0 0 20px;
     padding: 8px 10px 8px 10px;
