@@ -149,6 +149,7 @@ class MemberTest extends TestCase
             $this->assertEquals('頁數請輸入數字', $e->getMessage());
         }
 
+        /*
         try {
             $param = [
                 'nowPage' => '1',
@@ -159,9 +160,11 @@ class MemberTest extends TestCase
         catch(Exception $e) {
             $this->assertEquals('頁數限制請輸入數字', $e->getMessage());
         }
+        */
 
         $param = [
             'nowPage' => 1,
+            'pageNum' => 20,
         ];
         $items = $memberRepo->lists($param);
         $this->assertEquals(20, count($items));
