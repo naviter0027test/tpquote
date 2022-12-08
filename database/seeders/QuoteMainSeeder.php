@@ -17,7 +17,7 @@ class QuoteMainSeeder extends Seeder
     {
         $quoteMain1 = new QuoteMain();
         $quoteMain1->id = 1;
-        $quoteMain1->quoteCls = 1
+        $quoteMain1->quoteCls = 1;
         $quoteMain1->customerProductNum = "P2022120001";
         $quoteMain1->productNum = "C2201001";
         $quoteMain1->productNameTw = "長軒木樑材";
@@ -29,7 +29,7 @@ class QuoteMainSeeder extends Seeder
 
         $quoteMain2 = new QuoteMain();
         $quoteMain2->id = 2;
-        $quoteMain2->quoteCls = 1
+        $quoteMain2->quoteCls = 1;
         $quoteMain2->customerProductNum = "P2022120002";
         $quoteMain2->productNum = "C2201002";
         $quoteMain2->productNameTw = "長軒木樑材";
@@ -41,7 +41,7 @@ class QuoteMainSeeder extends Seeder
 
         $quoteMain3 = new QuoteMain();
         $quoteMain3->id = 3;
-        $quoteMain3->quoteCls = 1
+        $quoteMain3->quoteCls = 1;
         $quoteMain3->customerProductNum = "P2022120003";
         $quoteMain3->productNum = "C2201003";
         $quoteMain3->productNameTw = "換崁山岳羽";
@@ -53,7 +53,7 @@ class QuoteMainSeeder extends Seeder
 
         $quoteMain4 = new QuoteMain();
         $quoteMain4->id = 4;
-        $quoteMain4->quoteCls = 2
+        $quoteMain4->quoteCls = 2;
         $quoteMain4->customerProductNum = "P2022120004";
         $quoteMain4->productNum = "C2201004";
         $quoteMain4->productNameTw = "木宇習維尼";
@@ -65,7 +65,7 @@ class QuoteMainSeeder extends Seeder
 
         $quoteMain5 = new QuoteMain();
         $quoteMain5->id = 5;
-        $quoteMain5->quoteCls = 2
+        $quoteMain5->quoteCls = 2;
         $quoteMain5->customerProductNum = "P2022120005";
         $quoteMain5->productNum = "C2201005";
         $quoteMain5->productNameTw = "百練成生軒";
