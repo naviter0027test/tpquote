@@ -88,4 +88,32 @@ class QuoteMainTest extends TestCase
         $amount1 = $quoteRepo->listsMainAmount($paramSearch1);
         $this->assertEquals(20, $amount1);
     }
+
+    public function testCreateMain() {
+        $quoteRepo = new QuoteRepository();
+
+        $paramCreate1 = [
+            'quoteCls' => 2,
+            'customerProductNum' => 'P2022120021',
+            'productNum' => 'C2201021',
+            'productNameTw' => '赤兔糖霜林',
+            'productNameEn' => 'Product U',
+            'quoteQuality' => '高',
+            'quoteQuantity' => '3K',
+            'productInfo' => 'create by test program',
+        ];
+        try {
+            $quoteRepo->createMain($paramCreate1);
+            $quoteMain1 = $quoteRepo->getMainById(21);
+            $this->assertEquals(21, $quoteMain1->id);
+            $this->assertEquals(2, $quoteMain1->quoteCls);
+            $this->assertEquals("P2022120021", $quoteMain1->customerProductNum);
+            $this->assertEquals("赤兔糖霜林", $quoteMain1->productNameTw);
+            $this->assertEquals("3K", $quoteMain1->quoteQuantity);
+            $this->assertEquals("create by test program", $quoteMain1->productInfo);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("error", $e->getMessage());
+        }
+    }
 }

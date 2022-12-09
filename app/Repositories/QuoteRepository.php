@@ -40,4 +40,17 @@ class QuoteRepository
         $amount = $query->count();
         return $amount;
     }
+
+    public function createMain($param) {
+        $item = new QuoteMain();
+        $item->quoteCls = $param['quoteCls'];
+        $item->customerProductNum = $param['customerProductNum'];
+        $item->productNum = $param['productNum'];
+        $item->productNameTw = $param['productNameTw'];
+        $item->productNameEn = $param['productNameEn'];
+        $item->quoteQuality = $param['quoteQuality'];
+        $item->quoteQuantity = $param['quoteQuantity'];
+        $item->productInfo = $param['productInfo'];
+        $item->save();
+    }
 }
