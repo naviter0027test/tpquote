@@ -143,4 +143,21 @@ class QuoteMainTest extends TestCase
         $this->assertEquals("低", $quoteMain1->quoteQuality);
         $this->assertEquals("update by test program", $quoteMain1->productInfo);
     }
+
+    public function testRemoveMainById() {
+        $quoteRepo = new QuoteRepository();
+
+        $quoteRepo->removeMainById(6);
+        try {
+            $quoteMain1 = $quoteRepo->getMainById(6);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $quoteMain2 = $quoteRepo->getMainById(7);
+        $this->assertEquals(7, $quoteMain2->id);
+        $this->assertEquals("橡膠冷凝凍", $quoteMain2->productNameTw);
+    }
 }

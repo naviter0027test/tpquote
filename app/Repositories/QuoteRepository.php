@@ -78,4 +78,8 @@ class QuoteRepository
             $item->productInfo = $param['productInfo'];
         $item->save();
     }
+
+    public function removeMainById($id) {
+        QuoteMain::where('id', '=', $id)->delete();
+    }
 }
