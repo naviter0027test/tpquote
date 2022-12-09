@@ -116,4 +116,31 @@ class QuoteMainTest extends TestCase
             $this->assertEquals("error", $e->getMessage());
         }
     }
+
+    public function testUpdateMainById() {
+        $quoteRepo = new QuoteRepository();
+
+        $paramUpdate1 = [
+            'quoteCls' => 1,
+            'productNameTw' => '木棉客家林',
+            'productNameEn' => 'Product V',
+            'quoteQuality' => '低',
+            'productInfo' => 'update by test program',
+        ];
+        try {
+            $quoteRepo->updateMainById(99, $paramUpdate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $quoteRepo->updateMainById(17, $paramUpdate1);
+        $quoteMain1 = $quoteRepo->getMainById(17);
+        $this->assertEquals(1, $quoteMain1->quoteCls);
+        $this->assertEquals("木棉客家林", $quoteMain1->productNameTw);
+        $this->assertEquals("Product V", $quoteMain1->productNameEn);
+        $this->assertEquals("低", $quoteMain1->quoteQuality);
+        $this->assertEquals("update by test program", $quoteMain1->productInfo);
+    }
 }

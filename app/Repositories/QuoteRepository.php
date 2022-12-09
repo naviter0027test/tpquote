@@ -53,4 +53,29 @@ class QuoteRepository
         $item->productInfo = $param['productInfo'];
         $item->save();
     }
+
+    public function updateMainById($id, $param) {
+        $item = QuoteMain::where('id', '=', $id)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+
+        if(isset($param['quoteCls']) && is_numeric($param['quoteCls']))
+            $item->quoteCls = $param['quoteCls'];
+        if(isset($param['customerProductNum']) && trim($param['customerProductNum']) != '')
+            $item->customerProductNum = $param['customerProductNum'];
+        if(isset($param['productNum']) && trim($param['productNum']) != '')
+            $item->productNum = $param['productNum'];
+        if(isset($param['productNameTw']) && trim($param['productNameTw']) != '')
+            $item->productNameTw = $param['productNameTw'];
+        if(isset($param['productNameEn']) && trim($param['productNameEn']) != '')
+            $item->productNameEn = $param['productNameEn'];
+        if(isset($param['quoteQuality']) && trim($param['quoteQuality']) != '')
+            $item->quoteQuality = $param['quoteQuality'];
+        if(isset($param['quoteQuantity']) && trim($param['quoteQuantity']) != '')
+            $item->quoteQuantity = $param['quoteQuantity'];
+        if(isset($param['productInfo']) && trim($param['productInfo']) != '')
+            $item->productInfo = $param['productInfo'];
+        $item->save();
+    }
 }
