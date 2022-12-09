@@ -20,8 +20,7 @@ class QuoteMainTest extends TestCase
         shell_exec('php artisan DropTables');
     }
 
-    public function testGetMainById()
-    {
+    public function testGetMainById() {
         $quoteRepo = new QuoteRepository();
         $quoteMain1 = $quoteRepo->getMainById(1);
         $this->assertEquals(1, $quoteMain1->id);
@@ -36,5 +35,57 @@ class QuoteMainTest extends TestCase
         catch(Exception $e) {
             $this->assertEquals("指定資料不存在", $e->getMessage());
         }
+    }
+
+    public function testListsMain() {
+        $quoteRepo = new QuoteRepository();
+
+        try {
+            $paramSearch1 = [
+                'nowPage' => 'aaa',
+                'pageNum' => 'a',
+            ];
+            $quoteRepo->listsMain($paramSearch1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('頁數請輸入數字', $e->getMessage());
+        }
+
+        try {
+            $paramSearch2 = [
+                'nowPage' => '2',
+                'pageNum' => 'a',
+            ];
+            $quoteRepo->listsMain($paramSearch2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('單頁數量請輸入數字', $e->getMessage());
+        }
+
+        $paramSearch3 = [
+            'nowPage' => '1',
+            'pageNum' => '10',
+        ];
+        $items = $quoteRepo->listsMain($paramSearch3);
+        $this->assertEquals('P2022120020', $items[0]->customerProductNum);
+        $this->assertEquals('C2201020', $items[0]->productNum);
+        $this->assertEquals('威士忌名酒', $items[0]->productNameTw);
+
+        $this->assertEquals('P2022120018', $items[2]->customerProductNum);
+        $this->assertEquals('C2201018', $items[2]->productNum);
+        $this->assertEquals('Product R', $items[2]->productNameEn);
+    }
+
+    public function testListsMainAmount() {
+        $quoteRepo = new QuoteRepository();
+
+        $paramSearch1 = [
+            'nowPage' => '2',
+            'pageNum' => '10',
+        ];
+        $amount1 = $quoteRepo->listsMainAmount($paramSearch1);
+        $this->assertEquals(20, $amount1);
     }
 }
