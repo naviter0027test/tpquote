@@ -23,6 +23,19 @@ class QuoteSub1Test extends TestCase
 
     public function testGetSub1ByMainId()
     {
-        $this->assertEquals(true, true);
+        $quoteRepo = new QuoteRepository();
+        $quoteSub1at1 = $quoteRepo->getSub1ByMainId(3);
+        $this->assertEquals(3, $quoteSub1at1->mainId);
+        $this->assertEquals("SUB1-20221200003", $quoteSub1at1->partNo);
+        $this->assertEquals("橡膠系列RR版", $quoteSub1at1->materialName);
+        $this->assertEquals(235, $quoteSub1at1->length);
+        $this->assertEquals("膠合板", $quoteSub1at1->spec);
+
+        try {
+            $quoteMain2 = $quoteRepo->getMainById(99);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
     }
 }

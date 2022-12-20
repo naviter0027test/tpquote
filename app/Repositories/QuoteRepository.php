@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\QuoteMain;
+use App\Models\QuoteSub1;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 
@@ -81,5 +82,13 @@ class QuoteRepository
 
     public function removeMainById($id) {
         QuoteMain::where('id', '=', $id)->delete();
+    }
+
+    public function getSub1ByMainId($mainId) {
+        $item = QuoteSub1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
     }
 }
