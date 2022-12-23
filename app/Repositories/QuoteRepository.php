@@ -178,4 +178,8 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function removeSub1ByMainId($mainId) {
+        QuoteSub1::where('mainId', $mainId)->delete();
+    }
 }

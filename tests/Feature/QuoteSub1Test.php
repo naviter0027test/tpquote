@@ -151,4 +151,16 @@ class QuoteSub1Test extends TestCase
         $this->assertEquals(90, $quoteSub1at1->length);
         $this->assertEquals("update by tdd", $quoteSub1at1->memo);
     }
+
+    public function testRemoveSub1ByMainId() {
+        $quoteRepo = new QuoteRepository();
+        $quoteRepo->removeSub1ByMainId(6);
+        try {
+            $quoteSub1at1 = $quoteRepo->getSub1ByMainId(6);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+    }
 }
