@@ -90,4 +90,42 @@ class QuoteSub1Test extends TestCase
         $amount1 = $quoteRepo->listsSub1Amount($paramSearch1);
         $this->assertEquals(19, $amount1);
     }
+
+    public function testCreateSub1() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 21,
+            'partNo' => 'SUB1-20221200020',
+            'materialName' => '常構貢木板III',
+            'length' => 180,
+            'width' => 40,
+            'height' => 10,
+            'spec' => '實木',
+            'specIllustrate' => '刀模板',
+            'content' => '三椴二楊',
+            'level' => 'A/B',
+            'business' => 'A/B',
+            'fsc' => 'N',
+            'memo' => 'create by tdd',
+            'bigLength' => 0,
+            'bigWidth' => 0,
+            'bigHeight' => 0,
+        ];
+        try {
+            $quoteRepo->createSub1($paramCreate1);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate1['mainId'] = 20;
+        $quoteRepo->createSub1($paramCreate1);
+        $quoteSub1at1 = $quoteRepo->getSub1ByMainId(20);
+        $this->assertEquals(20, $quoteSub1at1->mainId);
+        $this->assertEquals("SUB1-20221200020", $quoteSub1at1->partNo);
+        $this->assertEquals("常構貢木板III", $quoteSub1at1->materialName);
+        $this->assertEquals(180, $quoteSub1at1->length);
+        $this->assertEquals("實木", $quoteSub1at1->spec);
+        $this->assertEquals("create by tdd", $quoteSub1at1->memo);
+    }
 }

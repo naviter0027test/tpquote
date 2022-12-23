@@ -52,6 +52,8 @@ class QuoteRepository
         $item->quoteQuality = $param['quoteQuality'];
         $item->quoteQuantity = $param['quoteQuantity'];
         $item->productInfo = $param['productInfo'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
 
@@ -77,6 +79,7 @@ class QuoteRepository
             $item->quoteQuantity = $param['quoteQuantity'];
         if(isset($param['productInfo']) && trim($param['productInfo']) != '')
             $item->productInfo = $param['productInfo'];
+        $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
 
@@ -112,5 +115,30 @@ class QuoteRepository
 
         $amount = $query->count();
         return $amount;
+    }
+
+    public function createSub1($param) {
+        $this->getMainById($param['mainId']);
+
+        $item = new QuoteSub1();
+        $item->mainId = $param['mainId'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->spec = $param['spec'];
+        $item->specIllustrate = $param['specIllustrate'];
+        $item->content = $param['content'];
+        $item->level = $param['level'];
+        $item->business = $param['business'];
+        $item->fsc = $param['fsc'];
+        $item->memo = $param['memo'];
+        $item->bigLength = $param['bigLength'];
+        $item->bigWidth = $param['bigWidth'];
+        $item->bigHeight = $param['bigHeight'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
     }
 }
