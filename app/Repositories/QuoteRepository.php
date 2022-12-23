@@ -141,4 +141,41 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub1ByMainId($mainId, $param) {
+        $item = $this->getSub1ByMainId($mainId);
+
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['spec']) && trim($param['spec']) != '')
+            $item->spec = $param['spec'];
+        if(isset($param['specIllustrate']) && trim($param['specIllustrate']) != '')
+            $item->specIllustrate = $param['specIllustrate'];
+        if(isset($param['content']) && trim($param['content']) != '')
+            $item->content = $param['content'];
+        if(isset($param['level']) && trim($param['level']) != '')
+            $item->level = $param['level'];
+        if(isset($param['business']) && trim($param['business']) != '')
+            $item->business = $param['business'];
+        if(isset($param['fsc']) && trim($param['fsc']) != '')
+            $item->fsc = $param['fsc'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+        if(isset($param['bigLength']) && is_numeric($param['bigLength']))
+            $item->bigLength = $param['bigLength'];
+        if(isset($param['bigWidth']) && is_numeric($param['bigWidth']))
+            $item->bigWidth = $param['bigWidth'];
+        if(isset($param['bigHeight']) && is_numeric($param['bigHeight']))
+            $item->bigHeight = $param['bigHeight'];
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }

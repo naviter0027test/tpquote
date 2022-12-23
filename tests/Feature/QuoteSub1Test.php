@@ -128,4 +128,27 @@ class QuoteSub1Test extends TestCase
         $this->assertEquals("實木", $quoteSub1at1->spec);
         $this->assertEquals("create by tdd", $quoteSub1at1->memo);
     }
+
+    public function testUpdateSub1ByMainId() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'materialName' => '材料fromTdd',
+            'length' => 90,
+            'memo' => 'update by tdd',
+        ];
+        $quoteRepo->updateSub1ByMainId(5, $paramUpdate1);
+        $quoteSub1at1 = $quoteRepo->getSub1ByMainId(5);
+        $this->assertEquals(5, $quoteSub1at1->mainId);
+        $this->assertEquals("材料fromTdd", $quoteSub1at1->materialName);
+        $this->assertEquals(90, $quoteSub1at1->length);
+        $this->assertEquals("update by tdd", $quoteSub1at1->memo);
+    }
 }
