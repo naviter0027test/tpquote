@@ -46,7 +46,7 @@
                 <div class="show-line2">
                     <h5>品質要求</h5>
                     <p>
-                        <select name="quoteCls">
+                        <select name="quoteQuality">
                             <option value="高">高</option>
                             <option value="中高">中高</option>
                             <option value="普通">普通</option>
