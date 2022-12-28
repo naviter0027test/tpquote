@@ -12,7 +12,11 @@ class QuoteMainTest extends TestCase
 {
     public function setUp() : void {
         parent::setUp();
+        shell_exec('php artisan migrate --path=/database/migrations/20221026/');
+        shell_exec('php artisan migrate --path=/database/migrations/20221102/');
         shell_exec('php artisan migrate --path=/database/migrations/20221207/');
+        shell_exec('php artisan db:seed --class=MemPermissionSeeder');
+        shell_exec('php artisan db:seed --class=MemberSeeder');
         shell_exec('php artisan db:seed --class=QuoteMainSeeder');
     }
 
@@ -159,5 +163,23 @@ class QuoteMainTest extends TestCase
         $quoteMain2 = $quoteRepo->getMainById(7);
         $this->assertEquals(7, $quoteMain2->id);
         $this->assertEquals("橡膠冷凝凍", $quoteMain2->productNameTw);
+    }
+
+    public function testCheckPermit() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->checkPermit(1, 'quoteMain', 2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("quoteMain permission denied", $e->getMessage());
+        }
+
+        try {
+            $quoteRepo->checkPermit(2, 'quoteMain', 1);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("error", $e->getMessage());
+        }
     }
 }

@@ -4,12 +4,28 @@ namespace App\Repositories;
 
 use App\Models\QuoteMain;
 use App\Models\QuoteSub1;
+use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
 
 class QuoteRepository
 {
     public function __construct() {
+    }
+
+    //$memberId 哪位成員要檢查
+    //$objectActive 目標動作
+    //$objectPermit 要求權限
+    public function checkPermit($memberId, $objectActive = 'quoteMain', $objectPermit = 2) {
+        $memberRepo = new MemberRepository();
+        $member = $memberRepo->getById($memberId);
+
+        $objActive = $objectActive;
+        if($objectActive == 'quoteMain')
+            $objActive = 'quoteSub_1';
+
+        if($member->$objActive < $objectPermit)
+            throw new Exception("$objectActive permission denied");
     }
 
     public function getMainById($id) {
