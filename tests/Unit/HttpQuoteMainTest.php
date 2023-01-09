@@ -252,5 +252,45 @@ class HttpQuoteMainTest extends TestCase
                 'status' => false,
                 'msg' => 'quoteMain permission denied',
             ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+        $paramEdit2 = [
+            'mode' => 'json',
+            'nowPage' => -1,
+            'pageNum' => 9,
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response3 = $this->withSession(['member' => $member2])
+            ->get("/quote/lists/main?$paramEdit2Str");
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.nowPage')
+                    ->has('errors.pageNum');
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'nowPage' => 1,
+            'pageNum' => 10,
+        ];
+        $paramEdit4Str = http_build_query($paramEdit3);
+        $response4 = $this->withSession(['member' => $member2])
+            ->get("/quote/lists/main?$paramEdit4Str");
+        $response4->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('items.0.id', 20)
+                    ->where('items.0.productNameTw', '威士忌名酒')
+                    ->where('items.1.id', 19)
+                    ->where('items.1.customerProductNum', 'P2022120019')
+                    ->where('amount', 20);
+            });
     }
 }

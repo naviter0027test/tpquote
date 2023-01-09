@@ -26,6 +26,22 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteMain', 1);
+
+            $param['nowPage'] = isset($param['nowPage']) == true ? $param['nowPage'] : 1;
+            $param['pageNum'] = isset($param['pageNum']) == true ? $param['pageNum'] : 20;
+            $validator = Validator::make($param, [
+                'nowPage' => 'integer|min:1',
+                'pageNum' => 'integer|min:10',
+            ]);
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $result['items'] = $quoteRepo->listsMain($param);
+            $result['amount'] = $quoteRepo->listsMainAmount($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;
