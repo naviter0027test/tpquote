@@ -27,6 +27,8 @@ class HttpQuoteMainTest extends TestCase
 
     public function testCreateMain() {
         $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
         $param1 = [
             'account' => 'account1',
             'pass' => '123456',
@@ -71,5 +73,32 @@ class HttpQuoteMainTest extends TestCase
                     ->has('errors.productNum')
                     ->has('errors.productNameTw');
             });
+
+        $createParam3 = [
+            'mode' => 'json',
+            'quoteCls' => 2,
+            'customerProductNum' => 'P2022120021',
+            'productNum' => 'C2201021',
+            'productNameTw' => '赤兔糖霜林',
+            'productNameEn' => 'Product U',
+            'quoteQuality' => '高',
+            'quoteQuantity' => '3K',
+            'productInfo' => 'create by test program',
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/main', $createParam3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', '建立成功');
+            });
+
+        $quoteMain1 = $quoteRepo->getMainById(21);
+        $this->assertEquals(21, $quoteMain1->id);
+        $this->assertEquals(2, $quoteMain1->quoteCls);
+        $this->assertEquals("P2022120021", $quoteMain1->customerProductNum);
+        $this->assertEquals("赤兔糖霜林", $quoteMain1->productNameTw);
+        $this->assertEquals("3K", $quoteMain1->quoteQuantity);
+        $this->assertEquals("create by test program", $quoteMain1->productInfo);
     }
 }
