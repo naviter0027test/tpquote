@@ -224,4 +224,33 @@ class HttpQuoteMainTest extends TestCase
         $this->assertEquals("中高", $quoteMain1->quoteQuality);
         $this->assertEquals("update by web route", $quoteMain1->productInfo);
     }
+
+    public function testListsMain() {
+        $memberRepo = new MemberRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $response1 = $this->withSession(['member' => $member1])
+            ->get('/member/isLogin');
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => 'has login',
+            ]);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $paramEdit1Str = http_build_query($paramEdit1);
+        $response2 = $this->withSession(['member' => $member1])
+            ->get("/quote/lists/main?$paramEdit1Str");
+        $response2->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteMain permission denied',
+            ]);
+    }
 }
