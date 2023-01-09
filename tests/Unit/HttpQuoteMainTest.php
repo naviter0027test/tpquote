@@ -118,16 +118,46 @@ class HttpQuoteMainTest extends TestCase
                 'msg' => 'has login',
             ]);
 
-        $paramCreate1 = [
+        $paramEdit1 = [
             'mode' => 'json',
         ];
-        $paramCreate1Str = http_build_query($paramCreate1);
+        $paramEdit1Str = http_build_query($paramEdit1);
         $response2 = $this->withSession(['member' => $member1])
-            ->get("/quote/edit/main/1?$paramCreate1Str");
+            ->get("/quote/edit/main/1?$paramEdit1Str");
         $response2->assertStatus(200)
             ->assertJson([
                 'status' => false,
                 'msg' => 'quoteMain permission denied',
             ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response3 = $this->withSession(['member' => $member2])
+            ->get("/quote/edit/main/1?$paramEdit2Str");
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('item.id', 1)
+                    ->where('item.quoteCls', '1')
+                    ->where('item.customerProductNum', 'P2022120001')
+                    ->where('item.productNameTw', '長軒木樑材')
+                    ->where('item.quoteQuantity', 'MOQ-1K');
+            });
+
+        $response4 = $this->withSession(['member' => $member2])
+            ->get("/quote/edit/main/100?$paramEdit2Str");
+        $response4->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '指定資料不存在');
+            });
     }
 }
