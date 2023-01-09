@@ -122,7 +122,7 @@ class MemPermissionSeeder extends Seeder
         ]);
         DB::table('MemPermission')->insert([
             'id' => 8,
-            'name' => '系統管理者',
+            'name' => '無權限者',
             'quoteSub_1' => 0,
             'quoteSub_2' => 0,
             'quoteSub_3' => 0,
