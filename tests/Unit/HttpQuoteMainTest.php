@@ -160,4 +160,45 @@ class HttpQuoteMainTest extends TestCase
                     ->where('msg', '指定資料不存在');
             });
     }
+
+    public function testUpdateMain() {
+        $memberRepo = new MemberRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $response1 = $this->withSession(['member' => $member1])
+            ->get('/member/isLogin');
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => 'has login',
+            ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/main/1", $paramEdit1);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.quoteCls')
+                    ->has('errors.customerProductNum')
+                    ->has('errors.productNum')
+                    ->has('errors.productNameTw');
+            });
+
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+    }
 }

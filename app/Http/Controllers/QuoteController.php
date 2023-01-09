@@ -100,7 +100,47 @@ class QuoteController extends Controller
     }
 
     public function updateMain(Request $request, $id = 0) {
-        return 'quote update main';
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteMain', 2);
+
+            $validator = Validator::make($param, [
+                'quoteCls' => 'required|integer',
+                'customerProductNum' => 'required',
+                'productNum' => 'required',
+                'productNameTw' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['productNameEn'] = isset($param['productNameEn']) ? trim($param['productNameEn']) : '';
+            $param['quoteQuality'] = isset($param['quoteQuality']) ? trim($param['quoteQuality']) : '';
+            $param['quoteQuantity'] = isset($param['quoteQuantity']) ? trim($param['quoteQuantity']) : '';
+            $param['productInfo'] = isset($param['productInfo']) ? trim($param['productInfo']) : '';
+
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
+        }
+        return json_encode($result);
     }
 
     public function createSub1_1(Request $request) {
