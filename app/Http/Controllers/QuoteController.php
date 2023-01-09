@@ -130,6 +130,9 @@ class QuoteController extends Controller
             $param['quoteQuantity'] = isset($param['quoteQuantity']) ? trim($param['quoteQuantity']) : '';
             $param['productInfo'] = isset($param['productInfo']) ? trim($param['productInfo']) : '';
 
+            $quoteRepo->updateMainById($id, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

@@ -163,6 +163,7 @@ class HttpQuoteMainTest extends TestCase
 
     public function testUpdateMain() {
         $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
         $paramUser1 = [
             'account' => 'account22',
             'pass' => '123456',
@@ -186,7 +187,7 @@ class HttpQuoteMainTest extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post("/quote/edit/main/1", $paramEdit1);
+            ->post("/quote/edit/main/3", $paramEdit1);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
@@ -199,6 +200,28 @@ class HttpQuoteMainTest extends TestCase
 
         $paramEdit2 = [
             'mode' => 'json',
+            'quoteCls' => 2,
+            'customerProductNum' => 'P2022120003',
+            'productNum' => 'C2201003',
+            'productNameTw' => '彈彈鍊與生',
+            'productNameEn' => 'product ccc',
+            'quoteQuality' => '中高',
+            'quoteQuantity' => '10K',
+            'productInfo' => 'update by web route',
         ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/main/3", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success');
+            });
+        $quoteMain1 = $quoteRepo->getMainById(3);
+        $this->assertEquals(3, $quoteMain1->id);
+        $this->assertEquals(2, $quoteMain1->quoteCls);
+        $this->assertEquals("彈彈鍊與生", $quoteMain1->productNameTw);
+        $this->assertEquals("product ccc", $quoteMain1->productNameEn);
+        $this->assertEquals("中高", $quoteMain1->quoteQuality);
+        $this->assertEquals("update by web route", $quoteMain1->productInfo);
     }
 }
