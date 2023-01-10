@@ -8,6 +8,7 @@ use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 use App\Repositories\MemberRepository;
 use App\Repositories\QuoteRepository;
+use Exception;
 
 class HttpQuoteMainTest extends TestCase
 {
@@ -292,5 +293,52 @@ class HttpQuoteMainTest extends TestCase
                     ->where('items.1.customerProductNum', 'P2022120019')
                     ->where('amount', 20);
             });
+    }
+
+    public function testRemoveMain() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $paramEdit1Str = http_build_query($paramEdit1);
+        $response2 = $this->withSession(['member' => $member1])
+            ->get("/quote/remove/main/4?". $paramEdit1Str);
+        $response2->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteMain permission denied',
+            ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response3 = $this->withSession(['member' => $member2])
+            ->get("/quote/remove/main/4?". $paramEdit2Str);
+        $response3->assertStatus(200)
+            ->assertJson([
+                'status' => true,
+                'msg' => '刪除成功',
+            ]);
+
+        try {
+            $quoteMain1 = $quoteRepo->getMainById(4);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
     }
 }

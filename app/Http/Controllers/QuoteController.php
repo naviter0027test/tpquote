@@ -184,6 +184,37 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function removeMain(Request $request, $id = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteMain', 2);
+
+            $quoteRepo->removeMainById($id);
+            $result['status'] = true;
+            $result['msg'] = '刪除成功';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
     public function createSub1_1(Request $request) {
         return view('quote.create.sub1-1');
     }
