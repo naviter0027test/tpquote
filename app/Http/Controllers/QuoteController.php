@@ -215,7 +215,7 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
-    public function editSub1(Request $request, $id = 0) {
+    public function editSub1(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
             'msg' => '',
@@ -229,6 +229,9 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_1', 1);
+            $result['item'] = $quoteRepo->getSub1ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;
