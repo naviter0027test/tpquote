@@ -215,12 +215,39 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
-    public function createSub1_1(Request $request) {
+    public function editSub1(Request $request, $id = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_1', 1);
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function createSub1(Request $request) {
         return view('quote.create.sub1-1');
     }
 
     public function editSub1_1(Request $request, $id = 0) {
-        return 'quote edit sub1';
+        return 'quote edit sub1-1';
     }
 
     public function createSub2(Request $request) {
