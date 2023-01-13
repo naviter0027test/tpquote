@@ -210,4 +210,83 @@ class HttpQuoteSub1Test extends TestCase
                     ->where('amount', 19);
             });
     }
+
+    public function testCreateSub1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/create/sub1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_1 permission denied',
+            ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub1", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.partNo')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height');
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'mainId' => 20,
+            'partNo' => "SUB1-20221200020",
+            'materialName' => "常構貢木板III",
+            'length' => 300,
+            'width' => 30,
+            'height' => 400,
+            'spec' => "實木",
+            'specIllustrate' => "指接板",
+            'content' => '二椴一楊',
+            'level' => 'A/B',
+            'business' => 'E0',
+            'fsc' => 'Y',
+            'memo' => 'from HttpQuoteSub1Test create',
+            'bigLength' => 3000,
+            'bigWidth' => 5000,
+            'bigHeight' => 4000,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub1", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success');
+            });
+
+        $sub1at1 = $quoteRepo->getSub1ByMainId(20);
+        $this->assertEquals('SUB1-20221200020', $sub1at1->partNo);
+        $this->assertEquals('常構貢木板III', $sub1at1->materialName);
+        $this->assertEquals(300, $sub1at1->length);
+        $this->assertEquals('指接板', $sub1at1->specIllustrate);
+        $this->assertEquals('A/B', $sub1at1->level);
+        $this->assertEquals('Y', $sub1at1->fsc);
+        $this->assertEquals(3000, $sub1at1->bigLength);
+    }
 }
