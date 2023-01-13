@@ -147,4 +147,67 @@ class HttpQuoteSub1Test extends TestCase
         $this->assertEquals('Y', $sub1at1->fsc);
         $this->assertEquals(1120, $sub1at1->bigLength);
     }
+
+    public function testListsSub1() {
+        $memberRepo = new MemberRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $paramEdit1Str = http_build_query($paramEdit1);
+        $response1 = $this->withSession(['member' => $member1])
+            ->get("/quote/lists/sub1?$paramEdit1Str");
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_1 permission denied',
+            ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+
+        $paramEdit2 = [
+            'mode' => 'json',
+            'nowPage' => 'O',
+            'pageNum' => -1,
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response2 = $this->withSession(['member' => $member2])
+            ->get("/quote/lists/sub1?$paramEdit2Str");
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.nowPage')
+                    ->has('errors.pageNum');
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'nowPage' => 1,
+            'pageNum' => 10,
+        ];
+        $paramEdit3Str = http_build_query($paramEdit3);
+        $response3 = $this->withSession(['member' => $member2])
+            ->get("/quote/lists/sub1?$paramEdit3Str");
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('items.0.id', 19)
+                    ->where('items.0.partNo', 'SUB1-20221200019')
+                    ->where('items.0.materialName', '常構貢木板II')
+                    ->where('items.1.id', 18)
+                    ->where('items.1.partNo', 'SUB1-20221200018')
+                    ->where('amount', 19);
+            });
+    }
 }

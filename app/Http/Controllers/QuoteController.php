@@ -299,6 +299,49 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function listsSub1(Request $request) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_1', 1);
+
+            $param['nowPage'] = isset($param['nowPage']) == true ? $param['nowPage'] : 1;
+            $param['pageNum'] = isset($param['pageNum']) == true ? $param['pageNum'] : 20;
+            $validator = Validator::make($param, [
+                'nowPage' => 'integer|min:1',
+                'pageNum' => 'integer|min:10',
+            ]);
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $result['items'] = $quoteRepo->listsSub1($param);
+            $result['amount'] = $quoteRepo->listsSub1Amount($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
     public function createSub1(Request $request) {
         return view('quote.create.sub1-1');
     }
