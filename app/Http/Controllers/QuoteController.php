@@ -272,6 +272,20 @@ class QuoteController extends Controller
                 $result['errors'] = $validator->errors();
                 throw new Exception('輸入錯誤');
             }
+            $param['spec'] = isset($param['spec']) ? trim($param['spec']) : '';
+            $param['specIllustrate'] = isset($param['specIllustrate']) ? trim($param['specIllustrate']) : '';
+            $param['content'] = isset($param['content']) ? trim($param['content']) : '';
+            $param['level'] = isset($param['level']) ? trim($param['level']) : '';
+            $param['business'] = isset($param['business']) ? trim($param['business']) : '';
+            $param['fsc'] = isset($param['fsc']) ? trim($param['fsc']) : '';
+            $param['memo'] = isset($param['memo']) ? trim($param['memo']) : '';
+            $param['bigLength'] = isset($param['bigLength']) ? trim($param['bigLength']) : '';
+            $param['bigWidth'] = isset($param['bigWidth']) ? trim($param['bigWidth']) : '';
+            $param['bigHeight'] = isset($param['bigHeight']) ? trim($param['bigHeight']) : '';
+
+            $quoteRepo->updateSub1ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

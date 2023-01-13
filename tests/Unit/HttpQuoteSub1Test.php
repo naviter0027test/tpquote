@@ -121,5 +121,30 @@ class HttpQuoteSub1Test extends TestCase
                     ->has('errors.width')
                     ->has('errors.height');
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SD00021',
+            'materialName' => '新半導體材料',
+            'length' => 400,
+            'width' => 500,
+            'height' => 600,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub1/1", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success');
+            });
+
+        $sub1at1 = $quoteRepo->getSub1ByMainId(1);
+        $this->assertEquals('SD00021', $sub1at1->partNo);
+        $this->assertEquals('新半導體材料', $sub1at1->materialName);
+        $this->assertEquals(400, $sub1at1->length);
+        $this->assertEquals('同向板', $sub1at1->specIllustrate);
+        $this->assertEquals('A/B', $sub1at1->level);
+        $this->assertEquals('Y', $sub1at1->fsc);
+        $this->assertEquals(1120, $sub1at1->bigLength);
     }
 }
