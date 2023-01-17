@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\QuoteMain;
 use App\Models\QuoteSub1;
+use App\Models\QuoteSub1_1;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
@@ -197,5 +198,13 @@ class QuoteRepository
 
     public function removeSub1ByMainId($mainId) {
         QuoteSub1::where('mainId', $mainId)->delete();
+    }
+
+    public function getSub1_1ByMainId($mainId) {
+        $item = QuoteSub1_1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
     }
 }
