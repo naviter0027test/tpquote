@@ -289,4 +289,26 @@ class HttpQuoteSub1Test extends TestCase
         $this->assertEquals('Y', $sub1at1->fsc);
         $this->assertEquals(3000, $sub1at1->bigLength);
     }
+
+    public function testRemoveSub1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $paramEdit1Str = http_build_query($paramEdit1);
+        $response2 = $this->withSession(['member' => $member1])
+            ->get("/quote/remove/sub1/2?". $paramEdit1Str);
+        $response2->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_1 permission denied',
+            ]);
+    }
 }
