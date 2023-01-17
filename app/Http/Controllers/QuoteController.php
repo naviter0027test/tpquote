@@ -400,7 +400,7 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
-    public function removeSub1(Request $request) {
+    public function removeSub1(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
             'msg' => '',
@@ -414,6 +414,10 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_1', 2);
+
+            $quoteRepo->removeSub1ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

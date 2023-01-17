@@ -310,5 +310,31 @@ class HttpQuoteSub1Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_1 permission denied',
             ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response2 = $this->withSession(['member' => $member2])
+            ->get("/quote/remove/sub1/2?". $paramEdit2Str);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success');
+            });
+
+        try {
+            $quoteSub1 = $quoteRepo->getSub1ByMainId(2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
     }
 }
