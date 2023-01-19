@@ -35,6 +35,8 @@ class DropTables extends Command
         echo "開始刪除資料表 (Memory Mode)\n";
         Schema::dropIfExists('MemPermission');
         Schema::dropIfExists('Member');
+        Schema::dropIfExists('QuoteMain');
+        Schema::dropIfExists('QuoteSub1');
         Schema::dropIfExists('migrations');
         echo "刪除完成\n";
         return Command::SUCCESS;
