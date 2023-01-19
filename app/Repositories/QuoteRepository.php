@@ -207,4 +207,19 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function listsSub1_1($param) {
+        if(is_numeric($param['nowPage']) == false)
+            throw new Exception('頁數請輸入數字');
+        if(is_numeric($param['pageNum']) == false)
+            throw new Exception('單頁數量請輸入數字');
+
+        $start = ($param['nowPage'] - 1) * $param['pageNum'];
+        $query = QuoteSub1_1::orderBy('id', 'desc');
+
+        $items = $query->offset($start)
+            ->limit($param['pageNum'])
+            ->get();
+        return $items;
+    }
 }

@@ -40,4 +40,46 @@ class QuoteSub1_1Test extends TestCase
             $this->assertEquals("指定資料不存在", $e->getMessage());
         }
     }
+
+    public function testListsSub1_1() {
+        $quoteRepo = new QuoteRepository();
+
+        try {
+            $paramSearch1 = [
+                'nowPage' => 'aaa',
+                'pageNum' => 'a',
+            ];
+            $quoteRepo->listsSub1_1($paramSearch1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('頁數請輸入數字', $e->getMessage());
+        }
+
+        try {
+            $paramSearch2 = [
+                'nowPage' => '2',
+                'pageNum' => 'a',
+            ];
+            $quoteRepo->listsSub1_1($paramSearch2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals('單頁數量請輸入數字', $e->getMessage());
+        }
+
+        $paramSearch3 = [
+            'nowPage' => '1',
+            'pageNum' => '10',
+        ];
+        $items = $quoteRepo->listsSub1_1($paramSearch3);
+        $this->assertEquals(10, count($items));
+        $this->assertEquals('SUB1-20221200019', $items[0]->partNo);
+        $this->assertEquals('二椴九楊', $items[0]->content);
+        $this->assertEquals('B/B', $items[0]->level);
+
+        $this->assertEquals('SUB1-20221200014', $items[5]->partNo);
+        $this->assertEquals('五椴二楊', $items[5]->content);
+        $this->assertEquals('A/B', $items[5]->level);
+    }
 }

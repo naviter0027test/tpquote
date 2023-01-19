@@ -58,7 +58,7 @@ class QuoteSub1Test extends TestCase
                 'nowPage' => '2',
                 'pageNum' => 'a',
             ];
-            $quoteRepo->listsMain($paramSearch2);
+            $quoteRepo->listsSub1($paramSearch2);
             $this->assertEquals(true, false);
         }
         catch(Exception $e) {
