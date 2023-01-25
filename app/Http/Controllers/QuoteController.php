@@ -62,7 +62,10 @@ class QuoteController extends Controller
     }
 
     public function createMainPage(Request $request) {
-        return view('quote.main.create');
+        $memberPermission = Session::get('memberPermission');
+        $result = [];
+        $result['memberPermission'] = $memberPermission;
+        return view('quote.main.create', $result);
     }
 
     public function createMain(Request $request) {
@@ -107,7 +110,11 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
             return redirect($jump);
         }
         return json_encode($result);
