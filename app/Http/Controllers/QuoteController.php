@@ -23,6 +23,7 @@ class QuoteController extends Controller
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
         $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteMain', 1);
@@ -42,6 +43,11 @@ class QuoteController extends Controller
             $result['amount'] = $quoteRepo->listsMainAmount($param);
             $result['status'] = true;
             $result['msg'] = 'success';
+            $result['nowPage'] = $param['nowPage'];
+            $result['pageNum'] = $param['pageNum'];
+            unset($param['nowPage']);
+            unset($param['pageNum']);
+            $result['param'] = $param;
         }
         catch(Exception $e) {
             $result['status'] = false;
@@ -49,13 +55,14 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            return view('quote.lists');
+            $result['memberPermission'] = $memberPermission;
+            return view('quote.main.lists', $result);
         }
         return json_encode($result);
     }
 
     public function createMainPage(Request $request) {
-        return view('quote.create.main');
+        return view('quote.main.create');
     }
 
     public function createMain(Request $request) {
@@ -131,7 +138,10 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
+            if($result['status'] == true) {
+                return view('quote.main.edit', $result);
+            }
+            $request->session()->flash('result', $result);
             return redirect($jump);
         }
         return json_encode($result);

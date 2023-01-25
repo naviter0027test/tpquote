@@ -49,6 +49,19 @@ class QuoteRepository
         $items = $query->offset($start)
             ->limit($param['pageNum'])
             ->get();
+        foreach($items as $i => $item) {
+            switch($item->quoteCls) {
+                case '1':
+                    $items[$i]->quoteClsShow = '業務一部';
+                    break;
+                case '2':
+                    $items[$i]->quoteClsShow = '業務二部';
+                    break;
+                case '3':
+                    $items[$i]->quoteClsShow = '公司品項';
+                    break;
+            }
+        }
         return $items;
     }
 
