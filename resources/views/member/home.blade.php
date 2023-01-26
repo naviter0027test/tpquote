@@ -17,16 +17,16 @@
             <div class="content-emp">
                 <div class="show-line1">
                     <label>員工名稱:</label>
-                    <span>黃玄鳴</span>
+                    <span>{{ $member->userName }}</span>
                 </div>
                 <div class="show-line1">
                     <label>部門所屬:</label>
-                    <span>練習部門</span>
+                    <span>{{ $memberPermission->permissionName }}</span>
                 </div>
                 <div class="home-panel">
-                    <a href="#" class="home-btn">業務一部</a>
-                    <a href="#" class="home-btn">業務二部</a>
-                    <a href="#" class="home-btn">公司品項</a>
+                    <a href="/quote/lists/main?quoteCls=1" class="home-btn">業務一部</a>
+                    <a href="/quote/lists/main?quoteCls=2" class="home-btn">業務二部</a>
+                    <a href="/quote/lists/main?quoteCls=3" class="home-btn">公司品項</a>
                 </div>
             </div>
         </div>

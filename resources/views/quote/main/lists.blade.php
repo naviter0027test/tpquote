@@ -52,7 +52,7 @@
                 @if(($i+1) == $nowPage)
                 <label>{{ $i+1 }} </label>
                 @elseif(($i+1) != $nowPage && abs($i+1-$nowPage) < 5)
-                <a href="/member/lists/main?nowPage={{ $i+1 }}&{{ http_build_query($param) }}">{{ $i+1 }}</a>
+                <a href="/quote/lists/main?nowPage={{ $i+1 }}&{{ http_build_query($param) }}">{{ $i+1 }}</a>
                 @endif
             @endfor
             @endif
