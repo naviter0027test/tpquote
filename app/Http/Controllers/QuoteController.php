@@ -473,19 +473,19 @@ class QuoteController extends Controller
         return view('quote.sub1-1.edit');
     }
 
-    public function createSub2(Request $request) {
-        return 'quote create sub 2';
+    public function createSub2Page(Request $request, $mainId = 0) {
+        return view('quote.sub2.create');
     }
 
     public function editSub2(Request $request, $id = 0) {
-        return 'quote edit sub2';
+        return view('quote.sub2.edit');
     }
 
-    public function createSub2_1(Request $request) {
-        return 'quote create sub 2-1';
+    public function createSub2_1Page(Request $request, $mainId = 0) {
+        return view('quote.sub2-1.create');
     }
 
-    public function editSub2_1(Request $request, $id = 0) {
-        return 'quote edit sub 2-1';
+    public function editSub2_1(Request $request, $mainId = 0) {
+        return view('quote.sub2-1.edit');
     }
 }
