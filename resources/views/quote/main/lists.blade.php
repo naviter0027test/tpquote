@@ -39,6 +39,7 @@
                         <td>{{ $item->created_at }}</td>
                         <td>{{ $item->updated_at }}</td>
                         <td>
+                            <a href='/quote/subs/main/{{ $item->id }}' class='glyphicon glyphicon-th-list'></a>
                             <a href='/quote/edit/main/{{ $item->id }}' class='glyphicon glyphicon-pencil'></a>
                             <a href='/quote/remove/main/{{ $item->id }}' class='glyphicon glyphicon-remove itemRemove'></a>
                         </td>

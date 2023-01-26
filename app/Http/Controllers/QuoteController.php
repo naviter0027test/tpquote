@@ -232,6 +232,24 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function subsMain(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+
+        if($param['mode'] == 'html') {
+            return view('quote.main.subs', $result);
+        }
+        return json_encode($result);
+    }
+
     public function editSub1(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
@@ -256,8 +274,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
-            return redirect($jump);
+            return view('quote.sub1.edit', $result);
         }
         return json_encode($result);
     }
@@ -360,7 +377,7 @@ class QuoteController extends Controller
     }
 
     public function createSub1Page(Request $request) {
-        return view('quote.create.sub1-1');
+        return view('quote.sub1.create');
     }
 
     public function createSub1(Request $request) {
@@ -448,8 +465,12 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
-    public function editSub1_1(Request $request, $id = 0) {
-        return 'quote edit sub1-1';
+    public function createSub1_1Page(Request $request, $mainId = 0) {
+        return view('quote.sub1-1.create');
+    }
+
+    public function editSub1_1(Request $request, $mainId = 0) {
+        return view('quote.sub1-1.edit');
     }
 
     public function createSub2(Request $request) {
