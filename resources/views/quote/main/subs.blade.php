@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>項目1 板材 木盒 主材料</td>
+                        <td>項目1 板材/木盒/主材料</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
@@ -43,7 +43,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>項目2 彩盒 展示盒</td>
+                        <td>項目2 彩盒/展示盒</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
@@ -79,7 +79,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>項目4 包材 紙箱 收縮膜</td>
+                        <td>項目4 包材/紙箱/收縮膜</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
@@ -97,12 +97,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>工序總表</td>
+                        <td>工序總表(5-1)</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
-                            <a href='/quote/create/sub?/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub?/0' class='glyphicon glyphicon-pencil'></a>
+                            <a href='/quote/create/sub5-1/0' class='glyphicon glyphicon-plus'></a>
+                            <a href='/quote/edit/sub5-1/0' class='glyphicon glyphicon-pencil'></a>
                         </td>
                     </tr>
                     <tr>
