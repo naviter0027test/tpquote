@@ -244,4 +244,11 @@ class QuoteRepository
             ->get();
         return $items;
     }
+
+    public function listsSub1_1Amount($param) {
+        $query = QuoteSub1_1::orderBy('id', 'desc');
+
+        $amount = $query->count();
+        return $amount;
+    }
 }

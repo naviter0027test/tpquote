@@ -82,4 +82,15 @@ class QuoteSub1_1Test extends TestCase
         $this->assertEquals('五椴二楊', $items[5]->content);
         $this->assertEquals('A/B', $items[5]->level);
     }
+
+    public function testListsSub1Amount() {
+        $quoteRepo = new QuoteRepository();
+
+        $paramSearch1 = [
+            'nowPage' => '2',
+            'pageNum' => '10',
+        ];
+        $amount1 = $quoteRepo->listsSub1_1Amount($paramSearch1);
+        $this->assertEquals(19, $amount1);
+    }
 }
