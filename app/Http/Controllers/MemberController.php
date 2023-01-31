@@ -45,7 +45,8 @@ class MemberController extends Controller
 
     public function home() {
         $memberPermission = Session::get('memberPermission');
-        return view('member.home', ['memberPermission' => $memberPermission]);
+        $member = Session::get('member');
+        return view('member.home', ['memberPermission' => $memberPermission, 'member' => $member]);
     }
 
     public function logout(Request $request) {

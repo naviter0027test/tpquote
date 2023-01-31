@@ -21,7 +21,7 @@
                 <thead>
                     <tr>
                         <td>報價類別</td>
-                        <td>客人名稱</td>
+                        <td>客人產品編號</td>
                         <td>產品編號</td>
                         <td>中文產品名稱</td>
                         <td>建立時間</td>
@@ -30,8 +30,34 @@
                     </tr>
                 </thead>
                 <tbody>
+                @foreach($items as $i => $item)
+                    <tr>
+                        <td>{{ $item->quoteClsShow }}</td>
+                        <td>{{ $item->customerProductNum }}</td>
+                        <td>{{ $item->productNum }}</td>
+                        <td>{{ $item->productNameTw }}</td>
+                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->updated_at }}</td>
+                        <td>
+                            <a href='/quote/subs/main/{{ $item->id }}' class='glyphicon glyphicon-th-list'></a>
+                            <a href='/quote/edit/main/{{ $item->id }}' class='glyphicon glyphicon-pencil'></a>
+                            <a href='/quote/remove/main/{{ $item->id }}' class='glyphicon glyphicon-remove itemRemove'></a>
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
+            <div class="pagination paginationCenter">
+            @if(isset($amount))
+            @for($i = 0;$i < ceil($amount / $pageNum); ++$i)
+                @if(($i+1) == $nowPage)
+                <label>{{ $i+1 }} </label>
+                @elseif(($i+1) != $nowPage && abs($i+1-$nowPage) < 5)
+                <a href="/quote/lists/main?nowPage={{ $i+1 }}&{{ http_build_query($param) }}">{{ $i+1 }}</a>
+                @endif
+            @endfor
+            @endif
+            </div>
         </div>
 @include('member.layout.footer')
     </body>

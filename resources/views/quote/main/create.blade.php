@@ -13,7 +13,7 @@
 @include('member.layout.menu')
         <div class="content">
             <div class="content-header">
-                <span>報價</span> &gt; <span>新增</span> &gt; <label>主要</label>
+                <span>報價</span> &gt; <span>主要</span> &gt; <label>新增</label>
             </div>
             <form method='post' action='/quote/create/main' class='form1' enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -46,7 +46,7 @@
                 <div class="show-line2">
                     <h5>品質要求</h5>
                     <p>
-                        <select name="quoteCls">
+                        <select name="quoteQuality">
                             <option value="高">高</option>
                             <option value="中高">中高</option>
                             <option value="普通">普通</option>

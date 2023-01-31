@@ -27,6 +27,14 @@
                         <td>{{ session('result')['msg'] }}</td>
                     @endif
                     </tr>
+                    @if (isset(session('result')['errors']))
+                    <tr>
+                        @foreach (session('result')['errors'] as $errName => $err)
+                        <td>{{ $errName }}</td>
+                        <td>{{ $err[0] }}</td>
+                        @endforeach
+                    </tr>
+                    @endif
                 </tbody>
             </table>
 
