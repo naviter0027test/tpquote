@@ -251,4 +251,36 @@ class QuoteRepository
         $amount = $query->count();
         return $amount;
     }
+
+    public function createSub1_1($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub1_1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub1_1();
+        $item->mainId = $param['mainId'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->spec = $param['spec'];
+        $item->specIllustrate = $param['specIllustrate'];
+        $item->content = $param['content'];
+        $item->level = $param['level'];
+        $item->business = $param['business'];
+        $item->fsc = $param['fsc'];
+        $item->materialPrice = $param['materialPrice'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }

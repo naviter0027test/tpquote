@@ -93,4 +93,52 @@ class QuoteSub1_1Test extends TestCase
         $amount1 = $quoteRepo->listsSub1_1Amount($paramSearch1);
         $this->assertEquals(19, $amount1);
     }
+
+    public function testCreateSub1_1() {
+        $quoteRepo = new QuoteRepository();
+
+        $paramCreate1 = [
+            'mainId' => 1,
+        ];
+        try {
+            $quoteRepo->createSub1_1($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 21,
+            'partNo' => 'SUB1-20221200020',
+            'materialName' => '盒身',
+            'length' => 380,
+            'width' => 49,
+            'height' => 15,
+            'usageAmount' => 95,
+            'spec' => '松木',
+            'specIllustrate' => '5夾',
+            'content' => '二椴九楊',
+            'level' => 'B/B',
+            'business' => 'E0',
+            'fsc' => 'N',
+            'materialPrice' => 1250,
+        ];
+        try {
+            $quoteRepo->createSub1_1($paramCreate2);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2['mainId'] = 20;
+        $quoteRepo->createSub1_1($paramCreate2);
+        $quoteSub1_1at1 = $quoteRepo->getSub1_1ByMainId(20);
+        $this->assertEquals(20, $quoteSub1_1at1->mainId);
+        $this->assertEquals("SUB1-20221200020", $quoteSub1_1at1->partNo);
+        $this->assertEquals("盒身", $quoteSub1_1at1->materialName);
+        $this->assertEquals(380, $quoteSub1_1at1->length);
+        $this->assertEquals(1250, $quoteSub1_1at1->materialPrice);
+
+    }
 }
