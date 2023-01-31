@@ -127,6 +127,15 @@ class QuoteSub1Test extends TestCase
         $this->assertEquals(180, $quoteSub1at1->length);
         $this->assertEquals("實木", $quoteSub1at1->spec);
         $this->assertEquals("create by tdd", $quoteSub1at1->memo);
+
+        try {
+            $quoteRepo->createSub1($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
     }
 
     public function testUpdateSub1ByMainId() {

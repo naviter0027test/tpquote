@@ -149,6 +149,15 @@ class QuoteRepository
 
     public function createSub1($param) {
         $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
 
         $item = new QuoteSub1();
         $item->mainId = $param['mainId'];
