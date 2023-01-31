@@ -83,7 +83,7 @@ class QuoteSub1_1Test extends TestCase
         $this->assertEquals('A/B', $items[5]->level);
     }
 
-    public function testListsSub1Amount() {
+    public function testListsSub1_1Amount() {
         $quoteRepo = new QuoteRepository();
 
         $paramSearch1 = [
