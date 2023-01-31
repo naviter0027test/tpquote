@@ -141,4 +141,27 @@ class QuoteSub1_1Test extends TestCase
         $this->assertEquals(1250, $quoteSub1_1at1->materialPrice);
 
     }
+
+    public function testUpdateSub1_1() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub1_1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'materialName' => 'sub 1-1 from tdd',
+            'length' => 90,
+            'materialPrice' => 1250,
+        ];
+        $quoteRepo->updateSub1_1ByMainId(5, $paramUpdate1);
+        $quoteSub1_1at1 = $quoteRepo->getSub1_1ByMainId(5);
+        $this->assertEquals(5, $quoteSub1_1at1->mainId);
+        $this->assertEquals("sub 1-1 from tdd", $quoteSub1_1at1->materialName);
+        $this->assertEquals(90, $quoteSub1_1at1->length);
+        $this->assertEquals(1250, $quoteSub1_1at1->materialPrice);
+    }
 }
