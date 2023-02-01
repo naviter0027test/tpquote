@@ -38,5 +38,12 @@ class QuoteSub2Test extends TestCase
         catch(Exception $e) {
             $this->assertEquals("指定資料不存在", $e->getMessage());
         }
+
+        $quoteSub2at3 = $quoteRepo->getSub2ByMainId(18);
+        $this->assertEquals(18, $quoteSub2at3->mainId);
+        $this->assertEquals("SLN-20221200018", $quoteSub2at3->serialNumber);
+        $this->assertEquals("展示盒", $quoteSub2at3->materialName);
+        $this->assertEquals(96, $quoteSub2at3->length);
+        $this->assertEquals("天地蓋", $quoteSub2at3->boxType);
     }
 }
