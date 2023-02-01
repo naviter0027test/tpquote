@@ -7,3 +7,4 @@
 - Laravel 9
 - Mysql Memory Mode
 
+另外，測試的部分，本次專案我將 Unit 與 Feature 意義搞反，測試上要注意一下
