@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\QuoteMain;
 use App\Models\QuoteSub1;
 use App\Models\QuoteSub1_1;
+use App\Models\QuoteSub2;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
@@ -315,5 +316,13 @@ class QuoteRepository
             $item->materialPrice = $param['materialPrice'];
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+    }
+
+    public function getSub2ByMainId($mainId) {
+        $item = QuoteSub2::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
     }
 }

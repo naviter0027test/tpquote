@@ -31,7 +31,7 @@ class QuoteSub1Test extends TestCase
         $this->assertEquals("膠合板", $quoteSub1at1->spec);
 
         try {
-            $quoteMain2 = $quoteRepo->getMainById(99);
+            $quoteSub1 = $quoteRepo->getSub1ByMainId(99);
         }
         catch(Exception $e) {
             $this->assertEquals("指定資料不存在", $e->getMessage());
