@@ -469,6 +469,33 @@ class QuoteController extends Controller
         return view('quote.sub1-1.create');
     }
 
+    public function createSub1_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_1', 2);
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $request->session()->flash('msg', $result['msg']);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
     public function editSub1_1(Request $request, $mainId = 0) {
         $result = [
             'status' => false,

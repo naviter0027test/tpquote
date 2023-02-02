@@ -153,4 +153,25 @@ class HttpQuoteSub1_1Test extends TestCase
         $this->assertEquals('N', $sub1at1->fsc);
         $this->assertEquals(600, $sub1at1->materialPrice);
     }
+
+    public function testCreateteSub1_1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+        $paramUser1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($paramUser1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/create/sub1-1/19", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_1 permission denied',
+            ]);
+    }
 }
