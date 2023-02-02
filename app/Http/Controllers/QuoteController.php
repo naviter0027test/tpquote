@@ -376,11 +376,11 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
-    public function createSub1Page(Request $request) {
+    public function createSub1Page(Request $request, $mainId = 0) {
         return view('quote.sub1.create');
     }
 
-    public function createSub1(Request $request) {
+    public function createSub1(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
             'msg' => '',
@@ -407,6 +407,7 @@ class QuoteController extends Controller
                 $result['errors'] = $validator->errors();
                 throw new Exception('輸入錯誤');
             }
+            $param['mainId'] = $mainId;
             $param['spec'] = isset($param['spec']) ? trim($param['spec']) : '';
             $param['specIllustrate'] = isset($param['specIllustrate']) ? trim($param['specIllustrate']) : '';
             $param['content'] = isset($param['content']) ? trim($param['content']) : '';

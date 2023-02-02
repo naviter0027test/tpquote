@@ -224,7 +224,7 @@ class HttpQuoteSub1Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/create/sub1", $paramEdit1);
+            ->post("/quote/create/sub1/20", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
@@ -241,7 +241,7 @@ class HttpQuoteSub1Test extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post("/quote/create/sub1", $paramEdit2);
+            ->post("/quote/create/sub1/20", $paramEdit2);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
@@ -255,7 +255,6 @@ class HttpQuoteSub1Test extends TestCase
 
         $paramEdit3 = [
             'mode' => 'json',
-            'mainId' => 20,
             'partNo' => "SUB1-20221200020",
             'materialName' => "常構貢木板III",
             'length' => 300,
@@ -273,7 +272,7 @@ class HttpQuoteSub1Test extends TestCase
             'bigHeight' => 4000,
         ];
         $response3 = $this->withSession(['member' => $member2])
-            ->post("/quote/create/sub1", $paramEdit3);
+            ->post("/quote/create/sub1/20", $paramEdit3);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', true)
