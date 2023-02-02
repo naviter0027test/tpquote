@@ -512,6 +512,31 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_1', 2);
+
+            $validator = Validator::make($param, [
+                'partNo' => 'required',
+                'materialName' => 'required',
+                'length' => 'required|integer',
+                'width' => 'required|integer',
+                'height' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['spec'] = isset($param['spec']) ? $param['spec'] : '';
+            $param['specIllustrate'] = isset($param['specIllustrate']) ? $param['specIllustrate'] : '';
+            $param['content'] = isset($param['content']) ? $param['content'] : '';
+            $param['level'] = isset($param['level']) ? $param['level'] : '';
+            $param['business'] = isset($param['business']) ? $param['business'] : '';
+            $param['fsc'] = isset($param['fsc']) ? $param['fsc'] : '';
+            $param['materialPrice'] = isset($param['materialPrice']) ? $param['materialPrice'] : null;
+
+            $quoteRepo->updateSub1_1ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

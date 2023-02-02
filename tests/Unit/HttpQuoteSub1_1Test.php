@@ -102,5 +102,55 @@ class HttpQuoteSub1_1Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_1 permission denied',
             ]);
+
+        $paramUser2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($paramUser2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub1-1/2", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.partNo')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SD00021',
+            'materialName' => '新半導體材料',
+            'length' => 400,
+            'width' => 500,
+            'height' => 550,
+            'usageAmount' => 950,
+            'materialPrice' => 600,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub1-1/2", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success');
+            });
+
+        $sub1at1 = $quoteRepo->getSub1_1ByMainId(2);
+        $this->assertEquals('SD00021', $sub1at1->partNo);
+        $this->assertEquals('新半導體材料', $sub1at1->materialName);
+        $this->assertEquals(400, $sub1at1->length);
+        $this->assertEquals('5夾', $sub1at1->specIllustrate);
+        $this->assertEquals('A/A', $sub1at1->level);
+        $this->assertEquals('N', $sub1at1->fsc);
+        $this->assertEquals(600, $sub1at1->materialPrice);
     }
 }
