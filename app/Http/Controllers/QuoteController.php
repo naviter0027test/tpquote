@@ -483,11 +483,9 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_1', 1);
-            /*
-            $result['item'] = $quoteRepo->getSub1ByMainId($mainId);
+            $result['item'] = $quoteRepo->getSub1_1ByMainId($mainId);
             $result['status'] = true;
             $result['msg'] = 'success';
-            */
         }
         catch(Exception $e) {
             $result['status'] = false;
