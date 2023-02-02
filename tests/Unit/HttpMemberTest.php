@@ -117,12 +117,13 @@ class HttpMemberTest extends TestCase
         $memberRepo = new MemberRepository();
 
         $param = [
-            'account' => 'test1',
+            'account' => 'account1',
             'pass' => '123456',
         ];
         $member = $memberRepo->checkLogin($param);
+        $memberPermission = $memberRepo->getById($member->id);
 
-        $response = $this->withSession(['member' => $member])
+        $response = $this->withSession(['member' => $member, 'memberPermission' => $memberPermission])
             ->get('/member/home');
         $response->assertStatus(200);
 

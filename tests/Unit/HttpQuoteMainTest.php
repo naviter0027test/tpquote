@@ -291,6 +291,9 @@ class HttpQuoteMainTest extends TestCase
                     ->where('items.0.productNameTw', '威士忌名酒')
                     ->where('items.1.id', 19)
                     ->where('items.1.customerProductNum', 'P2022120019')
+                    ->has('nowPage')
+                    ->has('pageNum')
+                    ->has('param')
                     ->where('amount', 20);
             });
     }
