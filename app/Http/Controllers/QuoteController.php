@@ -611,7 +611,7 @@ class QuoteController extends Controller
         return view('quote.sub2.create');
     }
 
-    public function editSub2(Request $request, $id = 0) {
+    public function editSub2(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
             'msg' => '',
@@ -625,6 +625,9 @@ class QuoteController extends Controller
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_2', 1);
+            $result['item'] = $quoteRepo->getSub2ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

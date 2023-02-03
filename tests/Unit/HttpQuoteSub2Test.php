@@ -51,5 +51,35 @@ class HttpQuoteSub2Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_2 permission denied',
             ]);
+
+        $param2 = [
+            'account' => 'account6',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response2 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub2/999?'.$paramEdit2Str);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '指定資料不存在');
+            });
+
+        $response3 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub2/5?'.$paramEdit2Str);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('item.mainId', '5')
+                    ->where('item.serialNumber', 'SLN-20221200005')
+                    ->where('item.usageAmount', '99')
+                    ->where('item.paperThickness', '250G')
+                    ->where('item.coatingMethod', '上啞油');
+            });
     }
 }
