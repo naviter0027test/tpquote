@@ -325,4 +325,38 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createSub2($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub2ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub2();
+        $item->mainId = $param['mainId'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->boxType = $param['boxType'];
+        $item->internalPcsNum = $param['internalPcsNum'];
+        $item->paperThickness = $param['paperThickness'];
+        $item->paperMaterial = $param['paperMaterial'];
+        $item->printMethod = $param['printMethod'];
+        $item->craftMethod = $param['craftMethod'];
+        $item->coatingMethod = $param['coatingMethod'];
+        $item->memo = $param['memo'];
+        $item->infoImg = $param['infoImg'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }

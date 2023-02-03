@@ -46,4 +46,57 @@ class QuoteSub2Test extends TestCase
         $this->assertEquals(96, $quoteSub2at3->length);
         $this->assertEquals("天地蓋", $quoteSub2at3->boxType);
     }
+
+    public function testCreateSub2() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub2($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 18,
+        ];
+        try {
+            $quoteRepo->createSub2($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate3 = [
+            'mainId' => 19,
+            'serialNumber' => "SLN-20221200019",
+            'partNo' => "SUB1-20221200019",
+            'materialName' => "彩盒",
+            'length' => 45,
+            'width' => 95,
+            'height' => 80,
+            'usageAmount' => 89,
+            'boxType' => "天地蓋",
+            'internalPcsNum' => 49,
+            'paperThickness' => "100G",
+            'paperMaterial' => "白卡",
+            'printMethod' => "四色印刷",
+            'craftMethod' => "開窗",
+            'coatingMethod' => "上OPP亮膜",
+            'memo' => "create by tdd",
+            'infoImg' => "",
+        ];
+        $quoteRepo->createSub2($paramCreate3);
+        $quoteSub2at1 = $quoteRepo->getSub2ByMainId(19);
+        $this->assertEquals(19, $quoteSub2at1->mainId);
+        $this->assertEquals("SUB1-20221200019", $quoteSub2at1->partNo);
+        $this->assertEquals("彩盒", $quoteSub2at1->materialName);
+        $this->assertEquals(45, $quoteSub2at1->length);
+        $this->assertEquals("天地蓋", $quoteSub2at1->boxType);
+        $this->assertEquals("create by tdd", $quoteSub2at1->memo);
+    }
 }
