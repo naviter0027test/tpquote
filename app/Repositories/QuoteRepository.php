@@ -359,4 +359,39 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub2ByMainId($mainId, $param) {
+        $item = $this->getSub2ByMainId($mainId);
+
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['boxType']) && trim($param['boxType']) != '')
+            $item->boxType = $param['boxType'];
+        if(isset($param['internalPcsNum']) && is_numeric($param['internalPcsNum']))
+            $item->internalPcsNum = $param['internalPcsNum'];
+        if(isset($param['paperThickness']) && trim($param['paperThickness']) != '')
+            $item->paperThickness = $param['paperThickness'];
+        if(isset($param['paperMaterial']) && trim($param['paperMaterial']) != '')
+            $item->paperMaterial = $param['paperMaterial'];
+        if(isset($param['printMethod']) && trim($param['printMethod']) != '')
+            $item->printMethod = $param['printMethod'];
+        if(isset($param['craftMethod']) && trim($param['craftMethod']) != '')
+            $item->craftMethod = $param['craftMethod'];
+        if(isset($param['coatingMethod']) && trim($param['coatingMethod']) != '')
+            $item->coatingMethod = $param['coatingMethod'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+
+        $item->save();
+    }
 }

@@ -99,4 +99,27 @@ class QuoteSub2Test extends TestCase
         $this->assertEquals("天地蓋", $quoteSub2at1->boxType);
         $this->assertEquals("create by tdd", $quoteSub2at1->memo);
     }
+
+    public function testUpdateSub2ByMainId() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub2ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'materialName' => '材料 from tdd',
+            'usageAmount' => 90,
+            'memo' => 'update by tdd',
+        ];
+        $quoteRepo->updateSub2ByMainId(5, $paramUpdate1);
+        $quoteSub2at1 = $quoteRepo->getSub2ByMainId(5);
+        $this->assertEquals(5, $quoteSub2at1->mainId);
+        $this->assertEquals("材料 from tdd", $quoteSub2at1->materialName);
+        $this->assertEquals(90, $quoteSub2at1->usageAmount);
+        $this->assertEquals("update by tdd", $quoteSub2at1->memo);
+    }
 }
