@@ -29,8 +29,7 @@ class HttpQuoteSub2Test extends TestCase
         shell_exec('php artisan DropTables');
     }
 
-    public function testEditSub2()
-    {
+    public function testEditSub2() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -81,5 +80,27 @@ class HttpQuoteSub2Test extends TestCase
                     ->where('item.paperThickness', '250G')
                     ->where('item.coatingMethod', '上啞油');
             });
+    }
+
+    public function testUpdateSub2() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub2/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_2 permission denied',
+            ]);
     }
 }
