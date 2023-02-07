@@ -197,5 +197,28 @@ class HttpQuoteSub2Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_2 permission denied',
             ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/sub2/19', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.partNo')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height')
+                    ->has('errors.usageAmount')
+                    ;
+            });
     }
 }
