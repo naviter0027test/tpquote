@@ -175,6 +175,7 @@ class HttpQuoteSub2Test extends TestCase
             });
         $sub2at2 = $quoteRepo->getSub2ByMainId(1);
         Storage::disk('uploads')->assertExists($sub2at2->infoImg);
+        Storage::disk('uploads')->delete($sub2at2->infoImg);
     }
 
     public function testCreateSub2() {
@@ -256,5 +257,6 @@ class HttpQuoteSub2Test extends TestCase
         $this->assertEquals(30, $sub2at1->usageAmount);
         $this->assertEquals('壓刀(折線)', $sub2at1->craftMethod);
         Storage::disk('uploads')->assertExists($sub2at1->infoImg);
+        Storage::disk('uploads')->delete($sub2at1->infoImg);
     }
 }
