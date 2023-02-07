@@ -621,6 +621,10 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('infoImg'))
+            $files['infoImg'] = $request->file('infoImg');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
@@ -639,6 +643,7 @@ class QuoteController extends Controller
                 $result['errors'] = $validator->errors();
                 throw new Exception('輸入錯誤');
             }
+            $param['serialNumber'] = isset($param['serialNumber']) ? $param['serialNumber'] : '';
             $param['boxType'] = isset($param['boxType']) ? $param['boxType'] : '';
             $param['internalPcsNum'] = isset($param['internalPcsNum']) ? $param['internalPcsNum'] : null;
             $param['paperThickness'] = isset($param['paperThickness']) ? $param['paperThickness'] : '';
@@ -647,6 +652,11 @@ class QuoteController extends Controller
             $param['craftMethod'] = isset($param['craftMethod']) ? $param['craftMethod'] : '';
             $param['coatingMethod'] = isset($param['coatingMethod']) ? $param['coatingMethod'] : '';
             $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub2($param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;
@@ -725,6 +735,7 @@ class QuoteController extends Controller
                 $result['errors'] = $validator->errors();
                 throw new Exception('輸入錯誤');
             }
+            $param['serialNumber'] = isset($param['serialNumber']) ? $param['serialNumber'] : '';
             $param['boxType'] = isset($param['boxType']) ? $param['boxType'] : '';
             $param['internalPcsNum'] = isset($param['internalPcsNum']) ? $param['internalPcsNum'] : null;
             $param['paperThickness'] = isset($param['paperThickness']) ? $param['paperThickness'] : '';

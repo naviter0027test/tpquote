@@ -334,7 +334,7 @@ class QuoteRepository
         return $item;
     }
 
-    public function createSub2($param) {
+    public function createSub2($param, $files = []) {
         $this->getMainById($param['mainId']);
         $sub = [];
         try {
@@ -345,6 +345,11 @@ class QuoteRepository
 
         if(isset($sub->id) == true)
             throw new Exception('子資料已存在');
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
 
         $item = new QuoteSub2();
         $item->mainId = $param['mainId'];
@@ -367,6 +372,16 @@ class QuoteRepository
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub2_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 
     public function updateSub2ByMainId($mainId, $param, $files = []) {

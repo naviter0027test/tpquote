@@ -220,5 +220,41 @@ class HttpQuoteSub2Test extends TestCase
                     ->has('errors.usageAmount')
                     ;
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221200019',
+            'partNo' => 'SUB1-20221200019',
+            'materialName' => '彩盒',
+            'length' => 455,
+            'width' => 300,
+            'height' => 230,
+            'usageAmount' => 30,
+            'boxType' => 'pizza盒型',
+            'internalPcsNum' => 90,
+            'paperThickness' => '300G',
+            'paperMaterial' => '雙灰板',
+            'printMethod' => '正反雙面',
+            'craftMethod' => '壓刀(折線)',
+            'coatingMethod' => '上亞膜',
+            'memo' => 'created by http tdd',
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/sub2/19', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub2at1 = $quoteRepo->getSub2ByMainId(19);
+        $this->assertEquals('SLN-20221200019', $sub2at1->serialNumber);
+        $this->assertEquals('彩盒', $sub2at1->materialName);
+        $this->assertEquals(455, $sub2at1->length);
+        $this->assertEquals(300, $sub2at1->width);
+        $this->assertEquals(30, $sub2at1->usageAmount);
+        $this->assertEquals('壓刀(折線)', $sub2at1->craftMethod);
+        Storage::disk('uploads')->assertExists($sub2at1->infoImg);
     }
 }
