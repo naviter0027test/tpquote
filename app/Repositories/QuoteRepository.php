@@ -349,6 +349,7 @@ class QuoteRepository
         $item = new QuoteSub2();
         $item->mainId = $param['mainId'];
         $item->partNo = $param['partNo'];
+        $item->serialNumber = $param['serialNumber'];
         $item->materialName = $param['materialName'];
         $item->length = $param['length'];
         $item->width = $param['width'];
@@ -378,6 +379,8 @@ class QuoteRepository
 
         if(isset($param['partNo']) && trim($param['partNo']) != '')
             $item->partNo = $param['partNo'];
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
         if(isset($param['materialName']) && trim($param['materialName']) != '')
             $item->materialName = $param['materialName'];
         if(isset($param['length']) && is_numeric($param['length']))
