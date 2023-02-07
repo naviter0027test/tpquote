@@ -3,6 +3,9 @@
 namespace Tests\Unit;
 
 //use PHPUnit\Framework\TestCase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
@@ -125,5 +128,52 @@ class HttpQuoteSub2Test extends TestCase
                     ->has('errors.usageAmount')
                     ;
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'DSL-202323213892',
+            'materialName' => '常案山匹瑞',
+            'length' => 488,
+            'width' => 390,
+            'height' => 90,
+            'usageAmount' => 80,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub2/1', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+
+        $sub2at1 = $quoteRepo->getSub2ByMainId(1);
+        $this->assertEquals('DSL-202323213892', $sub2at1->partNo);
+        $this->assertEquals('常案山匹瑞', $sub2at1->materialName);
+        $this->assertEquals(488, $sub2at1->length);
+        $this->assertEquals(390, $sub2at1->width);
+        $this->assertEquals(90, $sub2at1->height);
+        $this->assertEquals(80, $sub2at1->usageAmount);
+
+        $paramEdit4 = [
+            'mode' => 'json',
+            'partNo' => 'DSL-202323213892',
+            'materialName' => '常案山匹瑞',
+            'length' => 488,
+            'width' => 390,
+            'height' => 90,
+            'usageAmount' => 80,
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub2/1', $paramEdit4);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub2at2 = $quoteRepo->getSub2ByMainId(1);
+        Storage::disk('uploads')->assertExists($sub2at2->infoImg);
     }
 }

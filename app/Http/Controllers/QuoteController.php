@@ -650,6 +650,10 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('infoImg'))
+            $files['infoImg'] = $request->file('infoImg');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
@@ -676,6 +680,10 @@ class QuoteController extends Controller
             $param['craftMethod'] = isset($param['craftMethod']) ? $param['craftMethod'] : '';
             $param['coatingMethod'] = isset($param['coatingMethod']) ? $param['coatingMethod'] : '';
             $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $quoteRepo->updateSub2ByMainId($mainId, $param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

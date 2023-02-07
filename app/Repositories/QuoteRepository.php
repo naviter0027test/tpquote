@@ -9,10 +9,18 @@ use App\Models\QuoteSub2;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
+use Storage;
 
 class QuoteRepository
 {
     public function __construct() {
+    }
+
+    public function checkExt($ext) {
+        $validExtArr = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'doc', 'docx', 'odt', 'pdf', 'xls', 'xlsx', 'ods'];
+        $ext = strtolower(trim($ext));
+        if(in_array($ext, $validExtArr) == false)
+            throw new Exception('上傳檔案格式限定:'. implode(',', $validExtArr) );
     }
 
     //$memberId 哪位成員要檢查
@@ -360,8 +368,13 @@ class QuoteRepository
         $item->save();
     }
 
-    public function updateSub2ByMainId($mainId, $param) {
+    public function updateSub2ByMainId($mainId, $param, $files = []) {
         $item = $this->getSub2ByMainId($mainId);
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
 
         if(isset($param['partNo']) && trim($param['partNo']) != '')
             $item->partNo = $param['partNo'];
@@ -393,5 +406,15 @@ class QuoteRepository
             $item->memo = $param['memo'];
 
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub2_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 }
