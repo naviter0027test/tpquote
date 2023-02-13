@@ -85,4 +85,29 @@ class QuoteSub2_1Test extends TestCase
         $this->assertEquals(140, $quoteSub2_1at1->length);
         $this->assertEquals("四色印刷", $quoteSub2_1at1->printMethod);
     }
+
+    public function testUpdateSub2_1() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub2_1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'materialName' => 'Sub2-1 from tdd',
+            'usageAmount' => 90,
+            'craftMethod' => '開窗',
+            'memo' => 'update by tdd',
+        ];
+        $quoteRepo->updateSub2_1ByMainId(2, $paramUpdate1);
+        $quoteSub2_1at1 = $quoteRepo->getSub2_1ByMainId(2);
+        $this->assertEquals(2, $quoteSub2_1at1->mainId);
+        $this->assertEquals("Sub2-1 from tdd", $quoteSub2_1at1->materialName);
+        $this->assertEquals(90, $quoteSub2_1at1->usageAmount);
+        $this->assertEquals('開窗', $quoteSub2_1at1->craftMethod);
+        $this->assertEquals("update by tdd", $quoteSub2_1at1->memo);
+    }
 }

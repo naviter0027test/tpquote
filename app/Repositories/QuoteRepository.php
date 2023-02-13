@@ -474,6 +474,7 @@ class QuoteRepository
         $item->paperThickness = $param['paperThickness'];
         $item->paperMaterial = $param['paperMaterial'];
         $item->printMethod = $param['printMethod'];
+        $item->craftMethod = $param['craftMethod'];
         $item->coatingMethod = $param['coatingMethod'];
         $item->memo = $param['memo'];
         $item->save();
@@ -487,5 +488,43 @@ class QuoteRepository
             $item->save();
             $files['infoImg']->move($root. $path, $filename);
         }
+    }
+
+    public function updateSub2_1ByMainId($mainId, $param, $files = []) {
+        $item = $this->getSub2_1ByMainId($mainId);
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['paperThickness']) && trim($param['paperThickness']) != '')
+            $item->paperThickness = $param['paperThickness'];
+        if(isset($param['paperMaterial']) && trim($param['paperMaterial']) != '')
+            $item->paperMaterial = $param['paperMaterial'];
+        if(isset($param['printMethod']) && trim($param['printMethod']) != '')
+            $item->printMethod = $param['printMethod'];
+        if(isset($param['craftMethod']) && trim($param['craftMethod']) != '')
+            $item->craftMethod = $param['craftMethod'];
+        if(isset($param['coatingMethod']) && trim($param['coatingMethod']) != '')
+            $item->coatingMethod = $param['coatingMethod'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+
+        $item->save();
     }
 }
