@@ -444,4 +444,48 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createSub2_1($param, $files = []) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub2_1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
+        $item = new QuoteSub2_1();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->paperThickness = $param['paperThickness'];
+        $item->paperMaterial = $param['paperMaterial'];
+        $item->printMethod = $param['printMethod'];
+        $item->coatingMethod = $param['coatingMethod'];
+        $item->memo = $param['memo'];
+        $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub2_1_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
+    }
 }

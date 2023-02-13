@@ -47,4 +47,42 @@ class QuoteSub2_1Test extends TestCase
         $this->assertEquals(255, $quoteSub2at3->length);
         $this->assertEquals("專色印刷,熱轉印", $quoteSub2at3->printMethod);
     }
+
+    public function testCreateSub2_1() {
+        $quoteRepo = new QuoteRepository();
+        $createParam1 = [
+            'mainId' => 1,
+        ];
+        try {
+            $quoteRepo->createSub2_1($createParam1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $createParam2 = [
+            'mainId' => 19,
+            'serialNumber' => 'SLN-20221200019',
+            'partNo' => 'SUB1-20221200019',
+            'materialName' => '底紙',
+            'length' => 140,
+            'width' => 40,
+            'height' => 210,
+            'usageAmount' => 20,
+            'paperThickness' => '350G',
+            'paperMaterial' => '白卡',
+            'printMethod' => '四色印刷',
+            'craftMethod' => '開窗',
+            'coatingMethod' => '上UV',
+            'memo' => 'create sub2-1 by tdd',
+        ];
+        $quoteRepo->createSub2_1($createParam2);
+        $quoteSub2_1at1 = $quoteRepo->getSub2_1ByMainId(19);
+        $this->assertEquals(19, $quoteSub2_1at1->mainId);
+        $this->assertEquals("SLN-20221200019", $quoteSub2_1at1->serialNumber);
+        $this->assertEquals("底紙", $quoteSub2_1at1->materialName);
+        $this->assertEquals(140, $quoteSub2_1at1->length);
+        $this->assertEquals("四色印刷", $quoteSub2_1at1->printMethod);
+    }
 }
