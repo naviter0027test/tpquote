@@ -100,11 +100,71 @@ class HttpQuoteSub2_1Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/create/sub2-1/1", $paramEdit1);
+            ->post("/quote/create/sub2-1/19", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
                 'msg' => 'quoteSub_2 permission denied',
             ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+            'partNo' => 'SUB1-20221200019',
+            //'serialNumber' => 'SLN-20221200019',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub2-1/19", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SUB1-20221200019',
+            'serialNumber' => 'SLN-20221200019',
+            'materialName' => '背卡',
+            'length' => 455,
+            'width' => 90,
+            'height' => 199,
+            'usageAmount' => 20,
+            'paperThickness' => '450G',
+            'paperMaterial' => '五層瓦楞',
+            'printMethod' => '熱轉印',
+            'craftMethod' => '開窗',
+            'coatingMethod' => '上薄UV',
+            'memo' => 'created by tdd',
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub2-1/19", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub2_1at1 = $quoteRepo->getSub2_1ByMainId(19);
+        $this->assertEquals('SLN-20221200019', $sub2_1at1->serialNumber);
+        $this->assertEquals('背卡', $sub2_1at1->materialName);
+        $this->assertEquals(455, $sub2_1at1->length);
+        $this->assertEquals(90, $sub2_1at1->width);
+        $this->assertEquals(20, $sub2_1at1->usageAmount);
+        $this->assertEquals('開窗', $sub2_1at1->craftMethod);
+        Storage::disk('uploads')->assertExists($sub2_1at1->infoImg);
+        Storage::disk('uploads')->delete($sub2_1at1->infoImg);
     }
 }

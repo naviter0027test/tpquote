@@ -779,10 +779,40 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('infoImg'))
+            $files['infoImg'] = $request->file('infoImg');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_2', 1);
+
+            $validator = Validator::make($param, [
+                'partNo' => 'required',
+                'serialNumber' => 'required',
+                'materialName' => 'required',
+                'length' => 'required|integer',
+                'width' => 'required|integer',
+                'height' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['paperThickness'] = isset($param['paperThickness']) ? $param['paperThickness'] : '';
+            $param['paperMaterial'] = isset($param['paperMaterial']) ? $param['paperMaterial'] : '';
+            $param['printMethod'] = isset($param['printMethod']) ? $param['printMethod'] : '';
+            $param['craftMethod'] = isset($param['craftMethod']) ? $param['craftMethod'] : '';
+            $param['coatingMethod'] = isset($param['coatingMethod']) ? $param['coatingMethod'] : '';
+            $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub2_1($param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;
