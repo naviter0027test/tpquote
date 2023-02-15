@@ -209,5 +209,31 @@ class QuoteSub3Seeder extends Seeder
         $quoteSub3at15->info = "";
         $quoteSub3at15->infoImg = "";
         $quoteSub3at15->save();
+
+        $quoteSub3at16 = new QuoteSub3();
+        $quoteSub3at16->mainId = 16;
+        $quoteSub3at16->partNo = "SUB1-20221200016";
+        $quoteSub3at16->materialName = "膠磁";
+        $quoteSub3at16->length = 210;
+        $quoteSub3at16->width = 340;
+        $quoteSub3at16->height = 80;
+        $quoteSub3at16->usageAmount = 120;
+        $quoteSub3at16->spec = "H9mm";
+        $quoteSub3at16->info = "";
+        $quoteSub3at16->infoImg = "";
+        $quoteSub3at16->save();
+
+        $quoteSub3at17 = new QuoteSub3();
+        $quoteSub3at17->mainId = 17;
+        $quoteSub3at17->partNo = "SUB1-20221200017";
+        $quoteSub3at17->materialName = "PET袋";
+        $quoteSub3at17->length = 210;
+        $quoteSub3at17->width = 340;
+        $quoteSub3at17->height = 80;
+        $quoteSub3at17->usageAmount = 120;
+        $quoteSub3at17->spec = "孔徑2mm";
+        $quoteSub3at17->info = "";
+        $quoteSub3at17->infoImg = "";
+        $quoteSub3at17->save();
     }
 }
