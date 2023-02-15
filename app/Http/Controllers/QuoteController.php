@@ -899,7 +899,9 @@ class QuoteController extends Controller
             $param['coatingMethod'] = isset($param['coatingMethod']) ? $param['coatingMethod'] : '';
             $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
 
-            $param['mainId'] = $mainId;
+            $quoteRepo->updateSub2_1ByMainId($mainId, $param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

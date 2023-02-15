@@ -526,5 +526,15 @@ class QuoteRepository
             $item->memo = $param['memo'];
 
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub2_1_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 }

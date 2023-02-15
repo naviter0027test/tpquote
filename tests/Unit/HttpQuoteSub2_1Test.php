@@ -212,5 +212,41 @@ class HttpQuoteSub2_1Test extends TestCase
                     ->has('errors.usageAmount')
                     ;
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SUB1-20221200019',
+            'serialNumber' => 'SLN-20221200019',
+            'materialName' => '背卡',
+            'length' => 455,
+            'width' => 90,
+            'height' => 199,
+            'usageAmount' => 20,
+            'paperThickness' => '450G',
+            'paperMaterial' => '五層瓦楞',
+            'printMethod' => '熱轉印',
+            'craftMethod' => '開窗',
+            'coatingMethod' => '上薄UV',
+            'memo' => 'updated by tdd',
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub2-1/1", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub2_1at1 = $quoteRepo->getSub2_1ByMainId(1);
+        $this->assertEquals('SLN-20221200019', $sub2_1at1->serialNumber);
+        $this->assertEquals('背卡', $sub2_1at1->materialName);
+        $this->assertEquals(455, $sub2_1at1->length);
+        $this->assertEquals(199, $sub2_1at1->height);
+        $this->assertEquals(20, $sub2_1at1->usageAmount);
+        $this->assertEquals('450G', $sub2_1at1->paperThickness);
+        $this->assertEquals('updated by tdd', $sub2_1at1->memo);
+        Storage::disk('uploads')->assertExists($sub2_1at1->infoImg);
+        Storage::disk('uploads')->delete($sub2_1at1->infoImg);
     }
 }
