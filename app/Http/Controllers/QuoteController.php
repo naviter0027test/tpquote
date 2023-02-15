@@ -858,4 +858,62 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function updateSub2_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $files = [];
+        if($request->hasFile('infoImg'))
+            $files['infoImg'] = $request->file('infoImg');
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_2', 1);
+
+            $validator = Validator::make($param, [
+                'partNo' => 'required',
+                'serialNumber' => 'required',
+                'materialName' => 'required',
+                'length' => 'required|integer',
+                'width' => 'required|integer',
+                'height' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['paperThickness'] = isset($param['paperThickness']) ? $param['paperThickness'] : '';
+            $param['paperMaterial'] = isset($param['paperMaterial']) ? $param['paperMaterial'] : '';
+            $param['printMethod'] = isset($param['printMethod']) ? $param['printMethod'] : '';
+            $param['craftMethod'] = isset($param['craftMethod']) ? $param['craftMethod'] : '';
+            $param['coatingMethod'] = isset($param['coatingMethod']) ? $param['coatingMethod'] : '';
+            $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $param['mainId'] = $mainId;
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
 }
