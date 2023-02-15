@@ -32,5 +32,13 @@ class QuoteSub3Test extends TestCase
         $this->assertEquals("膠磁", $quoteSub3at1->materialName);
         $this->assertEquals(420, $quoteSub3at1->length);
         $this->assertEquals("H9mm", $quoteSub3at1->spec);
+
+        try {
+            $quoteSub3at2 = $quoteRepo->getSub3ByMainId(99);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
     }
 }
