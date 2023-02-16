@@ -243,7 +243,8 @@ class QuoteController extends Controller
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
         $member = Session::get('member');
-
+        $memberPermission = Session::get('memberPermission');
+        $result['memberPermission'] = $memberPermission;
         if($param['mode'] == 'html') {
             return view('quote.main.subs', $result);
         }
@@ -377,7 +378,31 @@ class QuoteController extends Controller
     }
 
     public function createSub1Page(Request $request, $mainId = 0) {
-        return view('quote.sub1.create');
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+
+        $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_1', 2);
+            $result['status'] = true;
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+        if($result['status'] == false) {
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        $result['memberPermission'] = $memberPermission;
+        return view('quote.sub1.create', $result);
     }
 
     public function createSub1(Request $request, $mainId = 0) {
