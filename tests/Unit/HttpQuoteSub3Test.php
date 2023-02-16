@@ -55,5 +55,35 @@ class HttpQuoteSub3Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_3 permission denied',
             ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response2 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub3/999?'.$paramEdit2Str);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '指定資料不存在');
+            });
+
+        $response3 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub3/6?'.$paramEdit2Str);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('item.mainId', '6')
+                    ->where('item.partNo', 'SUB1-20221200006')
+                    ->where('item.usageAmount', '62')
+                    ->where('item.spec', '釘帽直徑6mm')
+                    ;
+            });
     }
 }
