@@ -579,4 +579,33 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub3ByMainId($mainId, $param, $files = []) {
+        $item = $this->getSub3ByMainId($mainId);
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['spec']) && trim($param['spec']) != '')
+            $item->spec = $param['spec'];
+        if(isset($param['info']) && trim($param['info']) != '')
+            $item->info = $param['info'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }

@@ -87,4 +87,35 @@ class QuoteSub3Test extends TestCase
         $this->assertEquals("H9mm", $quoteSub3at1->spec);
         $this->assertEquals("created by tdd", $quoteSub3at1->info);
     }
+
+    public function testUpdateSub3() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub3ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'partNo' => "SUB1-20221200999",
+            'materialName' => "PET袋",
+            'length' => 995,
+            'width' => 955,
+            'height' => 850,
+            'usageAmount' => 90,
+            'info' => 'updated by tdd',
+        ];
+        $quoteRepo->updateSub3ByMainId(5, $paramUpdate1);
+        $quoteSub3at1 = $quoteRepo->getSub3ByMainId(5);
+        $this->assertEquals(5, $quoteSub3at1->mainId);
+        $this->assertEquals("SUB1-20221200999", $quoteSub3at1->partNo);
+        $this->assertEquals("PET袋", $quoteSub3at1->materialName);
+        $this->assertEquals(995, $quoteSub3at1->length);
+        $this->assertEquals(955, $quoteSub3at1->width);
+        $this->assertEquals(850, $quoteSub3at1->height);
+        $this->assertEquals(90, $quoteSub3at1->usageAmount);
+        $this->assertEquals("updated by tdd", $quoteSub3at1->info);
+    }
 }
