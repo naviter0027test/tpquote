@@ -21,36 +21,36 @@
                     <h5>報價類別</h5>
                     <p>
                         <select name="quoteCls">
-                            <option value="1">業務一部</option>
-                            <option value="2">業務二部</option>
-                            <option value="3">公司品項</option>
+                            <option value="1" @if ($item->quoteCls == 1) {{ 'selected' }} @endif >業務一部</option>
+                            <option value="2" @if ($item->quoteCls == 2) {{ 'selected' }} @endif >業務二部</option>
+                            <option value="3" @if ($item->quoteCls == 3) {{ 'selected' }} @endif >公司品項</option>
                         </select>
                     </p>
                 </div>
                 <div class="show-line2">
                     <h5>客人產品編號</h5>
-                    <p> <input type="text" name="customerProductNum" required /> </p>
+                    <p> <input type="text" name="customerProductNum" value="{{ $item->customerProductNum }}" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>產品編號</h5>
-                    <p> <input type="text" name="productNum" required /> </p>
+                    <p> <input type="text" name="productNum" value="{{ $item->productNum }}" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>中文產品名稱</h5>
-                    <p> <input type="text" name="productNameTw" required /> </p>
+                    <p> <input type="text" name="productNameTw" value="{{ $item->productNameTw }}" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>英文產品名稱</h5>
-                    <p> <input type="text" name="productNameEn" /> </p>
+                    <p> <input type="text" name="productNameEn" value="{{ $item->productNameEn }}" /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>品質要求</h5>
                     <p>
                         <select name="quoteQuality">
-                            <option value="高">高</option>
-                            <option value="中高">中高</option>
-                            <option value="普通">普通</option>
-                            <option value="低">低</option>
+                            <option value="高" @if ($item->quoteQuality == "高") {{ 'selected' }} @endif >高</option>
+                            <option value="中高" @if ($item->quoteQuality == "中高") {{ 'selected' }} @endif >中高</option>
+                            <option value="普通" @if ($item->quoteQuality == "普通") {{ 'selected' }} @endif >普通</option>
+                            <option value="低" @if ($item->quoteQuality == "低") {{ 'selected' }} @endif >低</option>
                         </select>
                     </p>
                 </div>
@@ -58,22 +58,29 @@
                     <h5>報價數量</h5>
                     <p>
                         <select name="quoteQuantity">
-                            <option value="MOQ-1K">MOQ(1K)</option>
-                            <option value="3K">3K</option>
-                            <option value="5K">5K</option>
-                            <option value="10K">10K</option>
+                            <option value="MOQ-1K" @if ($item->quoteQuantity == "MOQ-1K") {{ 'selected' }} @endif >MOQ(1K)</option>
+                            <option value="3K" @if ($item->quoteQuantity == "3K") {{ 'selected' }} @endif >3K</option>
+                            <option value="5K" @if ($item->quoteQuantity == "5K") {{ 'selected' }} @endif >5K</option>
+                            <option value="10K" @if ($item->quoteQuantity == "10K") {{ 'selected' }} @endif >10K</option>
                         </select>
                     </p>
                 </div>
                 <div class="show-line2">
                     <h5>插入圖片</h5>
+                    @if (trim($item->image) == '')
+                    無
+                    @else
+                    {{ $item->image }}
+                    @endif
                     <p> <input type="file" name="image" /> </p>
                 </div>
                 <div class="show-line3">
                     <h5>產品說明</h5>
                     <p> <textarea name="productInfo" ></textarea> </p>
                 </div>
-                <p class=""> <button class="btn">建立</button> </p>
+                <div class="show-line3">
+                    <p class=""> <button class="btn">建立</button> </p>
+                </div>
             </form>
         </div>
 @include('member.layout.footer')
