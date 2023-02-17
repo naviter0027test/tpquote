@@ -168,6 +168,10 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('image'))
+            $files['image'] = $request->file('image');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
@@ -189,7 +193,7 @@ class QuoteController extends Controller
             $param['quoteQuantity'] = isset($param['quoteQuantity']) ? trim($param['quoteQuantity']) : '';
             $param['productInfo'] = isset($param['productInfo']) ? trim($param['productInfo']) : '';
 
-            $quoteRepo->updateMainById($id, $param);
+            $quoteRepo->updateMainById($id, $param, $files);
             $result['status'] = true;
             $result['msg'] = 'success';
         }

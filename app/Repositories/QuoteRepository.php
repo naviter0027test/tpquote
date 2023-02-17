@@ -114,11 +114,16 @@ class QuoteRepository
         }
     }
 
-    public function updateMainById($id, $param) {
+    public function updateMainById($id, $param, $files) {
         $item = QuoteMain::where('id', '=', $id)
             ->first();
         if(isset($item->id) == false)
             throw new Exception('指定資料不存在');
+
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
 
         if(isset($param['quoteCls']) && is_numeric($param['quoteCls']))
             $item->quoteCls = $param['quoteCls'];
@@ -138,6 +143,16 @@ class QuoteRepository
             $item->productInfo = $param['productInfo'];
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $filename = $item->id. "_main_image.$ext";
+            $item->image = $path. $filename;
+            $item->save();
+            $files['image']->move($root. $path, $filename);
+        }
     }
 
     public function removeMainById($id) {

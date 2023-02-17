@@ -215,6 +215,7 @@ class HttpQuoteMainTest extends TestCase
             'quoteQuality' => '中高',
             'quoteQuantity' => '10K',
             'productInfo' => 'update by web route',
+            'image' => UploadedFile::fake()->image('img.jpg'),
         ];
         $response2 = $this->withSession(['member' => $member2])
             ->post("/quote/edit/main/3", $paramEdit2);
@@ -230,6 +231,8 @@ class HttpQuoteMainTest extends TestCase
         $this->assertEquals("product ccc", $quoteMain1->productNameEn);
         $this->assertEquals("中高", $quoteMain1->quoteQuality);
         $this->assertEquals("update by web route", $quoteMain1->productInfo);
+        Storage::disk('uploads')->assertExists($quoteMain1->image);
+        Storage::disk('uploads')->delete($quoteMain1->image);
     }
 
     public function testListsMain() {
