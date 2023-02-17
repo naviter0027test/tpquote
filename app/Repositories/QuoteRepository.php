@@ -83,7 +83,13 @@ class QuoteRepository
         return $amount;
     }
 
-    public function createMain($param) {
+    public function createMain($param, $files = []) {
+
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
         $item = new QuoteMain();
         $item->quoteCls = $param['quoteCls'];
         $item->customerProductNum = $param['customerProductNum'];
@@ -96,13 +102,28 @@ class QuoteRepository
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $filename = $item->id. "_main_image.$ext";
+            $item->image = $path. $filename;
+            $item->save();
+            $files['image']->move($root. $path, $filename);
+        }
     }
 
-    public function updateMainById($id, $param) {
+    public function updateMainById($id, $param, $files) {
         $item = QuoteMain::where('id', '=', $id)
             ->first();
         if(isset($item->id) == false)
             throw new Exception('指定資料不存在');
+
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
 
         if(isset($param['quoteCls']) && is_numeric($param['quoteCls']))
             $item->quoteCls = $param['quoteCls'];
@@ -122,6 +143,16 @@ class QuoteRepository
             $item->productInfo = $param['productInfo'];
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $filename = $item->id. "_main_image.$ext";
+            $item->image = $path. $filename;
+            $item->save();
+            $files['image']->move($root. $path, $filename);
+        }
     }
 
     public function removeMainById($id) {
@@ -545,5 +576,67 @@ class QuoteRepository
         if(isset($item->id) == false)
             throw new Exception('指定資料不存在');
         return $item;
+    }
+
+    public function createSub3($param, $files = []) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub3ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
+        $item = new QuoteSub3();
+        $item->mainId = $param['mainId'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->spec = $param['spec'];
+        $item->info = $param['info'];
+        $item->infoImg = $param['infoImg'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub3ByMainId($mainId, $param, $files = []) {
+        $item = $this->getSub3ByMainId($mainId);
+
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['spec']) && trim($param['spec']) != '')
+            $item->spec = $param['spec'];
+        if(isset($param['info']) && trim($param['info']) != '')
+            $item->info = $param['info'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
     }
 }

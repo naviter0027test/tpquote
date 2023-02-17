@@ -3,6 +3,9 @@
 namespace Tests\Unit;
 
 //use PHPUnit\Framework\TestCase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
@@ -85,6 +88,7 @@ class HttpQuoteMainTest extends TestCase
             'quoteQuality' => '高',
             'quoteQuantity' => '3K',
             'productInfo' => 'create by test program',
+            'image' => UploadedFile::fake()->image('img.jpg'),
         ];
         $response3 = $this->withSession(['member' => $member2])
             ->post('/quote/create/main', $createParam3);
@@ -101,6 +105,8 @@ class HttpQuoteMainTest extends TestCase
         $this->assertEquals("赤兔糖霜林", $quoteMain1->productNameTw);
         $this->assertEquals("3K", $quoteMain1->quoteQuantity);
         $this->assertEquals("create by test program", $quoteMain1->productInfo);
+        Storage::disk('uploads')->assertExists($quoteMain1->image);
+        Storage::disk('uploads')->delete($quoteMain1->image);
     }
 
     public function testEditMain() {
@@ -209,6 +215,7 @@ class HttpQuoteMainTest extends TestCase
             'quoteQuality' => '中高',
             'quoteQuantity' => '10K',
             'productInfo' => 'update by web route',
+            'image' => UploadedFile::fake()->image('img.jpg'),
         ];
         $response2 = $this->withSession(['member' => $member2])
             ->post("/quote/edit/main/3", $paramEdit2);
@@ -224,6 +231,8 @@ class HttpQuoteMainTest extends TestCase
         $this->assertEquals("product ccc", $quoteMain1->productNameEn);
         $this->assertEquals("中高", $quoteMain1->quoteQuality);
         $this->assertEquals("update by web route", $quoteMain1->productInfo);
+        Storage::disk('uploads')->assertExists($quoteMain1->image);
+        Storage::disk('uploads')->delete($quoteMain1->image);
     }
 
     public function testListsMain() {

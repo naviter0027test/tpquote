@@ -78,6 +78,10 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('image'))
+            $files['image'] = $request->file('image');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
@@ -99,7 +103,7 @@ class QuoteController extends Controller
             $param['quoteQuantity'] = isset($param['quoteQuantity']) ? trim($param['quoteQuantity']) : '';
             $param['productInfo'] = isset($param['productInfo']) ? trim($param['productInfo']) : '';
 
-            $quoteRepo->createMain($param);
+            $quoteRepo->createMain($param, $files);
 
             $result['status'] = true;
             $result['msg'] = "建立成功";
@@ -164,6 +168,10 @@ class QuoteController extends Controller
         $param = $request->all();
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
+        $files = [];
+        if($request->hasFile('image'))
+            $files['image'] = $request->file('image');
+
         $member = Session::get('member');
         try {
             $quoteRepo = new QuoteRepository();
@@ -185,7 +193,7 @@ class QuoteController extends Controller
             $param['quoteQuantity'] = isset($param['quoteQuantity']) ? trim($param['quoteQuantity']) : '';
             $param['productInfo'] = isset($param['productInfo']) ? trim($param['productInfo']) : '';
 
-            $quoteRepo->updateMainById($id, $param);
+            $quoteRepo->updateMainById($id, $param, $files);
             $result['status'] = true;
             $result['msg'] = 'success';
         }
@@ -940,6 +948,35 @@ class QuoteController extends Controller
             }
             $request->session()->flash('result', $result);
             return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function editSub3(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_3', 1);
+            $result['item'] = $quoteRepo->getSub3ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.sub3.edit', $result);
         }
         return json_encode($result);
     }
