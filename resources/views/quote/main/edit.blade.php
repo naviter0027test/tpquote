@@ -70,16 +70,16 @@
                     @if (trim($item->image) == '')
                     無
                     @else
-                    {{ $item->image }}
+                    <img class="custPic" src="/uploads{{ $item->image }}" />
                     @endif
                     <p> <input type="file" name="image" /> </p>
                 </div>
                 <div class="show-line3">
                     <h5>產品說明</h5>
-                    <p> <textarea name="productInfo" ></textarea> </p>
+                    <p> <textarea name="productInfo" >{{ $item->productInfo }}</textarea> </p>
                 </div>
                 <div class="show-line3">
-                    <p class=""> <button class="btn">建立</button> </p>
+                    <p class=""> <button class="btn">儲存</button> </p>
                 </div>
             </form>
         </div>
