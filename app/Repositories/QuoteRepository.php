@@ -83,7 +83,13 @@ class QuoteRepository
         return $amount;
     }
 
-    public function createMain($param) {
+    public function createMain($param, $files = []) {
+
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $this->checkExt($ext);
+        }
+
         $item = new QuoteMain();
         $item->quoteCls = $param['quoteCls'];
         $item->customerProductNum = $param['customerProductNum'];
@@ -96,6 +102,16 @@ class QuoteRepository
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['image'])) {
+            $ext = $files['image']->getClientOriginalExtension();
+            $filename = $item->id. "_main_image.$ext";
+            $item->image = $path. $filename;
+            $item->save();
+            $files['image']->move($root. $path, $filename);
+        }
     }
 
     public function updateMainById($id, $param) {
