@@ -605,10 +605,19 @@ class QuoteRepository
         $item->usageAmount = $param['usageAmount'];
         $item->spec = $param['spec'];
         $item->info = $param['info'];
-        $item->infoImg = $param['infoImg'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub3_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 
     public function updateSub3ByMainId($mainId, $param, $files = []) {
@@ -638,5 +647,15 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
 
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub3_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 }

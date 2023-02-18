@@ -992,6 +992,9 @@ class QuoteController extends Controller
             $param['info'] = isset($param['info']) ? $param['info'] : '';
 
             $param['mainId'] = $mainId;
+            $quoteRepo->createSub3($param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;

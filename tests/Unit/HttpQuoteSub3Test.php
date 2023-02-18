@@ -130,5 +130,35 @@ class HttpQuoteSub3Test extends TestCase
                     ->has('errors.usageAmount')
                     ;
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SUB1-20221200018',
+            'materialName' => '雙面覆膠軟鐵',
+            'length' => 448,
+            'width' => 230,
+            'height' => 160,
+            'usageAmount' => 90,
+            'spec' => '孔深8mm',
+            'info' => 'created by tdd',
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/sub3/18', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub3at1 = $quoteRepo->getSub3ByMainId(18);
+        $this->assertEquals('SUB1-20221200018', $sub3at1->partNo);
+        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
+        $this->assertEquals(448, $sub3at1->length);
+        $this->assertEquals(230, $sub3at1->width);
+        $this->assertEquals(90, $sub3at1->usageAmount);
+        $this->assertEquals('孔深8mm', $sub3at1->spec);
+        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
+        Storage::disk('uploads')->delete($sub3at1->infoImg);
     }
 }
