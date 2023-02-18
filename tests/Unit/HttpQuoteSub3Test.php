@@ -86,4 +86,26 @@ class HttpQuoteSub3Test extends TestCase
                     ;
             });
     }
+
+    public function testCreateSub3() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/create/sub3/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_3 permission denied',
+            ]);
+    }
 }
