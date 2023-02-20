@@ -104,5 +104,68 @@ class QuoteSub3_1Seeder extends Seeder
         $quoteSub3_1at10->subtotal = 1890;
         $quoteSub3_1at10->memo = "";
         $quoteSub3_1at10->save();
+
+        $quoteSub3_1at11 = new QuoteSub3_1();
+        $quoteSub3_1at11->mainId = 11;
+        $quoteSub3_1at11->serialNumber = "SLN-20221200011";
+        $quoteSub3_1at11->name = "絲印";
+        $quoteSub3_1at11->painted = "二底二面";
+        $quoteSub3_1at11->subtotal = 650;
+        $quoteSub3_1at11->memo = "";
+        $quoteSub3_1at11->save();
+
+        $quoteSub3_1at12 = new QuoteSub3_1();
+        $quoteSub3_1at12->mainId = 12;
+        $quoteSub3_1at12->serialNumber = "SLN-20221200012";
+        $quoteSub3_1at12->name = "噴漆";
+        $quoteSub3_1at12->painted = "二底三面";
+        $quoteSub3_1at12->subtotal = 2450;
+        $quoteSub3_1at12->memo = "";
+        $quoteSub3_1at12->save();
+
+        $quoteSub3_1at13 = new QuoteSub3_1();
+        $quoteSub3_1at13->mainId = 13;
+        $quoteSub3_1at13->serialNumber = "SLN-20221200013";
+        $quoteSub3_1at13->name = "噴漆";
+        $quoteSub3_1at13->painted = "二底一面";
+        $quoteSub3_1at13->subtotal = 4290;
+        $quoteSub3_1at13->memo = "";
+        $quoteSub3_1at13->save();
+
+        $quoteSub3_1at14 = new QuoteSub3_1();
+        $quoteSub3_1at14->mainId = 14;
+        $quoteSub3_1at14->serialNumber = "SLN-20221200014";
+        $quoteSub3_1at14->name = "滾漆";
+        $quoteSub3_1at14->painted = "二底二面";
+        $quoteSub3_1at14->subtotal = 3810;
+        $quoteSub3_1at14->memo = "";
+        $quoteSub3_1at14->save();
+
+        $quoteSub3_1at15 = new QuoteSub3_1();
+        $quoteSub3_1at15->mainId = 15;
+        $quoteSub3_1at15->serialNumber = "SLN-20221200015";
+        $quoteSub3_1at15->name = "絲印";
+        $quoteSub3_1at15->painted = "二底二面";
+        $quoteSub3_1at15->subtotal = 1150;
+        $quoteSub3_1at15->memo = "";
+        $quoteSub3_1at15->save();
+
+        $quoteSub3_1at16 = new QuoteSub3_1();
+        $quoteSub3_1at16->mainId = 16;
+        $quoteSub3_1at16->serialNumber = "SLN-20221200016";
+        $quoteSub3_1at16->name = "滾漆";
+        $quoteSub3_1at16->painted = "二底一面";
+        $quoteSub3_1at16->subtotal = 1890;
+        $quoteSub3_1at16->memo = "";
+        $quoteSub3_1at16->save();
+
+        $quoteSub3_1at17 = new QuoteSub3_1();
+        $quoteSub3_1at17->mainId = 17;
+        $quoteSub3_1at17->serialNumber = "SLN-20221200017";
+        $quoteSub3_1at17->name = "噴漆";
+        $quoteSub3_1at17->painted = "二底一面";
+        $quoteSub3_1at17->subtotal = 4550;
+        $quoteSub3_1at17->memo = "";
+        $quoteSub3_1at17->save();
     }
 }
