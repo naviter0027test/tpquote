@@ -8,6 +8,7 @@ use App\Models\QuoteSub1_1;
 use App\Models\QuoteSub2;
 use App\Models\QuoteSub2_1;
 use App\Models\QuoteSub3;
+use App\Models\QuoteSub3_1;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
@@ -657,5 +658,13 @@ class QuoteRepository
             $item->save();
             $files['infoImg']->move($root. $path, $filename);
         }
+    }
+
+    public function getSub3_1ByMainId($mainId) {
+        $item = QuoteSub3_1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
     }
 }
