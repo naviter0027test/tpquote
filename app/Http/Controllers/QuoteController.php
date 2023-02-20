@@ -1011,4 +1011,59 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function updateSub3(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $files = [];
+        if($request->hasFile('infoImg'))
+            $files['infoImg'] = $request->file('infoImg');
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_3', 2);
+
+            $validator = Validator::make($param, [
+                'partNo' => 'required',
+                'materialName' => 'required',
+                'length' => 'required|integer',
+                'width' => 'required|integer',
+                'height' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['spec'] = isset($param['spec']) ? $param['spec'] : '';
+            $param['info'] = isset($param['info']) ? $param['info'] : '';
+
+            $quoteRepo->updateSub3ByMainId($mainId, $param, $files);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
 }

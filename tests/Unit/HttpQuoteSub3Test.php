@@ -161,4 +161,79 @@ class HttpQuoteSub3Test extends TestCase
         Storage::disk('uploads')->assertExists($sub3at1->infoImg);
         Storage::disk('uploads')->delete($sub3at1->infoImg);
     }
+
+    public function testUpdateSub3() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub3/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_3 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub3/17', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.partNo')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'partNo' => 'SUB1-20221200097',
+            'materialName' => '雙面覆膠軟鐵',
+            'length' => 448,
+            'width' => 230,
+            'height' => 160,
+            'usageAmount' => 90,
+            'spec' => '孔深8mm',
+            'info' => 'created by tdd',
+            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub3/17', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub3at1 = $quoteRepo->getSub3ByMainId(17);
+        $this->assertEquals('SUB1-20221200097', $sub3at1->partNo);
+        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
+        $this->assertEquals(448, $sub3at1->length);
+        $this->assertEquals(230, $sub3at1->width);
+        $this->assertEquals(90, $sub3at1->usageAmount);
+        $this->assertEquals('孔深8mm', $sub3at1->spec);
+        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
+        Storage::disk('uploads')->delete($sub3at1->infoImg);
+    }
 }
