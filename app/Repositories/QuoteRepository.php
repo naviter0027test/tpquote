@@ -680,11 +680,6 @@ class QuoteRepository
         if(isset($sub->id) == true)
             throw new Exception('子資料已存在');
 
-        if(isset($files['infoImg'])) {
-            $ext = $files['infoImg']->getClientOriginalExtension();
-            $this->checkExt($ext);
-        }
-
         $item = new QuoteSub3_1();
         $item->mainId = $param['mainId'];
         $item->serialNumber = $param['serialNumber'];
@@ -693,15 +688,22 @@ class QuoteRepository
         $item->subtotal = $param['subtotal'];
         $item->memo = $param['memo'];
         $item->save();
+    }
 
-        $root = config('filesystems')['disks']['uploads']['root'];
-        $path = date('/Y/m'). '/';
-        if(isset($files['infoImg'])) {
-            $ext = $files['infoImg']->getClientOriginalExtension();
-            $filename = $item->id. "_sub3_1_infoImg.$ext";
-            $item->infoImg = $path. $filename;
-            $item->save();
-            $files['infoImg']->move($root. $path, $filename);
-        }
+    public function updateSub3_1ByMainId($mainId, $param, $files = []) {
+        $item = $this->getSub3_1ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['name']) && trim($param['name']) != '')
+            $item->name = $param['name'];
+        if(isset($param['painted']) && trim($param['painted']) != '')
+            $item->painted = $param['painted'];
+        if(isset($param['subtotal']) && is_numeric($param['subtotal']))
+            $item->subtotal = $param['subtotal'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+
+        $item->save();
     }
 }

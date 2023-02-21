@@ -79,4 +79,30 @@ class QuoteSub3_1Test extends TestCase
         $this->assertEquals("二底三面", $quoteSub3_1at1->painted);
         $this->assertEquals(2000, $quoteSub3_1at1->subtotal);
     }
+
+    public function testUpdateSub3_1() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub3_1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $updateParam1 = [
+            'serialNumber' => 'SLN-20221200998',
+            'name' => '絲印',
+            'painted' => '二底三面',
+            'subtotal' => 2400,
+            'memo' => 'create sub3-1 by tdd',
+        ];
+        $quoteRepo->updateSub3_1ByMainId(2, $updateParam1);
+        $quoteSub3_1at1 = $quoteRepo->getSub3_1ByMainId(2);
+        $this->assertEquals(2, $quoteSub3_1at1->mainId);
+        $this->assertEquals("SLN-20221200998", $quoteSub3_1at1->serialNumber);
+        $this->assertEquals("絲印", $quoteSub3_1at1->name);
+        $this->assertEquals("二底三面", $quoteSub3_1at1->painted);
+        $this->assertEquals(2400, $quoteSub3_1at1->subtotal);
+    }
 }
