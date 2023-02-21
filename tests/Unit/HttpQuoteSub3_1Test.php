@@ -21,6 +21,7 @@ class HttpQuoteSub3_1Test extends TestCase
         shell_exec('php artisan migrate --path=/database/migrations/20221102/');
         shell_exec('php artisan migrate --path=/database/migrations/20221207/');
         shell_exec('php artisan migrate --path=/database/migrations/20230111/');
+        shell_exec('php artisan migrate --path=/database/migrations/20230131/');
         shell_exec('php artisan db:seed --class=MemPermissionSeeder');
         shell_exec('php artisan db:seed --class=MemberSeeder');
         shell_exec('php artisan db:seed --class=QuoteMainSeeder');
@@ -56,5 +57,36 @@ class HttpQuoteSub3_1Test extends TestCase
                 'status' => false,
                 'msg' => 'quoteSub_3 permission denied',
             ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $paramEdit2Str = http_build_query($paramEdit2);
+        $response2 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub3-1/999?'.$paramEdit2Str);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '指定資料不存在');
+            });
+
+        $response3 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub3-1/1?'.$paramEdit2Str);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('item.mainId', '1')
+                    ->where('item.serialNumber', 'SLN-20221200001')
+                    ->where('item.name', '滾漆')
+                    ->where('item.painted', '二底一面')
+                    ->where('item.subtotal', '1500')
+                    ;
+            });
     }
 }
