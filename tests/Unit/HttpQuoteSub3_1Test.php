@@ -89,4 +89,46 @@ class HttpQuoteSub3_1Test extends TestCase
                     ;
             });
     }
+
+    public function testCreateSub3_1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/create/sub3-1/18", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_3 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub3-1/18", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.name')
+                    ->has('errors.subtotal')
+                    ;
+            });
+    }
 }
