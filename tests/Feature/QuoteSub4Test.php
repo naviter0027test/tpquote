@@ -50,4 +50,29 @@ class QuoteSub4Test extends TestCase
         $this->assertEquals(265, $quoteSub4at3->length);
         $this->assertEquals(0.019, $quoteSub4at3->thickness);
     }
+
+    public function testCreateSub4() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub4($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 15,
+        ];
+        try {
+            $quoteRepo->createSub4($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+    }
 }
