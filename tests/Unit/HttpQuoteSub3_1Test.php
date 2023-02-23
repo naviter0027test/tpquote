@@ -153,4 +153,68 @@ class HttpQuoteSub3_1Test extends TestCase
         $this->assertEquals(5540, $sub3_1at1->subtotal);
         $this->assertEquals('二底三面', $sub3_1at1->painted);
     }
+
+    public function testUpdateSub3_1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub3-1/15", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_3 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub3-1/15", $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.name')
+                    ->has('errors.subtotal')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221209915',
+            'name' => '滾漆',
+            'painted' => '二底三面',
+            'subtotal' => 1260,
+            'memo' => 'update sub3-1 by tdd',
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post("/quote/edit/sub3-1/15", $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub3_1at1 = $quoteRepo->getSub3_1ByMainId(15);
+        $this->assertEquals('SLN-20221209915', $sub3_1at1->serialNumber);
+        $this->assertEquals('滾漆', $sub3_1at1->name);
+        $this->assertEquals(1260, $sub3_1at1->subtotal);
+        $this->assertEquals('update sub3-1 by tdd', $sub3_1at1->memo);
+    }
 }
