@@ -130,5 +130,27 @@ class HttpQuoteSub3_1Test extends TestCase
                     ->has('errors.subtotal')
                     ;
             });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221200018',
+            'name' => '滾漆',
+            'painted' => '二底三面',
+            'subtotal' => 5540,
+            'memo' => 'create sub3-1 by tdd',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub3-1/18", $paramEdit3);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where( 'status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $sub3_1at1 = $quoteRepo->getSub3_1ByMainId(18);
+        $this->assertEquals('SLN-20221200018', $sub3_1at1->serialNumber);
+        $this->assertEquals('滾漆', $sub3_1at1->name);
+        $this->assertEquals(5540, $sub3_1at1->subtotal);
+        $this->assertEquals('二底三面', $sub3_1at1->painted);
     }
 }

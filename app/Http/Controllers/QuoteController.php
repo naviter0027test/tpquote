@@ -1125,6 +1125,9 @@ class QuoteController extends Controller
             $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
 
             $param['mainId'] = $mainId;
+            $quoteRepo->createSub3_1($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
         }
         catch(Exception $e) {
             $result['status'] = false;
