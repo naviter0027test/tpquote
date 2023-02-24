@@ -727,5 +727,23 @@ class QuoteRepository
 
         if(isset($sub->id) == true)
             throw new Exception('子資料已存在');
+
+        $item = new QuoteSub4();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->origin = $param['origin'];
+        $item->thickness = $param['thickness'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->loss = $param['loss'];
+        $item->price = $param['price'];
+        $item->memo = $param['memo'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
     }
 }

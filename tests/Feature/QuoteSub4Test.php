@@ -74,5 +74,29 @@ class QuoteSub4Test extends TestCase
         catch(Exception $e) {
             $this->assertEquals("子資料已存在", $e->getMessage());
         }
+
+        $paramCreate3 = [
+            'mainId' => 17,
+            'serialNumber' => 'SLN-20221200017',
+            'partNo' => 'SUB1-20221200017',
+            'materialName' => 'PE袋',
+            'length' => 350,
+            'width' => 230,
+            'height' => 160,
+            'origin' => '進口',
+            'thickness' => 0.037,
+            'usageAmount' => 45,
+            'loss' => 4,
+            'price' => 210,
+            'memo' => 'create sub4 by tdd',
+        ];
+        $quoteRepo->createSub4($paramCreate3);
+
+        $quoteSub4at1 = $quoteRepo->getSub4ByMainId(17);
+        $this->assertEquals(17, $quoteSub4at1->mainId);
+        $this->assertEquals("SUB1-20221200017", $quoteSub4at1->partNo);
+        $this->assertEquals("PE袋", $quoteSub4at1->materialName);
+        $this->assertEquals(350, $quoteSub4at1->length);
+        $this->assertEquals(0.037, $quoteSub4at1->thickness);
     }
 }
