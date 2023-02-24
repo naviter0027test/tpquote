@@ -74,5 +74,19 @@ class HttpQuoteSub4Test extends TestCase
                 $json->where('status', false)
                     ->where('msg', '指定資料不存在');
             });
+
+        $response3 = $this->withSession(['member' => $member2])
+            ->get('/quote/edit/sub4/7?'.$paramEdit2Str);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ->where('item.mainId', '7')
+                    ->where('item.partNo', 'SUB1-20221200007')
+                    ->where('item.usageAmount', '510')
+                    ->where('item.origin', '國產')
+                    ->where('item.price', '3490')
+                    ;
+            });
     }
 }
