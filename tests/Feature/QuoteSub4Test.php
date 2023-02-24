@@ -99,4 +99,40 @@ class QuoteSub4Test extends TestCase
         $this->assertEquals(350, $quoteSub4at1->length);
         $this->assertEquals(0.037, $quoteSub4at1->thickness);
     }
+
+    public function testUpdateSub4() {
+        $quoteRepo = new QuoteRepository();
+        $paramUpdate1 = [
+        ];
+        try {
+            $quoteRepo->updateSub4ByMainId(99, $paramUpdate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate2 = [
+            'serialNumber' => 'SLN-20221209915',
+            'partNo' => 'SUB1-20221209915',
+            'materialName' => 'PE袋',
+            'length' => 350,
+            'width' => 230,
+            'height' => 160,
+            'origin' => '進口',
+            'thickness' => 0.037,
+            'usageAmount' => 45,
+            'loss' => 4,
+            'price' => 210,
+            'memo' => 'create sub4 by tdd',
+        ];
+        $quoteRepo->updateSub4ByMainId(15, $paramUpdate2);
+
+        $quoteSub4at1 = $quoteRepo->getSub4ByMainId(15);
+        $this->assertEquals(15, $quoteSub4at1->mainId);
+        $this->assertEquals("SUB1-20221209915", $quoteSub4at1->partNo);
+        $this->assertEquals("PE袋", $quoteSub4at1->materialName);
+        $this->assertEquals(350, $quoteSub4at1->length);
+        $this->assertEquals(0.037, $quoteSub4at1->thickness);
+    }
 }

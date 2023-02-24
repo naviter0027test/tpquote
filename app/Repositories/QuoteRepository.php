@@ -746,4 +746,36 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub4ByMainId($mainId, $param) {
+        $item = $this->getSub4ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['origin']) && trim($param['origin']) != '')
+            $item->origin = $param['origin'];
+        if(isset($param['thickness']) && trim($param['thickness']) != '')
+            $item->thickness = $param['thickness'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['loss']) && is_numeric($param['loss']))
+            $item->loss = $param['loss'];
+        if(isset($param['price']) && is_numeric($param['price']))
+            $item->price = $param['price'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }
