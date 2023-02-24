@@ -165,4 +165,80 @@ class HttpQuoteSub4Test extends TestCase
         $this->assertEquals(350, $quoteSub4at1->length);
         $this->assertEquals(0.037, $quoteSub4at1->thickness);
     }
+
+    public function testUpdateSub4() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub4/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_4 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub4/10', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.partNo')
+                    ->has('errors.materialName')
+                    ->has('errors.length')
+                    ->has('errors.width')
+                    ->has('errors.height')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221209910',
+            'partNo' => 'SUB1-20221209910',
+            'materialName' => 'PE袋',
+            'length' => 350,
+            'width' => 230,
+            'height' => 160,
+            'origin' => '進口',
+            'thickness' => 0.037,
+            'usageAmount' => 45,
+            'loss' => 4,
+            'price' => 210,
+            'memo' => 'create sub4 by tdd',
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub4/10', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub4at1 = $quoteRepo->getSub4ByMainId(10);
+        $this->assertEquals(10, $quoteSub4at1->mainId);
+        $this->assertEquals("SUB1-20221209910", $quoteSub4at1->partNo);
+        $this->assertEquals("PE袋", $quoteSub4at1->materialName);
+        $this->assertEquals(350, $quoteSub4at1->length);
+        $this->assertEquals(0.037, $quoteSub4at1->thickness);
+    }
 }
