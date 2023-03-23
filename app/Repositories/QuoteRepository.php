@@ -787,4 +787,33 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createSub5($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub5ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub5();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->memo = $param["memo"];
+        $item->orderNum = $param['orderNum'];
+        $item->priceSubtotal = $param['priceSubtotal'];
+        $item->flattenSubtotal = $param['flattenSubtotal'];
+        $item->packageMethod = $param['packageMethod'];
+        $item->boxMethod = $param['boxMethod'];
+        $item->fillDate = $param['fillDate'];
+        $item->devFillDate = $param['devFillDate'];
+        $item->auditDate = $param['auditDate'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }
