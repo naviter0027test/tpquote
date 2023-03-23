@@ -168,5 +168,61 @@ class QuoteSub5Seeder extends Seeder
         $quoteSub5at11->devFillDate = "2023-03-01 15:00:00";
         $quoteSub5at11->auditDate = "2023-03-01 15:00:00";
         $quoteSub5at11->save();
+
+        $quoteSub5at12 = new QuoteSub5();
+        $quoteSub5at12->mainId = 12;
+        $quoteSub5at12->serialNumber = "SLN-20221200012";
+        $quoteSub5at12->memo = "";
+        $quoteSub5at12->orderNum = 168;
+        $quoteSub5at12->priceSubtotal = 5600;
+        $quoteSub5at12->flattenSubtotal = 2130;
+        $quoteSub5at12->packageMethod = "彩盒";
+        $quoteSub5at12->boxMethod = "外箱";
+        $quoteSub5at12->fillDate = "2023-03-01 16:00:00";
+        $quoteSub5at12->devFillDate = "2023-03-01 16:00:00";
+        $quoteSub5at12->auditDate = "2023-03-01 16:00:00";
+        $quoteSub5at12->save();
+
+        $quoteSub5at13 = new QuoteSub5();
+        $quoteSub5at13->mainId = 13;
+        $quoteSub5at13->serialNumber = "SLN-20221200013";
+        $quoteSub5at13->memo = "";
+        $quoteSub5at13->orderNum = 190;
+        $quoteSub5at13->priceSubtotal = 9300;
+        $quoteSub5at13->flattenSubtotal = 3130;
+        $quoteSub5at13->packageMethod = "收縮";
+        $quoteSub5at13->boxMethod = "內箱";
+        $quoteSub5at13->fillDate = "2023-03-01 16:00:00";
+        $quoteSub5at13->devFillDate = "2023-03-01 16:00:00";
+        $quoteSub5at13->auditDate = "2023-03-01 16:00:00";
+        $quoteSub5at13->save();
+
+        $quoteSub5at14 = new QuoteSub5();
+        $quoteSub5at14->mainId = 14;
+        $quoteSub5at14->serialNumber = "SLN-20221200014";
+        $quoteSub5at14->memo = "";
+        $quoteSub5at14->orderNum = 240;
+        $quoteSub5at14->priceSubtotal = 7900;
+        $quoteSub5at14->flattenSubtotal = 4200;
+        $quoteSub5at14->packageMethod = "木盒";
+        $quoteSub5at14->boxMethod = "展示盒";
+        $quoteSub5at14->fillDate = "2023-03-01 16:00:00";
+        $quoteSub5at14->devFillDate = "2023-03-01 16:00:00";
+        $quoteSub5at14->auditDate = "2023-03-01 16:00:00";
+        $quoteSub5at14->save();
+
+        $quoteSub5at15 = new QuoteSub5();
+        $quoteSub5at15->mainId = 15;
+        $quoteSub5at15->serialNumber = "SLN-20221200015";
+        $quoteSub5at15->memo = "";
+        $quoteSub5at15->orderNum = 85;
+        $quoteSub5at15->priceSubtotal = 1900;
+        $quoteSub5at15->flattenSubtotal = 3800;
+        $quoteSub5at15->packageMethod = "展示盒";
+        $quoteSub5at15->boxMethod = "外箱";
+        $quoteSub5at15->fillDate = "2023-03-01 16:00:00";
+        $quoteSub5at15->devFillDate = "2023-03-01 16:00:00";
+        $quoteSub5at15->auditDate = "2023-03-01 16:00:00";
+        $quoteSub5at15->save();
     }
 }
