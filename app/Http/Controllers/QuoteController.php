@@ -474,7 +474,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
+            $request->session()->flash('result', $result);
             return redirect($jump);
         }
         return json_encode($result);

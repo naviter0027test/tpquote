@@ -109,6 +109,18 @@
                         </select>
                     </p>
                 </div>
+                <div class="show-line2">
+                    <h5>巨長、直徑</h5>
+                    <p> <input type="number" name="bigLength" value="{{ $item->bigLength }}" required /> </p>
+                </div>
+                <div class="show-line2">
+                    <h5>巨寬</h5>
+                    <p> <input type="number" name="bigWidth" value="{{ $item->bigWidth }}" required /> </p>
+                </div>
+                <div class="show-line2">
+                    <h5>巨高、厚</h5>
+                    <p> <input type="number" name="bigHeight" value="{{ $item->bigHeight }}" required /> </p>
+                </div>
                 <div class="show-line3">
                     <h5>備註說明</h5>
                     <p> <textarea name="memo" >{{ $item->memo }}</textarea> </p>
