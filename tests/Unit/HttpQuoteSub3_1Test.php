@@ -13,7 +13,7 @@ use App\Repositories\MemberRepository;
 use App\Repositories\QuoteRepository;
 use Exception;
 
-class HttpQuoteSub3Test extends TestCase
+class HttpQuoteSub3_1Test extends TestCase
 {
     public function setUp() : void {
         parent::setUp();
@@ -27,14 +27,16 @@ class HttpQuoteSub3Test extends TestCase
         shell_exec('php artisan db:seed --class=QuoteMainSeeder');
         shell_exec('php artisan db:seed --class=QuoteSub1Seeder');
         shell_exec('php artisan db:seed --class=QuoteSub2Seeder');
+        shell_exec('php artisan db:seed --class=QuoteSub2_1Seeder');
         shell_exec('php artisan db:seed --class=QuoteSub3Seeder');
+        shell_exec('php artisan db:seed --class=QuoteSub3_1Seeder');
     }
 
     public function tearDown() : void {
         shell_exec('php artisan DropTables');
     }
 
-    public function testEditSub3() {
+    public function testEditSub3_1() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -49,7 +51,7 @@ class HttpQuoteSub3Test extends TestCase
         ];
         $paramEdit1Str = http_build_query($paramEdit1);
         $response1 = $this->withSession(['member' => $member1])
-            ->get("/quote/edit/sub3/1?$paramEdit1Str");
+            ->get("/quote/edit/sub3-1/1?$paramEdit1Str");
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
@@ -66,7 +68,7 @@ class HttpQuoteSub3Test extends TestCase
         ];
         $paramEdit2Str = http_build_query($paramEdit2);
         $response2 = $this->withSession(['member' => $member2])
-            ->get('/quote/edit/sub3/999?'.$paramEdit2Str);
+            ->get('/quote/edit/sub3-1/999?'.$paramEdit2Str);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
@@ -74,20 +76,21 @@ class HttpQuoteSub3Test extends TestCase
             });
 
         $response3 = $this->withSession(['member' => $member2])
-            ->get('/quote/edit/sub3/6?'.$paramEdit2Str);
+            ->get('/quote/edit/sub3-1/1?'.$paramEdit2Str);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', true)
                     ->where('msg', 'success')
-                    ->where('item.mainId', '6')
-                    ->where('item.partNo', 'SUB1-20221200006')
-                    ->where('item.usageAmount', '62')
-                    ->where('item.spec', '釘帽直徑6mm')
+                    ->where('item.mainId', '1')
+                    ->where('item.serialNumber', 'SLN-20221200001')
+                    ->where('item.name', '滾漆')
+                    ->where('item.painted', '二底一面')
+                    ->where('item.subtotal', '1500')
                     ;
             });
     }
 
-    public function testCreateSub3() {
+    public function testCreateSub3_1() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -101,7 +104,7 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/create/sub3/1", $paramEdit1);
+            ->post("/quote/create/sub3-1/18", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
@@ -117,52 +120,41 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post('/quote/create/sub3/18', $paramEdit2);
+            ->post("/quote/create/sub3-1/18", $paramEdit2);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
-                $json->where('status', false)
+                $json->where( 'status', false)
                     ->where('msg', '輸入錯誤')
-                    ->has('errors.partNo')
-                    ->has('errors.materialName')
-                    ->has('errors.length')
-                    ->has('errors.width')
-                    ->has('errors.height')
-                    ->has('errors.usageAmount')
+                    ->has('errors.serialNumber')
+                    ->has('errors.name')
+                    ->has('errors.subtotal')
                     ;
             });
 
         $paramEdit3 = [
             'mode' => 'json',
-            'partNo' => 'SUB1-20221200018',
-            'materialName' => '雙面覆膠軟鐵',
-            'length' => 448,
-            'width' => 230,
-            'height' => 160,
-            'usageAmount' => 90,
-            'spec' => '孔深8mm',
-            'info' => 'created by tdd',
-            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+            'serialNumber' => 'SLN-20221200018',
+            'name' => '滾漆',
+            'painted' => '二底三面',
+            'subtotal' => 5540,
+            'memo' => 'create sub3-1 by tdd',
         ];
-        $response3 = $this->withSession(['member' => $member2])
-            ->post('/quote/create/sub3/18', $paramEdit3);
-        $response3->assertStatus(200)
+        $response2 = $this->withSession(['member' => $member2])
+            ->post("/quote/create/sub3-1/18", $paramEdit3);
+        $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
-                $json->where('status', true)
+                $json->where( 'status', true)
                     ->where('msg', 'success')
                     ;
             });
-        $sub3at1 = $quoteRepo->getSub3ByMainId(18);
-        $this->assertEquals('SUB1-20221200018', $sub3at1->partNo);
-        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
-        $this->assertEquals(448, $sub3at1->length);
-        $this->assertEquals(230, $sub3at1->width);
-        $this->assertEquals(90, $sub3at1->usageAmount);
-        $this->assertEquals('孔深8mm', $sub3at1->spec);
-        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
-        Storage::disk('uploads')->delete($sub3at1->infoImg);
+        $sub3_1at1 = $quoteRepo->getSub3_1ByMainId(18);
+        $this->assertEquals('SLN-20221200018', $sub3_1at1->serialNumber);
+        $this->assertEquals('滾漆', $sub3_1at1->name);
+        $this->assertEquals(5540, $sub3_1at1->subtotal);
+        $this->assertEquals('二底三面', $sub3_1at1->painted);
     }
 
-    public function testUpdateSub3() {
+    public function testUpdateSub3_1() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -176,7 +168,7 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/edit/sub3/1", $paramEdit1);
+            ->post("/quote/edit/sub3-1/15", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
@@ -192,48 +184,37 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post('/quote/edit/sub3/17', $paramEdit2);
+            ->post("/quote/edit/sub3-1/15", $paramEdit2);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
-                $json->where('status', false)
+                $json->where( 'status', false)
                     ->where('msg', '輸入錯誤')
-                    ->has('errors.partNo')
-                    ->has('errors.materialName')
-                    ->has('errors.length')
-                    ->has('errors.width')
-                    ->has('errors.height')
-                    ->has('errors.usageAmount')
+                    ->has('errors.serialNumber')
+                    ->has('errors.name')
+                    ->has('errors.subtotal')
                     ;
             });
 
         $paramEdit3 = [
             'mode' => 'json',
-            'partNo' => 'SUB1-20221200097',
-            'materialName' => '雙面覆膠軟鐵',
-            'length' => 448,
-            'width' => 230,
-            'height' => 160,
-            'usageAmount' => 90,
-            'spec' => '孔深8mm',
-            'info' => 'created by tdd',
-            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+            'serialNumber' => 'SLN-20221209915',
+            'name' => '滾漆',
+            'painted' => '二底三面',
+            'subtotal' => 1260,
+            'memo' => 'update sub3-1 by tdd',
         ];
         $response3 = $this->withSession(['member' => $member2])
-            ->post('/quote/edit/sub3/17', $paramEdit3);
+            ->post("/quote/edit/sub3-1/15", $paramEdit3);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
-                $json->where('status', true)
+                $json->where( 'status', true)
                     ->where('msg', 'success')
                     ;
             });
-        $sub3at1 = $quoteRepo->getSub3ByMainId(17);
-        $this->assertEquals('SUB1-20221200097', $sub3at1->partNo);
-        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
-        $this->assertEquals(448, $sub3at1->length);
-        $this->assertEquals(230, $sub3at1->width);
-        $this->assertEquals(90, $sub3at1->usageAmount);
-        $this->assertEquals('孔深8mm', $sub3at1->spec);
-        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
-        Storage::disk('uploads')->delete($sub3at1->infoImg);
+        $sub3_1at1 = $quoteRepo->getSub3_1ByMainId(15);
+        $this->assertEquals('SLN-20221209915', $sub3_1at1->serialNumber);
+        $this->assertEquals('滾漆', $sub3_1at1->name);
+        $this->assertEquals(1260, $sub3_1at1->subtotal);
+        $this->assertEquals('update sub3-1 by tdd', $sub3_1at1->memo);
     }
 }

@@ -8,6 +8,9 @@ use App\Models\QuoteSub1_1;
 use App\Models\QuoteSub2;
 use App\Models\QuoteSub2_1;
 use App\Models\QuoteSub3;
+use App\Models\QuoteSub3_1;
+use App\Models\QuoteSub4;
+use App\Models\QuoteSub5;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
@@ -605,10 +608,19 @@ class QuoteRepository
         $item->usageAmount = $param['usageAmount'];
         $item->spec = $param['spec'];
         $item->info = $param['info'];
-        $item->infoImg = $param['infoImg'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub3_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
     }
 
     public function updateSub3ByMainId($mainId, $param, $files = []) {
@@ -637,6 +649,171 @@ class QuoteRepository
             $item->info = $param['info'];
         $item->updated_at = date('Y-m-d H:i:s');
 
+        $item->save();
+
+        $root = config('filesystems')['disks']['uploads']['root'];
+        $path = date('/Y/m'). '/';
+        if(isset($files['infoImg'])) {
+            $ext = $files['infoImg']->getClientOriginalExtension();
+            $filename = $item->id. "_sub3_infoImg.$ext";
+            $item->infoImg = $path. $filename;
+            $item->save();
+            $files['infoImg']->move($root. $path, $filename);
+        }
+    }
+
+    public function getSub3_1ByMainId($mainId) {
+        $item = QuoteSub3_1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub3_1($param, $files = []) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub3_1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub3_1();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->name = $param['name'];
+        $item->painted = $param['painted'];
+        $item->subtotal = $param['subtotal'];
+        $item->memo = $param['memo'];
+        $item->save();
+    }
+
+    public function updateSub3_1ByMainId($mainId, $param, $files = []) {
+        $item = $this->getSub3_1ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['name']) && trim($param['name']) != '')
+            $item->name = $param['name'];
+        if(isset($param['painted']) && trim($param['painted']) != '')
+            $item->painted = $param['painted'];
+        if(isset($param['subtotal']) && is_numeric($param['subtotal']))
+            $item->subtotal = $param['subtotal'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+
+        $item->save();
+    }
+
+    public function getSub4ByMainId($mainId) {
+        $item = QuoteSub4::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub4($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub4ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub4();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->partNo = $param['partNo'];
+        $item->materialName = $param['materialName'];
+        $item->length = $param['length'];
+        $item->width = $param['width'];
+        $item->height = $param['height'];
+        $item->origin = $param['origin'];
+        $item->thickness = $param['thickness'];
+        $item->usageAmount = $param['usageAmount'];
+        $item->loss = $param['loss'];
+        $item->price = $param['price'];
+        $item->memo = $param['memo'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub4ByMainId($mainId, $param) {
+        $item = $this->getSub4ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['partNo']) && trim($param['partNo']) != '')
+            $item->partNo = $param['partNo'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['length']) && is_numeric($param['length']))
+            $item->length = $param['length'];
+        if(isset($param['width']) && is_numeric($param['width']))
+            $item->width = $param['width'];
+        if(isset($param['height']) && is_numeric($param['height']))
+            $item->height = $param['height'];
+        if(isset($param['origin']) && trim($param['origin']) != '')
+            $item->origin = $param['origin'];
+        if(isset($param['thickness']) && trim($param['thickness']) != '')
+            $item->thickness = $param['thickness'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['loss']) && is_numeric($param['loss']))
+            $item->loss = $param['loss'];
+        if(isset($param['price']) && is_numeric($param['price']))
+            $item->price = $param['price'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
+
+    public function getSub5ByMainId($mainId) {
+        $item = QuoteSub5::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub5($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub5ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub5();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->memo = $param["memo"];
+        $item->orderNum = $param['orderNum'];
+        $item->priceSubtotal = $param['priceSubtotal'];
+        $item->flattenSubtotal = $param['flattenSubtotal'];
+        $item->packageMethod = $param['packageMethod'];
+        $item->boxMethod = $param['boxMethod'];
+        $item->fillDate = $param['fillDate'];
+        $item->devFillDate = $param['devFillDate'];
+        $item->auditDate = $param['auditDate'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
 }

@@ -13,7 +13,7 @@ use App\Repositories\MemberRepository;
 use App\Repositories\QuoteRepository;
 use Exception;
 
-class HttpQuoteSub3Test extends TestCase
+class HttpQuoteSub4Test extends TestCase
 {
     public function setUp() : void {
         parent::setUp();
@@ -22,19 +22,21 @@ class HttpQuoteSub3Test extends TestCase
         shell_exec('php artisan migrate --path=/database/migrations/20221207/');
         shell_exec('php artisan migrate --path=/database/migrations/20230111/');
         shell_exec('php artisan migrate --path=/database/migrations/20230131/');
+        shell_exec('php artisan migrate --path=/database/migrations/20230215/');
         shell_exec('php artisan db:seed --class=MemPermissionSeeder');
         shell_exec('php artisan db:seed --class=MemberSeeder');
         shell_exec('php artisan db:seed --class=QuoteMainSeeder');
         shell_exec('php artisan db:seed --class=QuoteSub1Seeder');
         shell_exec('php artisan db:seed --class=QuoteSub2Seeder');
         shell_exec('php artisan db:seed --class=QuoteSub3Seeder');
+        shell_exec('php artisan db:seed --class=QuoteSub4Seeder');
     }
 
     public function tearDown() : void {
         shell_exec('php artisan DropTables');
     }
 
-    public function testEditSub3() {
+    public function testEditSub4() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -49,11 +51,11 @@ class HttpQuoteSub3Test extends TestCase
         ];
         $paramEdit1Str = http_build_query($paramEdit1);
         $response1 = $this->withSession(['member' => $member1])
-            ->get("/quote/edit/sub3/1?$paramEdit1Str");
+            ->get("/quote/edit/sub4/1?$paramEdit1Str");
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
-                'msg' => 'quoteSub_3 permission denied',
+                'msg' => 'quoteSub_4 permission denied',
             ]);
 
         $param2 = [
@@ -66,7 +68,7 @@ class HttpQuoteSub3Test extends TestCase
         ];
         $paramEdit2Str = http_build_query($paramEdit2);
         $response2 = $this->withSession(['member' => $member2])
-            ->get('/quote/edit/sub3/999?'.$paramEdit2Str);
+            ->get('/quote/edit/sub4/999?'.$paramEdit2Str);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
@@ -74,20 +76,21 @@ class HttpQuoteSub3Test extends TestCase
             });
 
         $response3 = $this->withSession(['member' => $member2])
-            ->get('/quote/edit/sub3/6?'.$paramEdit2Str);
+            ->get('/quote/edit/sub4/7?'.$paramEdit2Str);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', true)
                     ->where('msg', 'success')
-                    ->where('item.mainId', '6')
-                    ->where('item.partNo', 'SUB1-20221200006')
-                    ->where('item.usageAmount', '62')
-                    ->where('item.spec', '釘帽直徑6mm')
+                    ->where('item.mainId', '7')
+                    ->where('item.partNo', 'SUB1-20221200007')
+                    ->where('item.usageAmount', '510')
+                    ->where('item.origin', '國產')
+                    ->where('item.price', '3490')
                     ;
             });
     }
 
-    public function testCreateSub3() {
+    public function testCreateSub4() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -101,11 +104,11 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/create/sub3/1", $paramEdit1);
+            ->post("/quote/create/sub4/1", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
-                'msg' => 'quoteSub_3 permission denied',
+                'msg' => 'quoteSub_4 permission denied',
             ]);
 
         $param2 = [
@@ -117,11 +120,12 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post('/quote/create/sub3/18', $paramEdit2);
+            ->post('/quote/create/sub4/18', $paramEdit2);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
                     ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
                     ->has('errors.partNo')
                     ->has('errors.materialName')
                     ->has('errors.length')
@@ -133,36 +137,36 @@ class HttpQuoteSub3Test extends TestCase
 
         $paramEdit3 = [
             'mode' => 'json',
-            'partNo' => 'SUB1-20221200018',
-            'materialName' => '雙面覆膠軟鐵',
-            'length' => 448,
+            'serialNumber' => 'SLN-20221200017',
+            'partNo' => 'SUB1-20221200017',
+            'materialName' => 'PE袋',
+            'length' => 350,
             'width' => 230,
             'height' => 160,
-            'usageAmount' => 90,
-            'spec' => '孔深8mm',
-            'info' => 'created by tdd',
-            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+            'origin' => '進口',
+            'thickness' => 0.037,
+            'usageAmount' => 45,
+            'loss' => 4,
+            'price' => 210,
+            'memo' => 'create sub4 by tdd',
         ];
         $response3 = $this->withSession(['member' => $member2])
-            ->post('/quote/create/sub3/18', $paramEdit3);
+            ->post('/quote/create/sub4/17', $paramEdit3);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', true)
                     ->where('msg', 'success')
                     ;
             });
-        $sub3at1 = $quoteRepo->getSub3ByMainId(18);
-        $this->assertEquals('SUB1-20221200018', $sub3at1->partNo);
-        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
-        $this->assertEquals(448, $sub3at1->length);
-        $this->assertEquals(230, $sub3at1->width);
-        $this->assertEquals(90, $sub3at1->usageAmount);
-        $this->assertEquals('孔深8mm', $sub3at1->spec);
-        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
-        Storage::disk('uploads')->delete($sub3at1->infoImg);
+        $quoteSub4at1 = $quoteRepo->getSub4ByMainId(17);
+        $this->assertEquals(17, $quoteSub4at1->mainId);
+        $this->assertEquals("SUB1-20221200017", $quoteSub4at1->partNo);
+        $this->assertEquals("PE袋", $quoteSub4at1->materialName);
+        $this->assertEquals(350, $quoteSub4at1->length);
+        $this->assertEquals(0.037, $quoteSub4at1->thickness);
     }
 
-    public function testUpdateSub3() {
+    public function testUpdateSub4() {
         $memberRepo = new MemberRepository();
         $quoteRepo = new QuoteRepository();
 
@@ -176,11 +180,11 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response1 = $this->withSession(['member' => $member1])
-            ->post("/quote/edit/sub3/1", $paramEdit1);
+            ->post("/quote/edit/sub4/1", $paramEdit1);
         $response1->assertStatus(200)
             ->assertJson([
                 'status' => false,
-                'msg' => 'quoteSub_3 permission denied',
+                'msg' => 'quoteSub_4 permission denied',
             ]);
 
         $param2 = [
@@ -192,11 +196,12 @@ class HttpQuoteSub3Test extends TestCase
             'mode' => 'json',
         ];
         $response2 = $this->withSession(['member' => $member2])
-            ->post('/quote/edit/sub3/17', $paramEdit2);
+            ->post('/quote/edit/sub4/10', $paramEdit2);
         $response2->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', false)
                     ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
                     ->has('errors.partNo')
                     ->has('errors.materialName')
                     ->has('errors.length')
@@ -208,32 +213,32 @@ class HttpQuoteSub3Test extends TestCase
 
         $paramEdit3 = [
             'mode' => 'json',
-            'partNo' => 'SUB1-20221200097',
-            'materialName' => '雙面覆膠軟鐵',
-            'length' => 448,
+            'serialNumber' => 'SLN-20221209910',
+            'partNo' => 'SUB1-20221209910',
+            'materialName' => 'PE袋',
+            'length' => 350,
             'width' => 230,
             'height' => 160,
-            'usageAmount' => 90,
-            'spec' => '孔深8mm',
-            'info' => 'created by tdd',
-            'infoImg' => UploadedFile::fake()->image('img.jpg'),
+            'origin' => '進口',
+            'thickness' => 0.037,
+            'usageAmount' => 45,
+            'loss' => 4,
+            'price' => 210,
+            'memo' => 'create sub4 by tdd',
         ];
         $response3 = $this->withSession(['member' => $member2])
-            ->post('/quote/edit/sub3/17', $paramEdit3);
+            ->post('/quote/edit/sub4/10', $paramEdit3);
         $response3->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
                 $json->where('status', true)
                     ->where('msg', 'success')
                     ;
             });
-        $sub3at1 = $quoteRepo->getSub3ByMainId(17);
-        $this->assertEquals('SUB1-20221200097', $sub3at1->partNo);
-        $this->assertEquals('雙面覆膠軟鐵', $sub3at1->materialName);
-        $this->assertEquals(448, $sub3at1->length);
-        $this->assertEquals(230, $sub3at1->width);
-        $this->assertEquals(90, $sub3at1->usageAmount);
-        $this->assertEquals('孔深8mm', $sub3at1->spec);
-        Storage::disk('uploads')->assertExists($sub3at1->infoImg);
-        Storage::disk('uploads')->delete($sub3at1->infoImg);
+        $quoteSub4at1 = $quoteRepo->getSub4ByMainId(10);
+        $this->assertEquals(10, $quoteSub4at1->mainId);
+        $this->assertEquals("SUB1-20221209910", $quoteSub4at1->partNo);
+        $this->assertEquals("PE袋", $quoteSub4at1->materialName);
+        $this->assertEquals(350, $quoteSub4at1->length);
+        $this->assertEquals(0.037, $quoteSub4at1->thickness);
     }
 }
