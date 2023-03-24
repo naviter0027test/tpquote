@@ -15,8 +15,9 @@
             <div class="content-header">
                 <span>報價</span> &gt; <span>項目1 板材/木盒/主材料</span> &gt; <label>新增</label>
             </div>
-            <form method='post' action='/quote/create/sub1/0' class='form1' enctype="multipart/form-data">
+            <form method='post' action='/quote/create/sub1' class='form1' enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="mainId" value="{{ $mainId }}" />
                 <div class="show-line2">
                     <h5>料號</h5>
                     <p> <input type="text" name="partNo" required /> </p>
@@ -112,6 +113,10 @@
                 <div class="show-line3">
                     <h5>備註說明</h5>
                     <p> <textarea name="memo" ></textarea> </p>
+                </div>
+
+                <div class="show-line3">
+                    <button class="btn">儲存</button>
                 </div>
             </form>
         </div>

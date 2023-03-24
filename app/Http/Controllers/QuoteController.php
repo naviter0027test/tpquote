@@ -293,6 +293,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
             return view('quote.sub1.edit', $result);
         }
         return json_encode($result);
@@ -346,7 +347,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
+            $request->session()->flash('result', $result);
             return redirect($jump);
         }
         return json_encode($result);
@@ -420,6 +421,7 @@ class QuoteController extends Controller
             return redirect($jump);
         }
         $result['memberPermission'] = $memberPermission;
+        $result['mainId'] = $mainId;
         return view('quote.sub1.create', $result);
     }
 
