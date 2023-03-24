@@ -29,8 +29,11 @@
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
-                            <a href='/quote/create/sub1/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub1/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub1']->id) == false)
+                            <a href='/quote/create/sub1/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub1/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
@@ -38,8 +41,11 @@
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
-                            <a href='/quote/create/sub1-1/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub1-1/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub1_1']->id) == false)
+                            <a href='/quote/create/sub1-1/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub1-1/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
@@ -47,8 +53,11 @@
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
-                            <a href='/quote/create/sub2/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub2/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub2']->id) == false)
+                            <a href='/quote/create/sub2/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub2/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
@@ -56,8 +65,11 @@
                         <td>2023-01-01 00:00:00</td>
                         <td>2023-01-01 00:00:00</td>
                         <td>
-                            <a href='/quote/create/sub2-1/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub2-1/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub2_1']->id) == false)
+                            <a href='/quote/create/sub2-1/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub2-1/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>

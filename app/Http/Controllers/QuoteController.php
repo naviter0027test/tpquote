@@ -253,6 +253,16 @@ class QuoteController extends Controller
         $member = Session::get('member');
         $memberPermission = Session::get('memberPermission');
         $result['memberPermission'] = $memberPermission;
+        try {
+            $quoteRepo = new QuoteRepository();
+            $param['mainId'] = $mainId;
+            $result['mainId'] = $mainId;
+            $result['items'] = $quoteRepo->subsMain($param);
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
         if($param['mode'] == 'html') {
             return view('quote.main.subs', $result);
         }

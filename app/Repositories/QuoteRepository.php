@@ -86,6 +86,19 @@ class QuoteRepository
         return $amount;
     }
 
+    public function subsMain($param) {
+        $items = [];
+        $items['sub1'] = QuoteSub1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub1_1'] = QuoteSub1_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub2'] = QuoteSub2::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub2_1'] = QuoteSub2_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        return $items;
+    }
+
     public function createMain($param, $files = []) {
 
         if(isset($files['image'])) {
