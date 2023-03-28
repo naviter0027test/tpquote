@@ -512,7 +512,32 @@ class QuoteController extends Controller
     }
 
     public function createSub1_1Page(Request $request, $mainId = 0) {
-        return view('quote.sub1-1.create');
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+
+        $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_1', 2);
+            $result['status'] = true;
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+        if($result['status'] == false) {
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        $result['memberPermission'] = $memberPermission;
+        $result['mainId'] = $mainId;
+        return view('quote.sub1-1.create', $result);
     }
 
     public function createSub1_1(Request $request, $mainId = 0) {
@@ -561,7 +586,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
-            $request->session()->flash('msg', $result['msg']);
+            $request->session()->flash('result', $result);
             return redirect($jump);
         }
         return json_encode($result);
@@ -591,6 +616,7 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
             return view('quote.sub1-1.edit', $result);
         }
         return json_encode($result);
