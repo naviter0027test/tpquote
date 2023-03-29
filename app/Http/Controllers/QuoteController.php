@@ -679,7 +679,32 @@ class QuoteController extends Controller
     }
 
     public function createSub2Page(Request $request, $mainId = 0) {
-        return view('quote.sub2.create');
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+
+        $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_2', 2);
+            $result['status'] = true;
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+        if($result['status'] == false) {
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        $result['memberPermission'] = $memberPermission;
+        $result['mainId'] = $mainId;
+        return view('quote.sub2.create', $result);
     }
 
     public function createSub2(Request $request, $mainId = 0) {
@@ -756,6 +781,7 @@ class QuoteController extends Controller
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
         $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_2', 1);
@@ -769,6 +795,8 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
+            $result['memberPermission'] = $memberPermission;
             return view('quote.sub2.edit', $result);
         }
         return json_encode($result);

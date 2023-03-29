@@ -417,7 +417,6 @@ class QuoteRepository
         $item->craftMethod = $param['craftMethod'];
         $item->coatingMethod = $param['coatingMethod'];
         $item->memo = $param['memo'];
-        $item->infoImg = $param['infoImg'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();

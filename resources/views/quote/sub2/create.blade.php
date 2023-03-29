@@ -15,7 +15,7 @@
             <div class="content-header">
                 <span>報價</span> &gt; <span>項目2 彩盒/展示盒</span> &gt; <label>新增</label>
             </div>
-            <form method='post' action='/quote/create/sub2/0' class='form1' enctype="multipart/form-data">
+            <form method='post' action='/quote/create/sub2/{{ $mainId }}' class='form1' enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="show-line2">
                     <h5>序號</h5>
@@ -36,24 +36,24 @@
                 </div>
                 <div class="show-line2">
                     <h5>長</h5>
-                    <p> <input type="text" name="length" required /> </p>
+                    <p> <input type="number" name="length" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>寬</h5>
-                    <p> <input type="text" name="width" required /> </p>
+                    <p> <input type="number" name="width" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>高</h5>
-                    <p> <input type="text" name="height" required /> </p>
+                    <p> <input type="number" name="height" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>用量</h5>
-                    <p> <input type="text" name="usageAmount" required /> </p>
+                    <p> <input type="number" name="usageAmount" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>彩盒類型</h5>
                     <p>
-                        <select name="materialName">
+                        <select name="boxType">
                             <option value="天地蓋">天地蓋</option>
                             <option value="牙膏盒/左右開口型">牙膏盒/左右開口型</option>
                             <option value="火柴盒型">火柴盒型</option>
@@ -107,7 +107,8 @@
                 <div class="show-line2">
                     <h5>印刷方式 (可複選)</h5>
                     <p>
-                        <select name="printMethod">
+                        <input type="hidden" name="printMethod" />
+                        <select name="printMethodSelect" multiple>
                             <option value="單面印刷">單面印刷</option>
                             <option value="正反雙面">正反雙面</option>
                             <option value="四色印刷">四色印刷</option>
@@ -120,7 +121,8 @@
                 <div class="show-line2">
                     <h5>工藝方式 (可複選 最多三個)</h5>
                     <p>
-                        <select name="craftMethod">
+                        <input type="hidden" name="craftMethod" />
+                        <select name="craftMethodSelect" multiple>
                             <option value="裱E瓦楞">裱E瓦楞</option>
                             <option value="壓刀(折線)">壓刀(折線)</option>
                             <option value="開窗">開窗</option>
@@ -144,7 +146,7 @@
                 </div>
                 <div class="show-line2">
                     <h5>插入說明圖片</h5>
-                    <p> <input type="file" name="infoImg" required /> </p>
+                    <p> <input type="file" name="infoImg" /> </p>
                 </div>
                 <div class="show-line3">
                     <h5>備註說明</h5>
@@ -159,6 +161,6 @@
     </body>
     <script src="/lib/jquery-2.1.4.min.js"></script>
     <script src="/lib/selectize.js-master/dist/js/standalone/selectize.js"></script>
-    <script src="/js/member/edit.js"></script>
+    <script src="/js/quote/sub2/edit.js"></script>
     <script src="/js/member/logout.js"></script>
 </html>
