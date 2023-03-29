@@ -96,6 +96,10 @@ class QuoteRepository
             ->first();
         $items['sub2_1'] = QuoteSub2_1::where('mainId', '=', $param['mainId'])
             ->first();
+        $items['sub3'] = QuoteSub3::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub3_1'] = QuoteSub3_1::where('mainId', '=', $param['mainId'])
+            ->first();
         return $items;
     }
 
