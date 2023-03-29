@@ -133,7 +133,7 @@
                         </select>
                     </p>
                 </div>
-                <div class="show-line2">
+                <div class="show-line3">
                     <h5>插入說明圖片</h5>
                     <p> <input type="file" name="infoImg" /> </p>
                 </div>
