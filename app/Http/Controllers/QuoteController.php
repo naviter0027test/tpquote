@@ -1057,6 +1057,7 @@ class QuoteController extends Controller
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
         $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_3', 1);
@@ -1070,6 +1071,8 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
+            $result['memberPermission'] = $memberPermission;
+            $result['mainId'] = $mainId;
             return view('quote.sub3.edit', $result);
         }
         return json_encode($result);
