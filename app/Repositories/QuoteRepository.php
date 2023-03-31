@@ -705,6 +705,8 @@ class QuoteRepository
         $item->painted = $param['painted'];
         $item->subtotal = $param['subtotal'];
         $item->memo = $param['memo'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
 
@@ -721,6 +723,7 @@ class QuoteRepository
             $item->subtotal = $param['subtotal'];
         if(isset($param['memo']) && trim($param['memo']) != '')
             $item->memo = $param['memo'];
+        $item->updated_at = date('Y-m-d H:i:s');
 
         $item->save();
     }
