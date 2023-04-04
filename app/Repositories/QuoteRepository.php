@@ -816,4 +816,32 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub5ByMainId($mainId, $param) {
+        $item = $this->getSub5ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+        if(isset($param['orderNum']) && is_numeric($param['orderNum']))
+            $item->orderNum = $param['orderNum'];
+        if(isset($param['priceSubtotal']) && is_numeric($param['priceSubtotal']))
+            $item->priceSubtotal = $param['priceSubtotal'];
+        if(isset($param['flattenSubtotal']) && is_numeric($param['flattenSubtotal']))
+            $item->flattenSubtotal = $param['flattenSubtotal'];
+        if(isset($param['packageMethod']) && trim($param['packageMethod']) != '')
+            $item->packageMethod = $param['packageMethod'];
+        if(isset($param['boxMethod']) && trim($param['boxMethod']) != '')
+            $item->boxMethod = $param['boxMethod'];
+        if(isset($param['fillDate']) && trim($param['fillDate']))
+            $item->fillDate = $param['fillDate'];
+        if(isset($param['devFillDate']) && trim($param['devFillDate']))
+            $item->devFillDate = $param['devFillDate'];
+        if(isset($param['auditDate']) && trim($param['auditDate']))
+            $item->auditDate = $param['auditDate'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }
