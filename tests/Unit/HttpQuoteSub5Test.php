@@ -162,4 +162,76 @@ class HttpQuoteSub5Test extends TestCase
         $this->assertEquals(550, $quoteSub5at1->priceSubtotal);
         $this->assertEquals(1250, $quoteSub5at1->flattenSubtotal);
     }
+
+    public function testUpdateSub5() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub5/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_5 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub5/10', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.orderNum')
+                    ->has('errors.priceSubtotal')
+                    ->has('errors.flattenSubtotal')
+                    ->has('errors.packageMethod')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221209910',
+            'memo' => 'update by http',
+            'orderNum' => 490,
+            'priceSubtotal' => 550,
+            'flattenSubtotal' => 1250,
+            'packageMethod' => '木盒',
+            'boxMethod' => '內箱',
+            'fillDate' => '2023-04-01 01:00:00',
+            'devFillDate' => '2023-04-01 01:00:00',
+            'auditDate' => '2023-04-01 01:00:00',
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub5/10', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub5at1 = $quoteRepo->getSub5ByMainId(10);
+        $this->assertEquals(10, $quoteSub5at1->mainId);
+        $this->assertEquals("SLN-20221209910", $quoteSub5at1->serialNumber);
+        $this->assertEquals("490", $quoteSub5at1->orderNum);
+        $this->assertEquals(550, $quoteSub5at1->priceSubtotal);
+        $this->assertEquals(1250, $quoteSub5at1->flattenSubtotal);
+    }
 }
