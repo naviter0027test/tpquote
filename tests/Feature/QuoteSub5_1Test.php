@@ -51,4 +51,44 @@ class QuoteSub5_1Test extends TestCase
         $this->assertEquals("打磨", $quoteSub5_1at3->proccessName);
         $this->assertEquals("自製", $quoteSub5_1at3->firm);
     }
+
+    public function testCreateSub5_1() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub5_1($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 15,
+        ];
+        try {
+            $quoteRepo->createSub5_1($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate3 = [
+            'mainId' => 16,
+            'serialNumber' => 'SLN-20221200016',
+            'proccessName' => '底板烙印',
+            'firm' => '委外',
+        ];
+        $quoteRepo->createSub5_1($paramCreate3);
+
+        $quoteSub5_1at1 = $quoteRepo->getSub5_1ByMainId(16);
+        $this->assertEquals(16, $quoteSub5_1at1->mainId);
+        $this->assertEquals('SLN-20221200016', $quoteSub5_1at1->serialNumber);
+        $this->assertEquals('底板烙印', $quoteSub5_1at1->proccessName);
+        $this->assertEquals('委外', $quoteSub5_1at1->firm);
+    }
+
 }
