@@ -91,4 +91,26 @@ class QuoteSub5_1Test extends TestCase
         $this->assertEquals('委外', $quoteSub5_1at1->firm);
     }
 
+    public function testUpdateSub5_1() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub5_1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'serialNumber' => "SLN-20221200999",
+            'proccessName' => '底板烙印',
+            'firm' => '委外',
+        ];
+        $quoteRepo->updateSub5_1ByMainId(15, $paramUpdate1);
+        $quoteSub5_1at1 = $quoteRepo->getSub5_1ByMainId(15);
+        $this->assertEquals(15, $quoteSub5_1at1->mainId);
+        $this->assertEquals("SLN-20221200999", $quoteSub5_1at1->serialNumber);
+        $this->assertEquals('底板烙印', $quoteSub5_1at1->proccessName);
+        $this->assertEquals('委外', $quoteSub5_1at1->firm);
+    }
 }

@@ -873,4 +873,18 @@ class QuoteRepository
         $item->firm = $param['firm'];
         $item->save();
     }
+
+    public function updateSub5_1ByMainId($mainId, $param) {
+        $item = $this->getSub5_1ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['proccessName']) && trim($param['proccessName']) != '')
+            $item->proccessName = $param['proccessName'];
+        if(isset($param['firm']) && trim($param['firm']) != '')
+            $item->firm = $param['firm'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }
