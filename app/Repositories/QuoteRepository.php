@@ -87,6 +87,23 @@ class QuoteRepository
         return $amount;
     }
 
+    public function subsMain($param) {
+        $items = [];
+        $items['sub1'] = QuoteSub1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub1_1'] = QuoteSub1_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub2'] = QuoteSub2::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub2_1'] = QuoteSub2_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub3'] = QuoteSub3::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub3_1'] = QuoteSub3_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        return $items;
+    }
+
     public function createMain($param, $files = []) {
 
         if(isset($files['image'])) {
@@ -405,7 +422,6 @@ class QuoteRepository
         $item->craftMethod = $param['craftMethod'];
         $item->coatingMethod = $param['coatingMethod'];
         $item->memo = $param['memo'];
-        $item->infoImg = $param['infoImg'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
