@@ -152,4 +152,66 @@ class HttpQuoteSub5_1Test extends TestCase
         $this->assertEquals("底板貼紙", $quoteSub5_1at1->proccessName);
         $this->assertEquals("自製", $quoteSub5_1at1->firm);
     }
+
+    public function testUpdateSub5_1() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub5-1/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_5 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub5-1/10', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.proccessName')
+                    ->has('errors.firm')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221209910',
+            'proccessName' => '貼紙',
+            'firm' => '委外',
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub5-1/10', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub5_1at1 = $quoteRepo->getSub5_1ByMainId(10);
+        $this->assertEquals(10, $quoteSub5_1at1->mainId);
+        $this->assertEquals("SLN-20221209910", $quoteSub5_1at1->serialNumber);
+        $this->assertEquals("貼紙", $quoteSub5_1at1->proccessName);
+        $this->assertEquals("委外", $quoteSub5_1at1->firm);
+    }
 }
