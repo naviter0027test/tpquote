@@ -148,7 +148,7 @@ class QuoteSub6Seeder extends Seeder
         $quoteSub6at14 = new QuoteSub6();
         $quoteSub6at14->mainId = 14;
         $quoteSub6at14->serialNumber = "SLN-20221200014";
-        $quoteSub6at14->processName = "底板烙印、";
+        $quoteSub6at14->processName = "底板烙印";
         $quoteSub6at14->materialName = "PVC盒";
         $quoteSub6at14->processMemo = "";
         $quoteSub6at14->localNeedSec = 220;
