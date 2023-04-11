@@ -939,4 +939,24 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub6ByMainId($mainId, $param) {
+        $item = $this->getSub6ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['processName']) && trim($param['processName']) != '')
+            $item->processName = $param['processName'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['processMemo']) && trim($param['processMemo']) != '')
+            $item->processMemo = $param['processMemo'];
+        if(isset($param['localNeedSec']) && is_numeric($param['localNeedSec']))
+            $item->localNeedSec = $param['localNeedSec'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }
