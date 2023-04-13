@@ -968,4 +968,31 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createSub7($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub7ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub7();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->processName = $param["processName"];
+        $item->materialName = $param['materialName'];
+        $item->processMemo = $param["processMemo"];
+        $item->localNeedSec = $param["localNeedSec"];
+        $item->usageAmount = $param["usageAmount"];
+        $item->localNeedNum = $param["localNeedNum"];
+        $item->outProcessPrice = $param["outProcessPrice"];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }

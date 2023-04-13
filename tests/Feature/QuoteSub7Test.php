@@ -54,4 +54,51 @@ class QuoteSub7Test extends TestCase
         $this->assertEquals(415, $quoteSub7at3->localNeedSec);
         $this->assertEquals(25, $quoteSub7at3->usageAmount);
     }
+
+    public function testCreateSub7() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub7($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 13,
+        ];
+        try {
+            $quoteRepo->createSub7($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate3 = [
+            'mainId' => 14,
+            'serialNumber' => 'SLN-20221200014',
+            'processName' =>  '敲定',
+            'materialName' => "OPP袋",
+            'processMemo' => "",
+            'localNeedSec' => 320,
+            'usageAmount' => 210,
+            'localNeedNum' => 270,
+            'outProcessPrice' => 180,
+        ];
+        $quoteRepo->createSub7($paramCreate3);
+
+        $quoteSub7at1 = $quoteRepo->getSub7ByMainId(14);
+        $this->assertEquals(14, $quoteSub7at1->mainId);
+        $this->assertEquals("敲定", $quoteSub7at1->processName);
+        $this->assertEquals("OPP袋", $quoteSub7at1->materialName);
+        $this->assertEquals(320, $quoteSub7at1->localNeedSec);
+        $this->assertEquals(210, $quoteSub7at1->usageAmount);
+        $this->assertEquals(270, $quoteSub7at1->localNeedNum);
+        $this->assertEquals(180, $quoteSub7at1->outProcessPrice);
+    }
 }
