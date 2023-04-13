@@ -26,7 +26,7 @@ return new class extends Migration
                 ->comment('工序名稱 (鞋底板、裁面板、面板滾漆、貼紙、底板貼紙、面板熱轉印、鑽孔、面板合框+品檢、沖壓一刀、沖壓二刀+撥取出品檢、噴漆、絲印、修邊、底板烙印、打磨、取出品檢 打磨、敲定、取出敲木釘+鐵釘5)');
             $table->string('materialName')
                 ->nullable()
-                ->comment('材料名稱 (sub1-4的材料名稱)');
+                ->comment('材料名稱 (sub1-4的材料名稱: 膠磁、單面背膠膠磁、雙面覆膠軟鐵、鉚釘、強磁、磁石、POF膜、POF袋、PET袋、自封袋、OPP袋、OPP自黏袋、PE袋、PE夾縫袋)');
             if(env('DB_CONNECTION', '') == 'testing') {
                 $table->string('processMemo')
                     ->default('')
