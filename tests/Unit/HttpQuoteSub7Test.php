@@ -93,4 +93,74 @@ class HttpQuoteSub7Test extends TestCase
                     ;
             });
     }
+
+    public function testCreateSub7() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/create/sub7/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_7 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/sub7/14', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.processName')
+                    ->has('errors.materialName')
+                    ->has('errors.localNeedSec')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221200014',
+            'processName' =>  '絲印',
+            'materialName' => "OPP袋",
+            'processMemo' => "",
+            'localNeedSec' => 360,
+            'usageAmount' => 190,
+            'localNeedNum' => 110,
+            'outProcessPrice' => 4800,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/create/sub7/14', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub7at1 = $quoteRepo->getSub7ByMainId(14);
+        $this->assertEquals(14, $quoteSub7at1->mainId);
+        $this->assertEquals("絲印", $quoteSub7at1->processName);
+        $this->assertEquals("OPP袋", $quoteSub7at1->materialName);
+        $this->assertEquals(360, $quoteSub7at1->localNeedSec);
+        $this->assertEquals(190, $quoteSub7at1->usageAmount);
+    }
 }
