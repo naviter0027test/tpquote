@@ -163,4 +163,76 @@ class HttpQuoteSub7Test extends TestCase
         $this->assertEquals(360, $quoteSub7at1->localNeedSec);
         $this->assertEquals(190, $quoteSub7at1->usageAmount);
     }
+
+    public function testUpdateSub7() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub7/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_7 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub7/11', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.serialNumber')
+                    ->has('errors.processName')
+                    ->has('errors.materialName')
+                    ->has('errors.localNeedSec')
+                    ->has('errors.usageAmount')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'serialNumber' => 'SLN-20221209911',
+            'processName' =>  '敲定',
+            'materialName' => "OPP袋",
+            'processMemo' => "updated by tdd",
+            'localNeedSec' => 320,
+            'usageAmount' => 210,
+            'localNeedNum' => 270,
+            'outProcessPrice' => 180,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub7/11', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub7at1 = $quoteRepo->getSub7ByMainId(11);
+        $this->assertEquals(11, $quoteSub7at1->mainId);
+        $this->assertEquals("SLN-20221209911", $quoteSub7at1->serialNumber);
+        $this->assertEquals("敲定", $quoteSub7at1->processName);
+        $this->assertEquals("OPP袋", $quoteSub7at1->materialName);
+        $this->assertEquals(320, $quoteSub7at1->localNeedSec);
+        $this->assertEquals(210, $quoteSub7at1->usageAmount);
+        $this->assertEquals(270, $quoteSub7at1->localNeedNum);
+    }
 }
