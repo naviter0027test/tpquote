@@ -97,6 +97,8 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::get('edit/sub6/{mainId}', [QuoteController::class, 'editSub6']);
         Route::post('create/sub6/{mainId}', [QuoteController::class, 'createSub6']);
         Route::post('edit/sub6/{mainId}', [QuoteController::class, 'updateSub6']);
+
+        Route::get('edit/sub7/{mainId}', [QuoteController::class, 'editSub7']);
     });
 });
 
