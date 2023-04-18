@@ -103,4 +103,37 @@ class QuoteSub7_1Test extends TestCase
         $this->assertEquals(2, $quoteSub7_1at1->outOrSelf);
         $this->assertEquals(180, $quoteSub7_1at1->outProcessPrice);
     }
+
+    public function testUpdateSub7_1() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub7_1ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'serialNumber' => "SLN-20221200999",
+            'outOrSelf' => 2,
+            'processName' =>  '敲定',
+            'materialName' => "OPP袋",
+            'processMemo' => "updated by tdd",
+            'localNeedSec' => 320,
+            'usageAmount' => 210,
+            'outProcessPrice' => 180,
+        ];
+        $quoteRepo->updateSub7_1ByMainId(3, $paramUpdate1);
+        $quoteSub7_1at1 = $quoteRepo->getSub7_1ByMainId(3);
+        $this->assertEquals(3, $quoteSub7_1at1->mainId);
+        $this->assertEquals("SLN-20221200999", $quoteSub7_1at1->serialNumber);
+        $this->assertEquals(2, $quoteSub7_1at1->outOrSelf);
+        $this->assertEquals("敲定", $quoteSub7_1at1->processName);
+        $this->assertEquals("OPP袋", $quoteSub7_1at1->materialName);
+        $this->assertEquals(320, $quoteSub7_1at1->localNeedSec);
+        $this->assertEquals(210, $quoteSub7_1at1->usageAmount);
+        $this->assertEquals(180, $quoteSub7_1at1->outProcessPrice);
+        $this->assertEquals("updated by tdd", $quoteSub7_1at1->processMemo);
+    }
 }
