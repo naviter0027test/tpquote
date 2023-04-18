@@ -2060,4 +2060,56 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function createSub7_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_7', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'outOrSelf' => 'required|integer',
+                'processName' => 'required',
+                'materialName' => 'required',
+                'localNeedSec' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['processMemo'] = isset($param['processMemo']) ? $param['processMemo'] : '';
+            $param['outProcessPrice'] = isset($param['outProcessPrice']) ? $param['outProcessPrice'] : 0;
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub7_1($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
 }
