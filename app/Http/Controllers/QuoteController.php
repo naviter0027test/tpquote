@@ -1550,4 +1550,522 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function editSub5(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 1);
+            $result['item'] = $quoteRepo->getSub5ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.sub5.edit', $result);
+        }
+        return json_encode($result);
+    }
+
+    public function createSub5(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'orderNum' => 'required|integer',
+                'priceSubtotal' => 'required|integer',
+                'flattenSubtotal' => 'required|integer',
+                'packageMethod' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['boxMethod'] = isset($param['boxMethod']) ? $param['boxMethod'] : '';
+            $param['fillDate'] = isset($param['fillDate']) ? $param['fillDate'] : '';
+            $param['devFillDate'] = isset($param['devFillDate']) ? $param['devFillDate'] : '';
+            $param['auditDate'] = isset($param['auditDate']) ? $param['auditDate'] : '';
+            $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub5($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function updateSub5(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'orderNum' => 'required|integer',
+                'priceSubtotal' => 'required|integer',
+                'flattenSubtotal' => 'required|integer',
+                'packageMethod' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['boxMethod'] = isset($param['boxMethod']) ? $param['boxMethod'] : '';
+            $param['fillDate'] = isset($param['fillDate']) ? $param['fillDate'] : '';
+            $param['devFillDate'] = isset($param['devFillDate']) ? $param['devFillDate'] : '';
+            $param['auditDate'] = isset($param['auditDate']) ? $param['auditDate'] : '';
+            $param['memo'] = isset($param['memo']) ? $param['memo'] : '';
+
+            $quoteRepo->updateSub5ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function editSub5_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 1);
+            $result['item'] = $quoteRepo->getSub5_1ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.sub5-1.edit', $result);
+        }
+        return json_encode($result);
+    }
+
+    public function createSub5_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'proccessName' => 'required',
+                'firm' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub5_1($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function updateSub5_1(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'proccessName' => 'required',
+                'firm' => 'required',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $quoteRepo->updateSub5_1ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function editSub6(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_6', 1);
+            $result['item'] = $quoteRepo->getSub6ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.sub6.edit', $result);
+        }
+        return json_encode($result);
+    }
+
+    public function createSub6(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_6', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'processName' => 'required',
+                'materialName' => 'required',
+                'localNeedSec' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['processMemo'] = isset($param['processMemo']) ? $param['processMemo'] : '';
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub6($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function updateSub6(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_6', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'processName' => 'required',
+                'materialName' => 'required',
+                'localNeedSec' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['processMemo'] = isset($param['processMemo']) ? $param['processMemo'] : '';
+
+            $quoteRepo->updateSub6ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function editSub7(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_7', 1);
+            $result['item'] = $quoteRepo->getSub7ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.sub7.edit', $result);
+        }
+        return json_encode($result);
+    }
+
+    public function createSub7(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_7', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'processName' => 'required',
+                'materialName' => 'required',
+                'localNeedSec' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['processMemo'] = isset($param['processMemo']) ? $param['processMemo'] : '';
+            $param['localNeedNum'] = isset($param['localNeedNum']) ? $param['localNeedNum'] : 0;
+            $param['outProcessPrice'] = isset($param['outProcessPrice']) ? $param['outProcessPrice'] : 0;
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub7($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
+
+    public function updateSub7(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_7', 2);
+
+            $validator = Validator::make($param, [
+                'serialNumber' => 'required',
+                'processName' => 'required',
+                'materialName' => 'required',
+                'localNeedSec' => 'required|integer',
+                'usageAmount' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['processMemo'] = isset($param['processMemo']) ? $param['processMemo'] : '';
+            $param['localNeedNum'] = isset($param['localNeedNum']) ? $param['localNeedNum'] : 0;
+            $param['outProcessPrice'] = isset($param['outProcessPrice']) ? $param['outProcessPrice'] : 0;
+
+            $quoteRepo->updateSub7ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
 }

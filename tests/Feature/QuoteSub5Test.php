@@ -104,4 +104,33 @@ class QuoteSub5Test extends TestCase
         $this->assertEquals("外箱", $quoteSub5at1->boxMethod);
         $this->assertEquals("2023-03-01 17:00:00", $quoteSub5at1->fillDate);
     }
+
+    public function testUpdateSub5() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub5ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'serialNumber' => "SLN-20221200999",
+            'orderNum' => 95,
+            'priceSubtotal' => 645,
+            'flattenSubtotal' => 85,
+            'packageMethod' => '收縮',
+            'memo' => 'updated by tdd',
+        ];
+        $quoteRepo->updateSub5ByMainId(3, $paramUpdate1);
+        $quoteSub5at1 = $quoteRepo->getSub5ByMainId(3);
+        $this->assertEquals(3, $quoteSub5at1->mainId);
+        $this->assertEquals("SLN-20221200999", $quoteSub5at1->serialNumber);
+        $this->assertEquals(95, $quoteSub5at1->orderNum);
+        $this->assertEquals(645, $quoteSub5at1->priceSubtotal);
+        $this->assertEquals(85, $quoteSub5at1->flattenSubtotal);
+        $this->assertEquals('收縮', $quoteSub5at1->packageMethod);
+        $this->assertEquals("updated by tdd", $quoteSub5at1->memo);
+    }
 }

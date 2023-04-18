@@ -11,6 +11,10 @@ use App\Models\QuoteSub3;
 use App\Models\QuoteSub3_1;
 use App\Models\QuoteSub4;
 use App\Models\QuoteSub5;
+use App\Models\QuoteSub5_1;
+use App\Models\QuoteSub6;
+use App\Models\QuoteSub7;
+use App\Models\QuoteSub7_1;
 use App\Repositories\MemberRepository;
 use Illuminate\Database\Eloquent\Model;
 use Exception;
@@ -837,6 +841,249 @@ class QuoteRepository
         $item->auditDate = $param['auditDate'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub5ByMainId($mainId, $param) {
+        $item = $this->getSub5ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['memo']) && trim($param['memo']) != '')
+            $item->memo = $param['memo'];
+        if(isset($param['orderNum']) && is_numeric($param['orderNum']))
+            $item->orderNum = $param['orderNum'];
+        if(isset($param['priceSubtotal']) && is_numeric($param['priceSubtotal']))
+            $item->priceSubtotal = $param['priceSubtotal'];
+        if(isset($param['flattenSubtotal']) && is_numeric($param['flattenSubtotal']))
+            $item->flattenSubtotal = $param['flattenSubtotal'];
+        if(isset($param['packageMethod']) && trim($param['packageMethod']) != '')
+            $item->packageMethod = $param['packageMethod'];
+        if(isset($param['boxMethod']) && trim($param['boxMethod']) != '')
+            $item->boxMethod = $param['boxMethod'];
+        if(isset($param['fillDate']) && trim($param['fillDate']))
+            $item->fillDate = $param['fillDate'];
+        if(isset($param['devFillDate']) && trim($param['devFillDate']))
+            $item->devFillDate = $param['devFillDate'];
+        if(isset($param['auditDate']) && trim($param['auditDate']))
+            $item->auditDate = $param['auditDate'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
+
+    public function getSub5_1ByMainId($mainId) {
+        $item = QuoteSub5_1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub5_1($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub5_1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub5_1();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->proccessName = $param["proccessName"];
+        $item->firm = $param['firm'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub5_1ByMainId($mainId, $param) {
+        $item = $this->getSub5_1ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['proccessName']) && trim($param['proccessName']) != '')
+            $item->proccessName = $param['proccessName'];
+        if(isset($param['firm']) && trim($param['firm']) != '')
+            $item->firm = $param['firm'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
+
+    public function getSub6ByMainId($mainId) {
+        $item = QuoteSub6::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub6($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub6ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub6();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->processName = $param["processName"];
+        $item->materialName = $param['materialName'];
+        $item->processMemo = $param["processMemo"];
+        $item->localNeedSec = $param["localNeedSec"];
+        $item->usageAmount = $param["usageAmount"];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub6ByMainId($mainId, $param) {
+        $item = $this->getSub6ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['processName']) && trim($param['processName']) != '')
+            $item->processName = $param['processName'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['processMemo']) && trim($param['processMemo']) != '')
+            $item->processMemo = $param['processMemo'];
+        if(isset($param['localNeedSec']) && is_numeric($param['localNeedSec']))
+            $item->localNeedSec = $param['localNeedSec'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
+
+    public function getSub7ByMainId($mainId) {
+        $item = QuoteSub7::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub7($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub7ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub7();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->processName = $param["processName"];
+        $item->materialName = $param['materialName'];
+        $item->processMemo = $param["processMemo"];
+        $item->localNeedSec = $param["localNeedSec"];
+        $item->usageAmount = $param["usageAmount"];
+        $item->localNeedNum = $param["localNeedNum"];
+        $item->outProcessPrice = $param["outProcessPrice"];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub7ByMainId($mainId, $param) {
+        $item = $this->getSub7ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['processName']) && trim($param['processName']) != '')
+            $item->processName = $param['processName'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['processMemo']) && trim($param['processMemo']) != '')
+            $item->processMemo = $param['processMemo'];
+        if(isset($param['localNeedSec']) && is_numeric($param['localNeedSec']))
+            $item->localNeedSec = $param['localNeedSec'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['localNeedNum']) && is_numeric($param['localNeedNum']))
+            $item->localNeedNum = $param['localNeedNum'];
+        if(isset($param['outProcessPrice']) && is_numeric($param['outProcessPrice']))
+            $item->outProcessPrice = $param['outProcessPrice'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
+
+    public function getSub7_1ByMainId($mainId) {
+        $item = QuoteSub7_1::where('mainId', '=', $mainId)
+            ->first();
+        if(isset($item->id) == false)
+            throw new Exception('指定資料不存在');
+        return $item;
+    }
+
+    public function createSub7_1($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub7_1ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub7_1();
+        $item->mainId = $param['mainId'];
+        $item->serialNumber = $param['serialNumber'];
+        $item->outOrSelf = $param['outOrSelf'];
+        $item->processName = $param["processName"];
+        $item->materialName = $param['materialName'];
+        $item->processMemo = $param["processMemo"];
+        $item->localNeedSec = $param["localNeedSec"];
+        $item->usageAmount = $param["usageAmount"];
+        $item->outProcessPrice = $param["outProcessPrice"];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
+
+    public function updateSub7_1ByMainId($mainId, $param) {
+        $item = $this->getSub7_1ByMainId($mainId);
+
+        if(isset($param['serialNumber']) && trim($param['serialNumber']) != '')
+            $item->serialNumber = $param['serialNumber'];
+        if(isset($param['outOrSelf']) && is_numeric($param['outOrSelf']))
+            $item->outOrSelf = $param['outOrSelf'];
+        if(isset($param['processName']) && trim($param['processName']) != '')
+            $item->processName = $param['processName'];
+        if(isset($param['materialName']) && trim($param['materialName']) != '')
+            $item->materialName = $param['materialName'];
+        if(isset($param['processMemo']) && trim($param['processMemo']) != '')
+            $item->processMemo = $param['processMemo'];
+        if(isset($param['localNeedSec']) && is_numeric($param['localNeedSec']))
+            $item->localNeedSec = $param['localNeedSec'];
+        if(isset($param['usageAmount']) && is_numeric($param['usageAmount']))
+            $item->usageAmount = $param['usageAmount'];
+        if(isset($param['outProcessPrice']) && is_numeric($param['outProcessPrice']))
+            $item->outProcessPrice = $param['outProcessPrice'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
         $item->save();
     }
 }
