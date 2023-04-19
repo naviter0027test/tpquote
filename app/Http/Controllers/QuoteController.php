@@ -1580,6 +1580,38 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function createSub5Page(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_5', 1);
+            $result['item'] = $quoteRepo->getSub5ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
+            $result['memberPermission'] = $memberPermission;
+            return view('quote.sub5.create', $result);
+        }
+        return json_encode($result);
+    }
+
     public function createSub5(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
