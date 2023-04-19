@@ -836,9 +836,12 @@ class QuoteRepository
         $item->flattenSubtotal = $param['flattenSubtotal'];
         $item->packageMethod = $param['packageMethod'];
         $item->boxMethod = $param['boxMethod'];
-        $item->fillDate = $param['fillDate'];
-        $item->devFillDate = $param['devFillDate'];
-        $item->auditDate = $param['auditDate'];
+        if(isset($param['fillDate']) && trim($param['fillDate']))
+            $item->fillDate = $param['fillDate'];
+        if(isset($param['devFillDate']) && trim($param['devFillDate']))
+            $item->devFillDate = $param['devFillDate'];
+        if(isset($param['auditDate']) && trim($param['auditDate']))
+            $item->auditDate = $param['auditDate'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
