@@ -1873,6 +1873,38 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function createSub6Page(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_6', 1);
+            //$result['item'] = $quoteRepo->getSub6ByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
+            $result['memberPermission'] = $memberPermission;
+            return view('quote.sub6.create', $result);
+        }
+        return json_encode($result);
+    }
+
     public function editSub6(Request $request, $mainId = 0) {
         $result = [
             'status' => false,
