@@ -158,56 +158,128 @@
                     </tr>
                     <tr>
                         <td>項目4 包材/紙箱/收縮膜</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub4']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub4']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub4']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub4']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub4/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub4/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub4']->id) == false)
+                            <a href='/quote/create/sub4/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub4/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
                         <td>項目5 起始費用</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub5']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub5']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub5']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub5']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub5/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub5/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub5']->id) == false)
+                            <a href='/quote/create/sub5/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub5/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
                         <td>工序總表(5-1)</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub5_1']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub5_1']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub5_1']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub5_1']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub5-1/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub5-1/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub5_1']->id) == false)
+                            <a href='/quote/create/sub5-1/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub5-1/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
                         <td>項目6 工序工時說明（本廠）</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub6']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub6']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub6']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub6']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub6/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub6/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub6']->id) == false)
+                            <a href='/quote/create/sub6/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub6/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
                         <td>項目7 工序工時說明（委外）</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub7']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub7']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub7']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub7']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub7/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub7/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub7']->id) == false)
+                            <a href='/quote/create/sub7/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub7/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                     <tr>
                         <td>項目7-1 工序工時說明（固定委外）</td>
-                        <td>2023-01-01 00:00:00</td>
-                        <td>2023-01-01 00:00:00</td>
+                        @if (isset($items['sub7_1']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub7_1']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub7_1']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub7_1']->updated_at }}</td>
+                        @endif
                         <td>
-                            <a href='/quote/create/sub7-1/0' class='glyphicon glyphicon-plus'></a>
-                            <a href='/quote/edit/sub7-1/0' class='glyphicon glyphicon-pencil'></a>
+                        @if (isset($items['sub7_1']->id) == false)
+                            <a href='/quote/create/sub7-1/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub7-1/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
                         </td>
                     </tr>
                 </tbody>

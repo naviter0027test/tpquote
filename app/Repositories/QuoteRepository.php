@@ -105,6 +105,18 @@ class QuoteRepository
             ->first();
         $items['sub3_1'] = QuoteSub3_1::where('mainId', '=', $param['mainId'])
             ->first();
+        $items['sub4'] = QuoteSub4::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub5'] = QuoteSub5::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub5_1'] = QuoteSub5_1::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub6'] = QuoteSub6::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub7'] = QuoteSub7::where('mainId', '=', $param['mainId'])
+            ->first();
+        $items['sub7_1'] = QuoteSub7_1::where('mainId', '=', $param['mainId'])
+            ->first();
         return $items;
     }
 
@@ -710,6 +722,8 @@ class QuoteRepository
         $item->painted = $param['painted'];
         $item->subtotal = $param['subtotal'];
         $item->memo = $param['memo'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
 
@@ -726,6 +740,7 @@ class QuoteRepository
             $item->subtotal = $param['subtotal'];
         if(isset($param['memo']) && trim($param['memo']) != '')
             $item->memo = $param['memo'];
+        $item->updated_at = date('Y-m-d H:i:s');
 
         $item->save();
     }
@@ -830,9 +845,12 @@ class QuoteRepository
         $item->flattenSubtotal = $param['flattenSubtotal'];
         $item->packageMethod = $param['packageMethod'];
         $item->boxMethod = $param['boxMethod'];
-        $item->fillDate = $param['fillDate'];
-        $item->devFillDate = $param['devFillDate'];
-        $item->auditDate = $param['auditDate'];
+        if(isset($param['fillDate']) && trim($param['fillDate']))
+            $item->fillDate = $param['fillDate'];
+        if(isset($param['devFillDate']) && trim($param['devFillDate']))
+            $item->devFillDate = $param['devFillDate'];
+        if(isset($param['auditDate']) && trim($param['auditDate']))
+            $item->auditDate = $param['auditDate'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();

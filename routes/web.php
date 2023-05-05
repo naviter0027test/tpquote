@@ -82,26 +82,32 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::post('create/sub3-1/{mainId}', [QuoteController::class, 'createSub3_1']);
         Route::post('edit/sub3-1/{mainId}', [QuoteController::class, 'updateSub3_1']);
 
+        Route::get('create/sub4/{mainId}', [QuoteController::class, 'createSub4Page']);
         Route::get('edit/sub4/{mainId}', [QuoteController::class, 'editSub4']);
         Route::post('create/sub4/{mainId}', [QuoteController::class, 'createSub4']);
         Route::post('edit/sub4/{mainId}', [QuoteController::class, 'updateSub4']);
 
+        Route::get('create/sub5/{mainId}', [QuoteController::class, 'createSub5Page']);
         Route::get('edit/sub5/{mainId}', [QuoteController::class, 'editSub5']);
         Route::post('create/sub5/{mainId}', [QuoteController::class, 'createSub5']);
         Route::post('edit/sub5/{mainId}', [QuoteController::class, 'updateSub5']);
 
+        Route::get('create/sub5-1/{mainId}', [QuoteController::class, 'createSub5_1Page']);
         Route::get('edit/sub5-1/{mainId}', [QuoteController::class, 'editSub5_1']);
         Route::post('create/sub5-1/{mainId}', [QuoteController::class, 'createSub5_1']);
         Route::post('edit/sub5-1/{mainId}', [QuoteController::class, 'updateSub5_1']);
 
+        Route::get('create/sub6/{mainId}', [QuoteController::class, 'createSub6Page']);
         Route::get('edit/sub6/{mainId}', [QuoteController::class, 'editSub6']);
         Route::post('create/sub6/{mainId}', [QuoteController::class, 'createSub6']);
         Route::post('edit/sub6/{mainId}', [QuoteController::class, 'updateSub6']);
 
+        Route::get('create/sub7/{mainId}', [QuoteController::class, 'createSub7Page']);
         Route::get('edit/sub7/{mainId}', [QuoteController::class, 'editSub7']);
         Route::post('create/sub7/{mainId}', [QuoteController::class, 'createSub7']);
         Route::post('edit/sub7/{mainId}', [QuoteController::class, 'updateSub7']);
 
+        Route::get('create/sub7-1/{mainId}', [QuoteController::class, 'createSub7_1Page']);
         Route::get('edit/sub7-1/{mainId}', [QuoteController::class, 'editSub7_1']);
         Route::post('create/sub7-1/{mainId}', [QuoteController::class, 'createSub7_1']);
         Route::post('edit/sub7-1/{mainId}', [QuoteController::class, 'updateSub7_1']);
