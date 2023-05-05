@@ -115,4 +115,47 @@ class QuoteSub8Test extends TestCase
         $this->assertEquals("李佳君", $quoteSub8at1->reviewName);
         $this->assertEquals("2023-04-02 00:00:00", $quoteSub8at1->reviewFillDate);
     }
+
+    public function testUpdateSub8() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub8ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'sub1Price' => 3200,
+            'sub1SubTotal' => 3200,
+            'sub2Price' => 2700,
+            'sub2SubTotal' => 5400,
+            'sub3Price' => 4200,
+            'sub3SubTotal' => 8400,
+            'sub3_1Price' => 8000,
+            'sub3_1SubTotal' => 8000,
+            'sub4Price' => 3200,
+            'sub4SubTotal' => 3200,
+            'sub5Price' => 2700,
+            'sub5SubTotal' => 5400,
+            'sub6Price' => 3200,
+            'sub6SubTotal' => 3200,
+            'sub7Price' => 2700,
+            'sub7SubTotal' => 5400,
+            'purchaseName' => '鍾漢強2',
+            'purchaseFillDate' =>  '2023-04-01 00:00:00',
+            'reviewName' => "李佳君",
+            'reviewFillDate' => "2023-04-02 00:00:00",
+        ];
+        $quoteRepo->updateSub8ByMainId(3, $paramUpdate1);
+        $quoteSub8at1 = $quoteRepo->getSub8ByMainId(3);
+        $this->assertEquals(3, $quoteSub8at1->mainId);
+        $this->assertEquals(4200, $quoteSub8at1->sub3Price);
+        $this->assertEquals(8400, $quoteSub8at1->sub3SubTotal);
+        $this->assertEquals(3200, $quoteSub8at1->sub6Price);
+        $this->assertEquals(3200, $quoteSub8at1->sub6SubTotal);
+        $this->assertEquals("鍾漢強2", $quoteSub8at1->purchaseName);
+        $this->assertEquals("2023-04-01 00:00:00", $quoteSub8at1->purchaseFillDate);
+    }
 }
