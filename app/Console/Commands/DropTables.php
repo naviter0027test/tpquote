@@ -48,6 +48,9 @@ class DropTables extends Command
         Schema::dropIfExists('QuoteSub6');
         Schema::dropIfExists('QuoteSub7');
         Schema::dropIfExists('QuoteSub7_1');
+        Schema::dropIfExists('QuoteSub8');
+        Schema::dropIfExists('QuoteSub9');
+        Schema::dropIfExists('QuoteTotal');
         Schema::dropIfExists('migrations');
         echo "刪除完成\n";
         return Command::SUCCESS;
