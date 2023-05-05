@@ -1088,4 +1088,43 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createSub8($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getSub8ByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteSub8();
+        $item->mainId = $param['mainId'];
+        $item->sub1Price = $param['sub1Price'];
+        $item->sub1SubTotal = $param["sub1SubTotal"];
+        $item->sub2Price = $param['sub2Price'];
+        $item->sub2SubTotal = $param["sub2SubTotal"];
+        $item->sub3Price = $param['sub3Price'];
+        $item->sub3SubTotal = $param["sub3SubTotal"];
+        $item->sub3_1Price = $param['sub3_1Price'];
+        $item->sub3_1SubTotal = $param["sub3_1SubTotal"];
+        $item->sub4Price = $param['sub4Price'];
+        $item->sub4SubTotal = $param["sub4SubTotal"];
+        $item->sub5Price = $param['sub5Price'];
+        $item->sub5SubTotal = $param["sub5SubTotal"];
+        $item->sub6Price = $param['sub6Price'];
+        $item->sub6SubTotal = $param["sub6SubTotal"];
+        $item->sub7Price = $param['sub7Price'];
+        $item->sub7SubTotal = $param["sub7SubTotal"];
+        $item->purchaseName = $param["purchaseName"];
+        $item->purchaseFillDate = $param["purchaseFillDate"];
+        $item->reviewName = $param["reviewName"];
+        $item->reviewFillDate = $param["reviewFillDate"];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }

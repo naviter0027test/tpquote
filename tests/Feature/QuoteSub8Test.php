@@ -56,4 +56,63 @@ class QuoteSub8Test extends TestCase
         $this->assertEquals("莊鴻瑜", $quoteSub8at3->purchaseName);
         $this->assertEquals("2023-02-02 00:00:00", $quoteSub8at3->purchaseFillDate);
     }
+
+    public function testCreateSub8() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub8($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 11,
+        ];
+        try {
+            $quoteRepo->createSub8($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate3 = [
+            'mainId' => 12,
+            'sub1Price' => 3200,
+            'sub1SubTotal' => 3200,
+            'sub2Price' => 2700,
+            'sub2SubTotal' => 5400,
+            'sub3Price' => 4200,
+            'sub3SubTotal' => 8400,
+            'sub3_1Price' => 8000,
+            'sub3_1SubTotal' => 8000,
+            'sub4Price' => 3200,
+            'sub4SubTotal' => 3200,
+            'sub5Price' => 2700,
+            'sub5SubTotal' => 5400,
+            'sub6Price' => 3200,
+            'sub6SubTotal' => 3200,
+            'sub7Price' => 2700,
+            'sub7SubTotal' => 5400,
+            'purchaseName' => '鍾漢強',
+            'purchaseFillDate' =>  '2023-04-01 00:00:00',
+            'reviewName' => "李佳君",
+            'reviewFillDate' => "2023-04-02 00:00:00",
+        ];
+        $quoteRepo->createSub8($paramCreate3);
+
+        $quoteSub8at1 = $quoteRepo->getSub8ByMainId(12);
+        $this->assertEquals(12, $quoteSub8at1->mainId);
+        $this->assertEquals(3200, $quoteSub8at1->sub1Price);
+        $this->assertEquals(3200, $quoteSub8at1->sub1SubTotal);
+        $this->assertEquals(2700, $quoteSub8at1->sub7Price);
+        $this->assertEquals(5400, $quoteSub8at1->sub7SubTotal);
+        $this->assertEquals("李佳君", $quoteSub8at1->reviewName);
+        $this->assertEquals("2023-04-02 00:00:00", $quoteSub8at1->reviewFillDate);
+    }
 }
