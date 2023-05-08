@@ -2395,4 +2395,68 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function createSub8(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_8', 2);
+
+            $validator = Validator::make($param, [
+                'sub1Price' => 'required|integer',
+                'sub1SubTotal' => 'required|integer',
+                'sub2Price' => 'required|integer',
+                'sub2SubTotal' => 'required|integer',
+                'sub3Price' => 'required|integer',
+                'sub3SubTotal' => 'required|integer',
+                'sub3_1Price' => 'required|integer',
+                'sub3_1SubTotal' => 'required|integer',
+                'sub4Price' => 'required|integer',
+                'sub4SubTotal' => 'required|integer',
+                'sub5Price' => 'required|integer',
+                'sub5SubTotal' => 'required|integer',
+                'sub6Price' => 'required|integer',
+                'sub6SubTotal' => 'required|integer',
+                'sub7Price' => 'required|integer',
+                'sub7SubTotal' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+            $param['purchaseName'] = isset($param['purchaseName']) ? $param['purchaseName'] : '';
+            $param['purchaseFillDate'] = isset($param['purchaseFillDate']) ? $param['purchaseFillDate'] : '';
+            $param['reviewName'] = isset($param['reviewName']) ? $param['reviewName'] : '';
+            $param['reviewFillDate'] = isset($param['reviewFillDate']) ? $param['reviewFillDate'] : '';
+
+            $param['mainId'] = $mainId;
+            $quoteRepo->createSub8($param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
 }

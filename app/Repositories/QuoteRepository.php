@@ -1137,10 +1137,14 @@ class QuoteRepository
         $item->sub6SubTotal = $param["sub6SubTotal"];
         $item->sub7Price = $param['sub7Price'];
         $item->sub7SubTotal = $param["sub7SubTotal"];
-        $item->purchaseName = $param["purchaseName"];
-        $item->purchaseFillDate = $param["purchaseFillDate"];
-        $item->reviewName = $param["reviewName"];
-        $item->reviewFillDate = $param["reviewFillDate"];
+        if(isset($param['purchaseName']) && trim($param['purchaseName']) != '')
+            $item->purchaseName = $param["purchaseName"];
+        if(isset($param['purchaseFillDate']) && trim($param['purchaseFillDate']) != '')
+            $item->purchaseFillDate = $param["purchaseFillDate"];
+        if(isset($param['reviewName']) && trim($param['reviewName']) != '')
+            $item->reviewName = $param["reviewName"];
+        if(isset($param['reviewFillDate']) && trim($param['reviewFillDate']) != '')
+            $item->reviewFillDate = $param["reviewFillDate"];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
