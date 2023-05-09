@@ -55,4 +55,43 @@ class QuoteSub9Test extends TestCase
         $this->assertEquals(2, $quoteSub9at3->formula);
         $this->assertEquals(4750, $quoteSub9at3->freight);
     }
+
+    public function testCreateSub9() {
+        $quoteRepo = new QuoteRepository();
+        $paramCreate1 = [
+            'mainId' => 99,
+        ];
+        try {
+            $quoteRepo->createSub9($paramCreate1);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramCreate2 = [
+            'mainId' => 10,
+        ];
+        try {
+            $quoteRepo->createSub9($paramCreate2);
+            $this->assertEquals(true, false);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("子資料已存在", $e->getMessage());
+        }
+
+        $paramCreate3 = [
+            'mainId' => 11,
+            'port' => 3,
+            'formula' => 3,
+            'freight' => 150 + 500 + 45 + 4400,
+        ];
+        $quoteRepo->createSub9($paramCreate3);
+
+        $quoteSub9at1 = $quoteRepo->getSub9ByMainId(11);
+        $this->assertEquals(11, $quoteSub9at1->mainId);
+        $this->assertEquals(3, $quoteSub9at1->port);
+        $this->assertEquals(3, $quoteSub9at1->formula);
+        $this->assertEquals(5095, $quoteSub9at1->freight);
+    }
 }
