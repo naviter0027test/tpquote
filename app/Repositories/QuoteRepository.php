@@ -1228,4 +1228,18 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateSub9ByMainId($mainId, $param) {
+        $item = $this->getSub9ByMainId($mainId);
+
+        if(isset($param['port']) && is_numeric($param['port']))
+            $item->port = $param['port'];
+        if(isset($param['formula']) && is_numeric($param['formula']))
+            $item->formula = $param["formula"];
+        if(isset($param['freight']) && is_numeric($param['freight']))
+            $item->freight = $param['freight'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }

@@ -94,4 +94,27 @@ class QuoteSub9Test extends TestCase
         $this->assertEquals(3, $quoteSub9at1->formula);
         $this->assertEquals(5095, $quoteSub9at1->freight);
     }
+
+    public function testUpdateSub9() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateSub9ByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'port' => 3,
+            'formula' => 4,
+            'freight' => 150 + 50 + 45 + 4400,
+        ];
+        $quoteRepo->updateSub9ByMainId(3, $paramUpdate1);
+        $quoteSub9at1 = $quoteRepo->getSub9ByMainId(3);
+        $this->assertEquals(3, $quoteSub9at1->mainId);
+        $this->assertEquals(3, $quoteSub9at1->port);
+        $this->assertEquals(4, $quoteSub9at1->formula);
+        $this->assertEquals(4645, $quoteSub9at1->freight);
+    }
 }
