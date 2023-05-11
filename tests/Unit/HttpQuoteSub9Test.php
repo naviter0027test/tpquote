@@ -157,4 +157,66 @@ class HttpQuoteSub9Test extends TestCase
         $this->assertEquals(3, $quoteSub9at1->formula);
         $this->assertEquals(5095, $quoteSub9at1->freight);
     }
+
+    public function testUpdateSub9() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/sub9/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_9 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub9/9', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.port')
+                    ->has('errors.formula')
+                    ->has('errors.freight')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'port' => 3,
+            'formula' => 3,
+            'freight' => 150 + 500 + 45 + 4400,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/sub9/9', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteSub9at1 = $quoteRepo->getSub9ByMainId(9);
+        $this->assertEquals(9, $quoteSub9at1->mainId);
+        $this->assertEquals(3, $quoteSub9at1->port);
+        $this->assertEquals(3, $quoteSub9at1->formula);
+        $this->assertEquals(5095, $quoteSub9at1->freight);
+    }
 }

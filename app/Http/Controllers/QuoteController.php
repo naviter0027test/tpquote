@@ -2598,4 +2598,50 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function updateSub9(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_9', 2);
+
+            $validator = Validator::make($param, [
+                'port' => 'required|integer',
+                'formula' => 'required|integer',
+                'freight' => 'required|integer',
+            ]);
+
+            if($validator->fails()) {
+                $result['errors'] = $validator->errors();
+                throw new Exception('輸入錯誤');
+            }
+
+            $quoteRepo->updateSub9ByMainId($mainId, $param);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            if(isset($result['errors'])) {
+                $errors = json_decode(json_encode($result['errors']), true);
+                $result['errors'] = $errors;
+            }
+            $request->session()->flash('result', $result);
+            return redirect($jump);
+        }
+        return json_encode($result);
+    }
 }
