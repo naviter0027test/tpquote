@@ -103,4 +103,34 @@ class QuoteTotalTest extends TestCase
         $this->assertEquals('簡於生', $quoteTotalat1->reviewGeneralManager);
         $this->assertEquals('2023-02-25 00:00:00', $quoteTotalat1->reviewGeneralManagerFillDate);
     }
+
+    public function testUpdateTotal() {
+        $quoteRepo = new QuoteRepository();
+        try {
+            $quoteRepo->updateTotalByMainId(99, []);
+            $this->assertEquals(false, true);
+        }
+        catch(Exception $e) {
+            $this->assertEquals("指定資料不存在", $e->getMessage());
+        }
+
+        $paramUpdate1 = [
+            'costPrice' => 39000,
+            'profit' => 12000,
+            'exchangeRate' => 1.2,
+            'reviewName' => '鐘糖其',
+            'reviewFillDate' => '2023-02-24 00:00:00',
+            'reviewGeneralManager' => '簡於生',
+            'reviewGeneralManagerFillDate' => '2023-02-25 00:00:00',
+            'reviewFinalGeneralManager' => '簡於生',
+            'reviewFinalGeneralManagerFillDate' => '2023-02-26 00:00:00',
+        ];
+        $quoteRepo->updateTotalByMainId(3, $paramUpdate1);
+        $quoteTotalat1 = $quoteRepo->getTotalByMainId(3);
+        $this->assertEquals(3, $quoteTotalat1->mainId);
+        $this->assertEquals(39000, $quoteTotalat1->costPrice);
+        $this->assertEquals(12000, $quoteTotalat1->profit);
+        $this->assertEquals('簡於生', $quoteTotalat1->reviewGeneralManager);
+        $this->assertEquals('2023-02-25 00:00:00', $quoteTotalat1->reviewGeneralManagerFillDate);
+    }
 }

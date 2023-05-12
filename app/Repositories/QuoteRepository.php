@@ -1280,4 +1280,31 @@ class QuoteRepository
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
     }
+
+    public function updateTotalByMainId($mainId, $param) {
+        $item = $this->getTotalByMainId($mainId);
+
+        if(isset($param['costPrice']) && is_numeric($param['costPrice']))
+            $item->costPrice = $param['costPrice'];
+        if(isset($param['profit']) && is_numeric($param['profit']))
+            $item->profit = $param["profit"];
+        if(isset($param['exchangeRate']) && is_double($param['exchangeRate']))
+            $item->exchangeRate = $param['exchangeRate'];
+        $item->quotePrice = ($item->costPrice + $item->profit) * $item->exchangeRate;
+        if(isset($param['reviewName']) && trim($param['reviewName']))
+            $item->reviewName = $param['reviewName'];
+        if(isset($param['reviewFillDate']) && trim($param['reviewFillDate']))
+            $item->reviewFillDate = $param['reviewFillDate'];
+        if(isset($param['reviewGeneralManager']) && trim($param['reviewGeneralManager']))
+            $item->reviewGeneralManager = $param['reviewGeneralManager'];
+        if(isset($param['reviewGeneralManagerFillDate']) && trim($param['reviewGeneralManagerFillDate']))
+            $item->reviewGeneralManagerFillDate = $param['reviewGeneralManagerFillDate'];
+        if(isset($param['reviewFinalGeneralManager']) && trim($param['reviewFinalGeneralManager']))
+            $item->reviewFinalGeneralManager = $param['reviewFinalGeneralManager'];
+        if(isset($param['reviewFinalGeneralManagerFillDate']) && trim($param['reviewFinalGeneralManagerFillDate']))
+            $item->reviewFinalGeneralManagerFillDate = $param['reviewFinalGeneralManagerFillDate'];
+        $item->updated_at = date('Y-m-d H:i:s');
+
+        $item->save();
+    }
 }
