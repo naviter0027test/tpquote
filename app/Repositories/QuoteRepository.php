@@ -1251,4 +1251,33 @@ class QuoteRepository
             throw new Exception('指定資料不存在');
         return $item;
     }
+
+    public function createTotal($param) {
+        $this->getMainById($param['mainId']);
+        $sub = [];
+        try {
+            $sub = $this->getTotalByMainId($param['mainId']);
+        } catch(Exception $e) {
+            //子資料不存在的例外，因符合本次需要，故跳過不處理
+        }
+
+        if(isset($sub->id) == true)
+            throw new Exception('子資料已存在');
+
+        $item = new QuoteTotal();
+        $item->mainId = $param['mainId'];
+        $item->costPrice = $param['costPrice'];
+        $item->profit = $param["profit"];
+        $item->exchangeRate = $param['exchangeRate'];
+        $item->quotePrice = ($item->costPrice + $item->profit) * $item->exchangeRate;
+        $item->reviewName = $param['reviewName'];
+        $item->reviewFillDate = $param['reviewFillDate'];
+        $item->reviewGeneralManager = $param['reviewGeneralManager'];
+        $item->reviewGeneralManagerFillDate = $param['reviewGeneralManagerFillDate'];
+        $item->reviewFinalGeneralManager = $param['reviewFinalGeneralManager'];
+        $item->reviewFinalGeneralManagerFillDate = $param['reviewFinalGeneralManagerFillDate'];
+        $item->created_at = date('Y-m-d H:i:s');
+        $item->updated_at = date('Y-m-d H:i:s');
+        $item->save();
+    }
 }
