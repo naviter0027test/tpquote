@@ -2644,4 +2644,33 @@ class QuoteController extends Controller
         }
         return json_encode($result);
     }
+
+    public function editTotal(Request $request, $mainId = 0) {
+        $result = [
+            'status' => false,
+            'msg' => '',
+        ];
+        $jump = "/member/proccess";
+
+        $param = $request->all();
+        $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
+
+        $member = Session::get('member');
+        try {
+            $quoteRepo = new QuoteRepository();
+            $quoteRepo->checkPermit($member->id, 'quoteSub_10', 1);
+            $result['item'] = $quoteRepo->getTotalByMainId($mainId);
+            $result['status'] = true;
+            $result['msg'] = 'success';
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
+        if($param['mode'] == 'html') {
+            return view('quote.total.edit', $result);
+        }
+        return json_encode($result);
+    }
 }
