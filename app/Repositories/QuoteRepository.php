@@ -1270,12 +1270,18 @@ class QuoteRepository
         $item->profit = $param["profit"];
         $item->exchangeRate = $param['exchangeRate'];
         $item->quotePrice = ($item->costPrice + $item->profit) * $item->exchangeRate;
-        $item->reviewName = $param['reviewName'];
-        $item->reviewFillDate = $param['reviewFillDate'];
-        $item->reviewGeneralManager = $param['reviewGeneralManager'];
-        $item->reviewGeneralManagerFillDate = $param['reviewGeneralManagerFillDate'];
-        $item->reviewFinalGeneralManager = $param['reviewFinalGeneralManager'];
-        $item->reviewFinalGeneralManagerFillDate = $param['reviewFinalGeneralManagerFillDate'];
+        if(isset($param['reviewName']) && trim($param['reviewName']))
+            $item->reviewName = $param['reviewName'];
+        if(isset($param['reviewFillDate']) && trim($param['reviewFillDate']))
+            $item->reviewFillDate = $param['reviewFillDate'];
+        if(isset($param['reviewGeneralManager']) && trim($param['reviewGeneralManager']))
+            $item->reviewGeneralManager = $param['reviewGeneralManager'];
+        if(isset($param['reviewGeneralManagerFillDate']) && trim($param['reviewGeneralManagerFillDate']))
+            $item->reviewGeneralManagerFillDate = $param['reviewGeneralManagerFillDate'];
+        if(isset($param['reviewFinalGeneralManager']) && trim($param['reviewFinalGeneralManager']))
+            $item->reviewFinalGeneralManager = $param['reviewFinalGeneralManager'];
+        if(isset($param['reviewFinalGeneralManagerFillDate']) && trim($param['reviewFinalGeneralManagerFillDate']))
+            $item->reviewFinalGeneralManagerFillDate = $param['reviewFinalGeneralManagerFillDate'];
         $item->created_at = date('Y-m-d H:i:s');
         $item->updated_at = date('Y-m-d H:i:s');
         $item->save();
