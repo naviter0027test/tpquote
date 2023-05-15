@@ -158,4 +158,66 @@ class HttpQuoteTotalTest extends TestCase
         $this->assertEquals(1.5, $quoteTotalat1->exchangeRate);
         $this->assertEquals(103800, $quoteTotalat1->quotePrice);
     }
+
+    public function testUpdateTotal() {
+        $memberRepo = new MemberRepository();
+        $quoteRepo = new QuoteRepository();
+
+        $param1 = [
+            'account' => 'account22',
+            'pass' => '123456',
+        ];
+        $member1 = $memberRepo->checkLogin($param1);
+
+        $paramEdit1 = [
+            'mode' => 'json',
+        ];
+        $response1 = $this->withSession(['member' => $member1])
+            ->post("/quote/edit/total/1", $paramEdit1);
+        $response1->assertStatus(200)
+            ->assertJson([
+                'status' => false,
+                'msg' => 'quoteSub_10 permission denied',
+            ]);
+
+        $param2 = [
+            'account' => 'account19',
+            'pass' => '123456',
+        ];
+        $member2 = $memberRepo->checkLogin($param2);
+        $paramEdit2 = [
+            'mode' => 'json',
+        ];
+        $response2 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/total/9', $paramEdit2);
+        $response2->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', false)
+                    ->where('msg', '輸入錯誤')
+                    ->has('errors.costPrice')
+                    ->has('errors.profit')
+                    ->has('errors.exchangeRate')
+                    ;
+            });
+
+        $paramEdit3 = [
+            'mode' => 'json',
+            'costPrice' => 56700,
+            'profit' => 12500,
+            'exchangeRate' => 1.5,
+        ];
+        $response3 = $this->withSession(['member' => $member2])
+            ->post('/quote/edit/total/9', $paramEdit3);
+        $response3->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('status', true)
+                    ->where('msg', 'success')
+                    ;
+            });
+        $quoteTotalat1 = $quoteRepo->getTotalByMainId(9);
+        $this->assertEquals(9, $quoteTotalat1->mainId);
+        $this->assertEquals(56700, $quoteTotalat1->costPrice);
+        $this->assertEquals(1.5, $quoteTotalat1->exchangeRate);
+        $this->assertEquals(103800, $quoteTotalat1->quotePrice);
+    }
 }
