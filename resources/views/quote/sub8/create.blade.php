@@ -16,6 +16,7 @@
                 <span>報價</span> &gt; <span>項目8 材料單價</span> &gt; <label>新增</label>
             </div>
             <form method='post' action='/quote/create/sub8/{{ $mainId }}' class='form1' enctype="multipart/form-data">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="show-line2">
                     <h5>項目1 單價</h5>
                     <p> <input type="number" name="sub1Price" required /> </p>
@@ -86,15 +87,17 @@
                 </div>
                 <div class="show-line2">
                     <h5>採購填表人日期</h5>
-                    <p> <input type="date" name="purchaseFillDate" required /> </p>
+                    <input type="hidden" name="purchaseFillDate" />
+                    <p> <input type="date" name="purchaseFillDateInput" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>審核填表人</h5>
-                    <p> <input type="text" name="reviewName" required /> </p>
+                    <p> <input type="text" name="reviewName" /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>審核填表人日期</h5>
-                    <p> <input type="date" name="reviewFillDate" required /> </p>
+                    <input type="hidden" name="reviewFillDate" />
+                    <p> <input type="date" name="reviewFillDateInput" /> </p>
                 </div>
                 <div class="show-line3">
                     <button class="btn-style1">儲存</button>
@@ -105,6 +108,6 @@
     </body>
     <script src="/lib/jquery-2.1.4.min.js"></script>
     <script src="/lib/selectize.js-master/dist/js/standalone/selectize.js"></script>
-    <script src="/js/quote/sub2/edit.js"></script>
+    <script src="/js/quote/sub8/edit.js"></script>
     <script src="/js/member/logout.js"></script>
 </html>
