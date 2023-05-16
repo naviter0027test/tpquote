@@ -282,6 +282,69 @@
                         @endif
                         </td>
                     </tr>
+                    <tr>
+                        <td>項目8 材料單價</td>
+                        @if (isset($items['sub8']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub8']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub8']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub8']->updated_at }}</td>
+                        @endif
+                        <td>
+                        @if (isset($items['sub8']->id) == false)
+                            <a href='/quote/create/sub8/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub8/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>項目9 運費</td>
+                        @if (isset($items['sub9']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub9']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['sub9']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['sub9']->updated_at }}</td>
+                        @endif
+                        <td>
+                        @if (isset($items['sub9']->id) == false)
+                            <a href='/quote/create/sub9/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/sub9/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>項目10 總費用計算</td>
+                        @if (isset($items['total']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['total']->created_at }}</td>
+                        @endif
+
+                        @if (isset($items['total']->id) == false)
+                        <td> -- </td>
+                        @else
+                        <td>{{ $items['total']->updated_at }}</td>
+                        @endif
+                        <td>
+                        @if (isset($items['total']->id) == false)
+                            <a href='/quote/create/total/{{ $mainId }}' class='glyphicon glyphicon-plus'></a>
+                        @else
+                            <a href='/quote/edit/total/{{ $mainId }}' class='glyphicon glyphicon-pencil'></a>
+                        @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
