@@ -2764,6 +2764,7 @@ class QuoteController extends Controller
         $param['mode'] = isset($param['mode']) ? $param['mode'] : 'html';
 
         $member = Session::get('member');
+        $memberPermission = Session::get('memberPermission');
         try {
             $quoteRepo = new QuoteRepository();
             $quoteRepo->checkPermit($member->id, 'quoteSub_10', 1);
@@ -2777,6 +2778,8 @@ class QuoteController extends Controller
         }
 
         if($param['mode'] == 'html') {
+            $result['mainId'] = $mainId;
+            $result['memberPermission'] = $memberPermission;
             return view('quote.total.edit', $result);
         }
         return json_encode($result);
@@ -2798,8 +2801,8 @@ class QuoteController extends Controller
             $quoteRepo->checkPermit($member->id, 'quoteSub_10', 2);
 
             $validator = Validator::make($param, [
-                'costPrice' => 'required|integer',
-                'profit' => 'required|integer',
+                'costPrice' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+                'profit' => 'required|regex:/^\d+(\.\d{1,2})?$/',
                 'exchangeRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             ]);
 
@@ -2851,8 +2854,8 @@ class QuoteController extends Controller
             $quoteRepo->checkPermit($member->id, 'quoteSub_10', 2);
 
             $validator = Validator::make($param, [
-                'costPrice' => 'required|integer',
-                'profit' => 'required|integer',
+                'costPrice' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+                'profit' => 'required|regex:/^\d+(\.\d{1,2})?$/',
                 'exchangeRate' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             ]);
 

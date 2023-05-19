@@ -31,6 +31,5 @@ $(document).ready(function() {
         if(reviewFinalGeneralManagerFillDate.trim() != '')
             $('[name=reviewFinalGeneralManagerFillDate]').val(reviewFinalGeneralManagerFillDate+ " 00:00:00");
 
-        return false;
     });
 });
