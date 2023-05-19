@@ -16,3 +16,5 @@ yarn-error.log
 /.vscode
 *.swp
 public/uploads
+storage/fonts/wt024_normal_*
+storage/fonts/installed-fonts.json

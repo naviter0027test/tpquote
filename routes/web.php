@@ -126,6 +126,8 @@ Route::middleware([CheckMemberLoginMiddle::class])->group(function() {
         Route::get('edit/total/{mainId}', [QuoteController::class, 'editTotal']);
         Route::post('create/total/{mainId}', [QuoteController::class, 'createTotal']);
         Route::post('edit/total/{mainId}', [QuoteController::class, 'updateTotal']);
+
+        Route::get('pdf/test', [QuoteController::class, 'pdfTest']);
     });
 });
 

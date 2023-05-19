@@ -9,6 +9,7 @@ use App\Repositories\MemPermissionRepository;
 use App\Repositories\QuoteRepository;
 use Session;
 use Exception;
+use PDF;
 
 class QuoteController extends Controller
 {
@@ -2888,5 +2889,10 @@ class QuoteController extends Controller
             return redirect($jump);
         }
         return json_encode($result);
+    }
+
+    public function pdfTest(Request $request) {
+        $pdf = PDF::loadView('quote.total.quote');
+        return $pdf->download('test.pdf');
     }
 }
