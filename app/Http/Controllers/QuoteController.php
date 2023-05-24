@@ -2746,9 +2746,52 @@ class QuoteController extends Controller
             $result['msg'] = $e->getMessage();
         }
 
+        try {
+            if($result['status'] == true) {
+                $quoteSub8 = $quoteRepo->getSub8ByMainId($mainId);
+                $sub8 = json_decode(json_encode($quoteSub8), true);
+                $result['sub8'] = $sub8;
+                $result['status'] = true;
+                $result['msg'] = 'success';
+            }
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = '項目8 尚未填寫';
+        }
+
+        try {
+            if($result['status'] == true) {
+                $result['sub9'] = $quoteRepo->getSub9ByMainId($mainId);
+                $result['status'] = true;
+                $result['msg'] = 'success';
+            }
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = '項目9 尚未填寫';
+        }
+
+        try {
+            if($result['status'] == true) {
+                $result['costPrice'] = 0;
+                for($i = 1;$i < 8;++$i)
+                    $result['costPrice'] += $result['sub8']["sub$i". "SubTotal"];
+                $result['costPrice'] += $result['sub9']->freight;
+            }
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+
         if($param['mode'] == 'html') {
             $result['mainId'] = $mainId;
             $result['memberPermission'] = $memberPermission;
+            if($result['status'] == false) {
+                $request->session()->flash('result', $result);
+                return redirect($jump);
+            }
             return view('quote.total.create', $result);
         }
         return json_encode($result);

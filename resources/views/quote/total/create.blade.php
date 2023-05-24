@@ -19,15 +19,15 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="show-line2">
                     <h5>總成本價格</h5>
-                    <p> <input type="number" name="costPrice" step="0.01" required /> </p>
+                    <p> <input type="number" name="costPrice" step="0.01" value="{{ $costPrice }}" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>獲利值</h5>
-                    <p> <input type="number" name="profit" step="0.01" required /> </p>
+                    <p> <input type="number" name="profit" step="0.01" value="0" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>匯率</h5>
-                    <p> <input type="number" name="exchangeRate" step="0.01" required /> </p>
+                    <p> <input type="number" name="exchangeRate" step="0.01" value="1" required /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>報價單價</h5>
