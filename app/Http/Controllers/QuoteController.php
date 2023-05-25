@@ -2935,7 +2935,7 @@ class QuoteController extends Controller
     }
 
     public function pdfTest(Request $request) {
-        $pdf = PDF::loadView('quote.total.quote');
+        $pdf = PDF::loadView('quote.total.test');
         return $pdf->download('test.pdf');
     }
 }
