@@ -31,7 +31,7 @@
                 </div>
                 <div class="show-line2">
                     <h5>報價單價</h5>
-                    <p> <input type="number" name="quotePrice" step="0.01" value="{{ $item->quotePrice }}" required /> </p>
+                    <p> <input type="number" name="quotePrice" step="0.01" value="{{ $item->quotePrice }}" required readonly /> </p>
                 </div>
                 <div class="show-line2">
                     <h5>審核填表人</h5>

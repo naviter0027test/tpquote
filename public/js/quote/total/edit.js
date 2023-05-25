@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    countQuotePrice();
 
     if($('[name=reviewFillDate]').val().trim() != '') {
         var reviewFillDateTmp = $('[name=reviewFillDate]').val().trim();
@@ -30,6 +31,20 @@ $(document).ready(function() {
         var reviewFinalGeneralManagerFillDate = $('[name=reviewFinalGeneralManagerFillDateInput]').val();
         if(reviewFinalGeneralManagerFillDate.trim() != '')
             $('[name=reviewFinalGeneralManagerFillDate]').val(reviewFinalGeneralManagerFillDate+ " 00:00:00");
+    });
 
+    $('[name=profit]').on('change', function() {
+        countQuotePrice();
+    });
+
+    $('[name=exchangeRate]').on('change', function() {
+        countQuotePrice();
     });
 });
+
+function countQuotePrice() {
+    var costPrice = parseFloat($('[name=costPrice]').val());
+    var profit = parseFloat($('[name=profit]').val());
+    var exchangeRate = parseFloat($('[name=exchangeRate]').val());
+    $('[name=quotePrice]').val( ((costPrice + profit) * exchangeRate).toFixed(2) );
+}
