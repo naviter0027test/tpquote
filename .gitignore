@@ -17,4 +17,4 @@ yarn-error.log
 *.swp
 public/uploads
 storage/fonts/wt024_normal_*
-storage/fonts/installed-fonts.json
+storage/fonts/*.json

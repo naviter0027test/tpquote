@@ -2934,6 +2934,11 @@ class QuoteController extends Controller
         return json_encode($result);
     }
 
+    public function pdfMain(Request $request, $mainId = 0) {
+        $pdf = PDF::loadView('quote.total.main');
+        return $pdf->download('quote-'. date('Ymd'). rand(1000, 9999). '.pdf');
+    }
+
     public function pdfTest(Request $request) {
         $pdf = PDF::loadView('quote.total.test');
         return $pdf->download('test.pdf');
