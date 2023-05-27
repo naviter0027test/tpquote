@@ -2935,7 +2935,33 @@ class QuoteController extends Controller
     }
 
     public function pdfMain(Request $request, $mainId = 0) {
-        $pdf = PDF::loadView('quote.total.main');
+        $param = $request->all();
+        try {
+            $quoteRepo = new QuoteRepository();
+            $param['mainId'] = $mainId;
+
+            $result['items'] = $quoteRepo->subsMain($param);
+            $result['main'] = $quoteRepo->getMainById($mainId);
+            switch($result['items']['sub9']->port) {
+            case '1':
+                $result['items']['sub9']->portStr = '高雄';
+                break;
+            case '2':
+                $result['items']['sub9']->portStr = '東京';
+                break;
+            case '3':
+                $result['items']['sub9']->portStr = '首爾';
+                break;
+            }
+            //echo "<pre>";
+            //print_r($result);
+            //echo "</pre>";
+        }
+        catch(Exception $e) {
+            $result['status'] = false;
+            $result['msg'] = $e->getMessage();
+        }
+        $pdf = PDF::loadView('quote.total.main', $result);
         return $pdf->download('quote-'. date('Ymd'). rand(1000, 9999). '.pdf');
     }
 

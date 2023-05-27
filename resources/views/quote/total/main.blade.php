@@ -8,10 +8,10 @@
             font-family: 'wt024';
             font-style: normal;
             font-weight: normal;
-            /*src: url({{ storage_path('fonts/wt024.ttf') }}) format('truetype');*/
+            src: url({{ storage_path('fonts/wt024.ttf') }}) format('truetype');
         }
         body {
-            /*font-family: wt024, DejaVu Sans,sans-serif;*/
+            font-family: wt024, DejaVu Sans,sans-serif;
         }
         table tbody tr:nth-child(odd) {
         }
@@ -44,35 +44,43 @@
         .footer-2 {
             width: 100%;
         }
+
+        .custPic {
+            width: 150px;
+        }
     </style>
     <body>
         <table class="head">
             <tbody>
                 <tr>
-                    <td>Name</td>
-                    <td></td>
+                    <td>客戶產品編號</td>
+                    <td>{{ $main->customerProductNum }}</td>
                 </tr>
                 <tr>
-                    <td>Number</td>
-                    <td></td>
+                    <td>產品編號</td>
+                    <td>{{ $main->productNum }}</td>
                 </tr>
                 <tr>
-                    <td>Product</td>
-                    <td></td>
+                    <td>產品名稱</td>
+                    <td>{{ $main->productNameTw }}</td>
                 </tr>
                 <tr>
-                    <td>Size</td>
-                    <td></td>
+                    <td>產品尺寸</td>
+                    <td>{{ $items['sub1']->length }} x {{ $items['sub1']->width }} x {{ $items['sub1']->height }}</td>
                 </tr>
             </tbody>
         </table>
         <table class="mid">
             <tbody>
                 <tr>
-                    <td>Picture</td>
+                    <td>產品照片</td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>
+                    @if (trim($main->image) != '')
+                        <img class="custPic" src="{{ public_path('uploads'. $main->image) }}" />
+                    @endif
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -80,24 +88,20 @@
             <table class="footer-1">
                 <tbody>
                     <tr>
-                        <td>Method</td>
-                        <td>aaa</td>
+                        <td>裝箱方式</td>
+                        <td>{{ $items['sub5']->boxMethod }}</td>
                     </tr>
                     <tr>
-                        <td>Main Material</td>
-                        <td></td>
+                        <td>主材質</td>
+                        <td>{{ $items['sub1']->spec }} x {{ $items['sub1']->specIllustrate }} x {{ $items['sub1']->content }}</td>
                     </tr>
                     <tr>
-                        <td>Craft Method</td>
-                        <td></td>
+                        <td>包裝方式</td>
+                        <td>{{ $items['sub5']->packageMethod }}</td>
                     </tr>
                     <tr>
-                        <td>Start Money</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Start Money</td>
-                        <td></td>
+                        <td>起始費用</td>
+                        <td>{{ $items['sub5']->priceSubtotal }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -106,20 +110,16 @@
             <table class="footer-2">
                 <tbody>
                     <tr>
-                        <td>Port</td>
+                        <td>港口</td>
                         <td>MOQ</td>
-                        <td>Effect Date</td>
-                        <td></td>
-                        <td>Quote Number</td>
-                        <td>Quote Number</td>
+                        <td>單價</td>
+                        <td>報價數量</td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ $items['sub9']->portStr }}</td>
+                        <td>{{ $main->quoteQuantity }}</td>
+                        <td>{{ $items['total']->quotePrice }}</td>
+                        <td>1</td>
                     </tr>
                 </tbody>
             </table>
